@@ -316,7 +316,7 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
   return (
     <div
       ref={mountRef}
-      className={`w-full h-[520px] relative cursor-grab active:cursor-grabbing select-none ${className}`}
+      className={`w-full h-[520px] relative cursor-grab active:cursor-grabbing select-none z-10 ${className}`}
     />
   );
 };

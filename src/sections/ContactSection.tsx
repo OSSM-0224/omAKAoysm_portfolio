@@ -12,6 +12,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { MagneticButton } from "../components/common/MagneticButton";
+import { SocialPreviewDock } from "../components/ui/social-preview-dock";
 
 export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -119,61 +120,29 @@ export const ContactSection: React.FC = () => {
                 </button>
               </div>
 
-              {/* Quick Links List */}
-              <div className="space-y-3 pt-2">
-                <a
-                  href="https://wa.me/?text=Hi%20Praju,%20let's%20build%20something!"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-xl bg-[#121212] hover:bg-[#181818] border border-[#212121] hover:border-[#ff7900]/40 transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <MessageSquare className="w-4 h-4 text-[#ff7900]" />
-                    <span className="text-xs sm:text-sm font-mono text-white">
-                      WhatsApp Direct
-                    </span>
-                  </div>
-                  <span className="text-xs font-mono text-[#737069] group-hover:text-[#ff7900] flex items-center gap-1">
-                    <span>CHAT</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </span>
-                </a>
-
-                <a
-                  href="https://github.com/OSSM-0224"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-xl bg-[#121212] hover:bg-[#181818] border border-[#212121] hover:border-[#ff7900]/40 transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <Github className="w-4 h-4 text-[#ff7900]" />
-                    <span className="text-xs sm:text-sm font-mono text-white">
-                      GitHub Repositories
-                    </span>
-                  </div>
-                  <span className="text-xs font-mono text-[#737069] group-hover:text-[#ff7900] flex items-center gap-1">
-                    <span>EXPLORE</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </span>
-                </a>
-
-                <a
-                  href="https://www.linkedin.com/in/om-mhatre-8b819025b/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-xl bg-[#121212] hover:bg-[#181818] border border-[#212121] hover:border-[#ff7900]/40 transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <Linkedin className="w-4 h-4 text-[#ff7900]" />
-                    <span className="text-xs sm:text-sm font-mono text-white">
-                      LinkedIn Network
-                    </span>
-                  </div>
-                  <span className="text-xs font-mono text-[#737069] group-hover:text-[#ff7900] flex items-center gap-1">
-                    <span>CONNECT</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </span>
-                </a>
+              {/* Social Dock */}
+              <div className="pt-4 flex justify-center">
+                <SocialPreviewDock
+                  email={emailAddress}
+                  profile={{
+                    username: "OSSM-0224",
+                    xHandle: "OmMhatre",
+                    name: "Om Mhatre",
+                    headline: "Software Engineer & Full Stack Developer",
+                    location: "India",
+                    bio: "Building high-performance web & 3D experiences",
+                    links: {
+                      github: "https://github.com/OSSM-0224",
+                      linkedin:
+                        "https://www.linkedin.com/in/om-mhatre-8b819025b/",
+                      x: "https://x.com/OmMhatre",
+                    },
+                  }}
+                  bannerColors={{
+                    linkedin: ["#ff7900", "#ff5500", "#ff4b00"],
+                    x: ["#ffb038", "#ff7900", "#ff5500"],
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -341,6 +310,23 @@ export const ContactSection: React.FC = () => {
               )}
             </div>
           </div>
+        </div>
+        <div className="flex justify-center">
+          <SocialPreviewDock
+            email="ommhatre379@gmail.com"
+            profile={{
+              username: "ommhatre",
+              name: "Om Mhatre",
+              headline: "Full-Stack & Mobile App Developer",
+              location: "Navi Mumbai, India",
+              links: {
+                github: "https://github.com/OSSM-0224",
+                linkedin: "https://www.linkedin.com/in/om-mhatre-8b819025b/",
+                x: "https://x.com/OmMhatre",
+              },
+            }}
+            live={false}
+          />
         </div>
       </div>
     </section>

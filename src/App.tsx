@@ -95,8 +95,7 @@ export default function App() {
       {/* Custom Cursor */}
       <CustomCursor />
 
-      {/* Retro CRT Scanlines & Grain Background Texture */}
-      <div className="fixed inset-0 scanlines-overlay pointer-events-none z-30" />
+      {/* Grain Background Texture */}
       <div className="fixed inset-0 noise-overlay pointer-events-none z-20" />
 
       {/* Initial Boot Loader */}

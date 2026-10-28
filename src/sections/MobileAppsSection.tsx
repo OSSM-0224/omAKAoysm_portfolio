@@ -8,6 +8,24 @@ export const MobileAppsSection: React.FC = () => {
   const [activeAppIndex, setActiveAppIndex] = useState(0);
   const activeApp = MOBILE_APPS[activeAppIndex];
 
+  React.useEffect(() => {
+    const scanlines = document.querySelector('.scanlines-overlay') as HTMLElement | null;
+    const prevDisplay = scanlines?.style.display;
+    const prevOpacity = scanlines?.style.opacity;
+    if (scanlines) {
+      scanlines.style.display = 'none';
+      scanlines.style.opacity = '0';
+    }
+    document.body.classList.add('mobile-preview-active');
+    return () => {
+      document.body.classList.remove('mobile-preview-active');
+      if (scanlines) {
+        scanlines.style.display = prevDisplay || '';
+        scanlines.style.opacity = prevOpacity || '';
+      }
+    };
+  }, []);
+
   return (
     <section
       id="mobile-apps"
@@ -68,6 +86,7 @@ export const MobileAppsSection: React.FC = () => {
             <Phone3DCanvas
               screenshotUrl={activeApp.screenshots[0]}
               accentColor={activeApp.accentColor}
+              className="mobile-preview-canvas"
             />
 
             <div className="w-full flex items-center justify-between font-mono text-[11px] pt-3 border-t border-[#1c1c1f] text-[#8a8780]">

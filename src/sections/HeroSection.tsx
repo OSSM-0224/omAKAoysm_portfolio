@@ -61,10 +61,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
       </div>
 
-      {/* Main Hero Split Grid: Typography Left, Moving ASCII Portrait Right */}
+      {/* Main Hero Split Grid: Typography Left, Portrait Right */}
       <div className="relative z-10 max-w-7xl mx-auto w-full my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Left Column: Giant Name & Roles */}
-        <div className="lg:col-span-12 space-y-6">
+        <div className="lg:col-span-7 space-y-6">
           {/* Developer Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#120c06] border border-[#ff7900]/40 text-xs font-mono text-[#ff9029]">
             <Code2 className="w-3.5 h-3.5 text-[#ff7900]" />
@@ -151,25 +151,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Right Column: NEON ORANGE ASCII PORTRAIT */}
-        <div className="lg:col-span-5 flex flex-col items-center justify-center relative min-w-0 w-full">
-          <div className="relative w-full max-w-[520px] overflow-hidden rounded-2xl border border-[#ff7900]/30 bg-[#030303] shadow-[0_0_60px_rgba(255,121,0,0.18)]">
-            {/* ASCII Portrait Header */}
-            <div className="relative z-10 flex items-center justify-between gap-2 font-mono text-[10px] text-[#737069] px-3 py-2 border-b border-[#ff7900]/20 bg-[#090909]">
-              <span className="text-[#ff7900] truncate">
-                ASCII_PORTRAIT://OM_OYSM.HTML
-              </span>
-              <span className="text-[#ff7900] shrink-0">LIVE_RENDER</span>
-            </div>
-
-            {/* HTML-based ASCII Portrait */}
-            <iframe
-              src="/om_neon_orange_ascii.html"
-              title="OM Neon Orange ASCII Portrait"
-              className="block w-full h-[480px] sm:h-[560px] lg:h-[600px] border-0 bg-[#030303] pointer-events-none"
-              loading="eager"
-              sandbox="allow-scripts"
-              scrolling="no"
+        {/* Right Column: Portrait */}
+        <div className="lg:col-span-5 relative flex items-center justify-center">
+          <div className="relative w-full max-w-md aspect-[4/5] overflow-hidden rounded-2xl border border-[#ff7900]/30 shadow-[0_0_60px_rgba(255,121,0,0.25)]">
+            <img
+              src="/om-portrait.webp"
+              alt="Om, aka OYSM"
+              className="block w-full h-full object-cover object-top bg-[#030303]"
             />
           </div>
         </div>

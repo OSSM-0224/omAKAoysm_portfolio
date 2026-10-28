@@ -60,7 +60,7 @@ export const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
         isFadingOut ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100'
       }`}
     >
-      <div className="absolute inset-0 scanlines-overlay pointer-events-none" />
+      {/* scanlines removed */}
 
       <div className="relative z-10 w-full max-w-xl flex flex-col items-center text-center space-y-6">
         <div className="flex items-center gap-2 font-mono text-xs text-[#8a8780] tracking-wider mb-2">
