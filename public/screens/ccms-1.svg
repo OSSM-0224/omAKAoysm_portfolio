@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="360" height="720" viewBox="0 0 360 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="orangeGrad" x1="0" y1="0" x2="320" y2="110" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff7900" />
+      <stop offset="1" stop-color="#ff9d33" />
+    </linearGradient>
+  </defs>
+  <!-- Screen Canvas Background -->
+  <rect width="360" height="720" fill="#0c0e12"/>
+  
+      <!-- Status Bar -->
+      <text x="24" y="32" fill="#888" font-family="monospace" font-size="12">09:41</text>
+      <text x="310" y="32" fill="#888" font-family="monospace" font-size="12">5G · 98%</text>
+
+      <!-- App Header -->
+      <rect x="20" y="50" width="320" height="60" rx="12" fill="#161a22" stroke="#ff7900" stroke-width="1.5"/>
+      <text x="36" y="80" fill="#ffffff" font-family="sans-serif" font-weight="bold" font-size="16">Tech Vyassa CCMS</text>
+      <text x="36" y="98" fill="#ff7900" font-family="monospace" font-size="11">● Active Shift · Cafeteria #2</text>
+
+      <!-- Balance Card -->
+      <rect x="20" y="125" width="320" height="110" rx="16" fill="url(#orangeGrad)"/>
+      <text x="36" y="155" fill="#000000" font-family="sans-serif" font-size="12" font-weight="600">AVAILABLE COUPON BALANCE</text>
+      <text x="36" y="195" fill="#000000" font-family="monospace" font-size="34" font-weight="bold">₹ 1,450.00</text>
+      <text x="36" y="218" fill="#000000" font-family="sans-serif" font-size="11" opacity="0.8">18 Meal Tokens Remaining</text>
+
+      <!-- QR Quick Pass -->
+      <rect x="20" y="250" width="320" height="210" rx="16" fill="#161a22" stroke="#252b36"/>
+      <text x="36" y="280" fill="#ffffff" font-family="sans-serif" font-weight="bold" font-size="14">Fast QR Dispense Token</text>
+      <!-- Simulated QR pattern -->
+      <rect x="100" y="300" width="160" height="130" rx="8" fill="#ffffff"/>
+      <rect x="115" y="315" width="40" height="40" fill="#000"/>
+      <rect x="125" y="325" width="20" height="20" fill="#fff"/>
+      <rect x="205" y="315" width="40" height="40" fill="#000"/>
+      <rect x="215" y="325" width="20" height="20" fill="#fff"/>
+      <rect x="115" y="375" width="40" height="40" fill="#000"/>
+      <rect x="125" y="385" width="20" height="20" fill="#fff"/>
+      <rect x="170" y="340" width="25" height="40" fill="#ff7900"/>
+
+      <!-- Recent Transactions List -->
+      <text x="24" y="490" fill="#ffffff" font-family="sans-serif" font-weight="bold" font-size="14">Recent Cafeteria Orders</text>
+      <rect x="20" y="505" width="320" height="50" rx="10" fill="#141720" stroke="#222"/>
+      <text x="36" y="535" fill="#fff" font-family="sans-serif" font-size="13">Executive Thali Combo</text>
+      <text x="270" y="535" fill="#ff7900" font-family="monospace" font-size="13">-₹85.00</text>
+
+      <rect x="20" y="565" width="320" height="50" rx="10" fill="#141720" stroke="#222"/>
+      <text x="36" y="595" fill="#fff" font-family="sans-serif" font-size="13">Cold Brew &amp; Sandwich</text>
+      <text x="270" y="595" fill="#ff7900" font-family="monospace" font-size="13">-₹60.00</text>
+
+      <!-- Bottom Navigation Bar -->
+      <rect x="20" y="630" width="320" height="50" rx="14" fill="#0e1117" stroke="#222"/>
+      <text x="50" y="660" fill="#ff7900" font-family="monospace" font-size="11">HOME</text>
+      <text x="140" y="660" fill="#666" font-family="monospace" font-size="11">COUPONS</text>
+      <text x="240" y="660" fill="#666" font-family="monospace" font-size="11">HISTORY</text>
+    
+</svg>
