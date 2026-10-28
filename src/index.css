@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @theme {
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -12,24 +11,76 @@
 
 :root {
   color-scheme: dark;
-  --dr-bg-0: #050510;
-  --dr-bg-1: #07071a;
-  --dr-bg-2: #0a0a24;
-  --dr-calm: #ff7a2a;
-  --dr-mid: #ff5f1f;
-  --dr-hot: #ff3d14;
-  --dr-core: #ffe6d6;
-  --dr-vignette: 0.72;
+  --dr-calm: #ff4b00;
+  --dr-mid: #ff7900;
+  --dr-hot: #ffb038;
+  --dr-core: #fff0d6;
+  --dr-vignette: 0.62;
   --dr-grain: 0.05;
   --dr-bloom-blur: 10px;
   --dr-bloom-opacity: 0.7;
 }
 
 body {
-  background: radial-gradient(1200px 800px at 50% 0%, #10102a 0%, #050510 45%, #020208 100%);
+  background-color: #030303;
   color: #f4f1ea;
   font-family: var(--font-sans);
   overflow-x: hidden;
+}
+
+@keyframes dr-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dr-root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.dr-root--contained {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.dr-root canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.dr-bloom {
+  filter: blur(10px);
+  opacity: 0.7;
+}
+
+.dr-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(3, 3, 3, 0.62) 100%);
+}
+
+.dr-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dr-root {
+    animation: none;
+  }
 }
 
 @keyframes dr-fade-in {
@@ -65,7 +116,7 @@ body {
 }
 
 .dr-main {
-  filter: contrast(1.06) saturate(1.08);
+  filter: brightness(2) saturate(1.3);
 }
 
 .dr-bloom {

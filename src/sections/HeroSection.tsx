@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ArrowDown, Sparkles, Terminal, Code2, Smartphone } from "lucide-react";
-import { MatrixRain } from "../components/common/MatrixRain";
+import DataRain from "../components/ui/data-rain";
 import { MagneticButton } from "../components/common/MagneticButton";
 
 interface HeroSectionProps {
@@ -40,10 +40,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <section
       id="hero"
-      className="relative min-h-screen w-full flex flex-col justify-between pt-28 pb-12 px-6 sm:px-8 md:px-12 overflow-hidden bg-[#030303]"
+      className="relative min-h-screen w-full flex flex-col justify-between pt-28 pb-12 px-6 sm:px-8 md:px-12 overflow-hidden"
     >
-      {/* Low-opacity Falling Matrix Digit Rain in background */}
-      <MatrixRain opacity={0.09} color="#ff7900" />
+      <DataRain fullscreen={false} className="absolute inset-0 -z-10 h-full w-full block" count={5000} flowSpeed={1.0} obstacleRadius={80} />
 
       {/* Top Meta Terminal Banner */}
       <div className="relative z-10 max-w-7xl mx-auto w-full flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-[#8a8780] border-b border-[#1c1c1c] pb-4">
@@ -65,7 +64,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Main Hero Split Grid: Typography Left, Moving ASCII Portrait Right */}
       <div className="relative z-10 max-w-7xl mx-auto w-full my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Left Column: Giant Name & Roles */}
-        <div className="lg:col-span-7 space-y-6">
+        <div className="lg:col-span-12 space-y-6">
           {/* Developer Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#120c06] border border-[#ff7900]/40 text-xs font-mono text-[#ff9029]">
             <Code2 className="w-3.5 h-3.5 text-[#ff7900]" />

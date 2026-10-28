@@ -1,6 +1,4 @@
-// component.tsx
-import { useEffect, useRef } from "react";
-import "../../index.css";
+import { useEffect, useRef, type CSSProperties } from "react";
 
 export interface DataRainPalette {
   calm: string;
@@ -34,14 +32,14 @@ const TAU = Math.PI * 2;
 const AGE_BUCKETS = 6;
 const SEGS_PER_BUCKET = 3;
 
-const DEFAULT_CALM: RGB = [255, 140, 60];
-const DEFAULT_MID: RGB = [255, 100, 40];
-const DEFAULT_HOT: RGB = [255, 70, 20];
-const DEFAULT_CORE: RGB = [255, 230, 210];
+const DEFAULT_CALM: RGB = [255, 75, 0];
+const DEFAULT_MID: RGB = [255, 121, 0];
+const DEFAULT_HOT: RGB = [255, 176, 56];
+const DEFAULT_CORE: RGB = [255, 240, 214];
 
 const BASE_ALPHA = [0.2, 0.32, 0.48];
-const BASE_WIDTH = [0.7, 0.9, 1.2];
-const ALPHA_GAIN = 1.3;
+const BASE_WIDTH = [0.9, 1.1, 1.4];
+const ALPHA_GAIN = 2.4;
 const HEAD_WIDTH = 1.4;
 
 // precomputed per-step filter coefficients (the step is fixed)
@@ -76,7 +74,13 @@ function parseHex(input: string | undefined, fallback: RGB): RGB {
   if (!input) return fallback;
   let s = input.trim().replace(/^#/, "");
   if (s.length === 3) {
-    s = s.charAt(0) + s.charAt(0) + s.charAt(1) + s.charAt(1) + s.charAt(2) + s.charAt(2);
+    s =
+      s.charAt(0) +
+      s.charAt(0) +
+      s.charAt(1) +
+      s.charAt(1) +
+      s.charAt(2) +
+      s.charAt(2);
   }
   if (!/^[0-9a-fA-F]{6}$/.test(s)) return fallback;
   const n = parseInt(s, 16);
@@ -88,11 +92,21 @@ interface Wave {
   ky: number;
   om: number;
   ph: number;
-  au: number;
-  av: number;
+  au: number; // velocity amplitude along x per unit cos()
+  av: number; // velocity amplitude along y per unit cos()
 }
 
-function makeWave(lambda: number, angle: number, omega: number, phase: number, amp: number): Wave {
+/**
+ * One term of the divergence-free sway field ψ = A/|k| · sin(k·x + ωt + φ).
+ * u = ∂ψ/∂y = A·sinθ·cos(·),  v = −∂ψ/∂x = −A·cosθ·cos(·)  (analytic, |(u,v)| ≤ A).
+ */
+function makeWave(
+  lambda: number,
+  angle: number,
+  omega: number,
+  phase: number,
+  amp: number,
+): Wave {
   const k = TAU / lambda;
   return {
     kx: k * Math.cos(angle),
@@ -143,7 +157,7 @@ export default function DataRain(props: DataRainProps) {
     let bw = 1;
     let bh = 1;
 
-    /* particles */
+    /* particles (allocated once) */
     const px = new Float32Array(MAX);
     const py = new Float32Array(MAX);
     const vx = new Float32Array(MAX);
@@ -174,7 +188,7 @@ export default function DataRain(props: DataRainProps) {
     const pGamma = new Float32Array(PUFFS);
     const pAge = new Float32Array(PUFFS);
     const pAlive = new Uint8Array(PUFFS);
-    const aX = new Float32Array(PUFFS);
+    const aX = new Float32Array(PUFFS); // compact per-step views of live puffs
     const aY = new Float32Array(PUFFS);
     const aG = new Float32Array(PUFFS);
     const aC2 = new Float32Array(PUFFS);
@@ -218,13 +232,23 @@ export default function DataRain(props: DataRainProps) {
     let slowFrames = 0;
     let fastFrames = 0;
 
-    /* styles & palette */
+    /* ─────────────── styles & palette ─────────────── */
+
     const buildStyles = (): void => {
       const cs = getComputedStyle(root);
       const pal = propsRef.current.palette;
-      const calm = parseHex(pal?.calm ?? cs.getPropertyValue("--dr-calm"), DEFAULT_CALM);
-      const mid = parseHex(pal?.mid ?? cs.getPropertyValue("--dr-mid"), DEFAULT_MID);
-      const hot = parseHex(pal?.hot ?? cs.getPropertyValue("--dr-hot"), DEFAULT_HOT);
+      const calm = parseHex(
+        pal?.calm ?? cs.getPropertyValue("--dr-calm"),
+        DEFAULT_CALM,
+      );
+      const mid = parseHex(
+        pal?.mid ?? cs.getPropertyValue("--dr-mid"),
+        DEFAULT_MID,
+      );
+      const hot = parseHex(
+        pal?.hot ?? cs.getPropertyValue("--dr-hot"),
+        DEFAULT_HOT,
+      );
       const core = parseHex(cs.getPropertyValue("--dr-core"), DEFAULT_CORE);
       const colours: RGB[] = [calm, mid, hot];
 
@@ -236,12 +260,18 @@ export default function DataRain(props: DataRainProps) {
           const falloff = Math.pow(1 - (ab + 0.5) / AGE_BUCKETS, 1.5);
           const alpha = Math.min(
             0.95,
-            BASE_ALPHA[bucket] * (depth === 0 ? 0.55 : 1) * falloff * ALPHA_GAIN,
+            BASE_ALPHA[bucket] *
+              (depth === 0 ? 0.55 : 1) *
+              falloff *
+              ALPHA_GAIN,
           );
-          strokeStyles[g * AGE_BUCKETS + ab] = `rgba(${c[0]},${c[1]},${c[2]},${alpha.toFixed(3)})`;
+          strokeStyles[g * AGE_BUCKETS + ab] =
+            `rgba(${c[0]},${c[1]},${c[2]},${alpha.toFixed(3)})`;
           const width =
-            BASE_WIDTH[bucket] * (depth === 0 ? 0.75 : 1) * (1 - (0.45 * ab) / AGE_BUCKETS);
-          strokeWidths[g * AGE_BUCKETS + ab] = clamp(width, 0.6, 1.3);
+            BASE_WIDTH[bucket] *
+            (depth === 0 ? 0.75 : 1) *
+            (1 - (0.45 * ab) / AGE_BUCKETS);
+          strokeWidths[g * AGE_BUCKETS + ab] = clamp(width, 0.7, 1.6);
         }
       }
       headStyles[0] = `rgba(${core[0]},${core[1]},${core[2]},0.5)`;
@@ -253,6 +283,8 @@ export default function DataRain(props: DataRainProps) {
       grad.addColorStop(1, `rgba(${hot[0]},${hot[1]},${hot[2]},0)`);
       haloGradient = grad;
     };
+
+    /* ─────────────── particles ─────────────── */
 
     const seedParticle = (i: number, uniform: boolean): void => {
       let x: number;
@@ -296,9 +328,15 @@ export default function DataRain(props: DataRainProps) {
     const applyCount = (uniform: boolean): void => {
       const auto = clamp(Math.round((w * h) / 520), 1200, 5200);
       const requested = propsRef.current.count;
-      targetCount = clamp(Math.round(requested !== undefined ? requested : auto), 1, MAX);
+      targetCount = clamp(
+        Math.round(requested !== undefined ? requested : auto),
+        1,
+        MAX,
+      );
       setActive(targetCount * quality, uniform);
     };
+
+    /* ─────────────── vortex puffs ─────────────── */
 
     const spawnPuff = (a: number, speed: number): void => {
       const dxn = vcx / speed;
@@ -309,10 +347,16 @@ export default function DataRain(props: DataRainProps) {
       puffCursor = (puffCursor + 1) % PUFFS;
       pX[j] = cx - dxn * 0.6 * a - dyn * sign * 0.7 * a;
       pY[j] = cy - dyn * 0.6 * a + dxn * sign * 0.7 * a;
-      pGamma[j] = clamp(sign * Math.min(speed, 1200) * a * 1.5, -105000, 105000);
+      pGamma[j] = clamp(
+        sign * Math.min(speed, 1200) * a * 1.5,
+        -105000,
+        105000,
+      );
       pAge[j] = 0;
       pAlive[j] = 1;
     };
+
+    /* ─────────────── physics step ─────────────── */
 
     const simulate = (): void => {
       const p = propsRef.current;
@@ -324,7 +368,13 @@ export default function DataRain(props: DataRainProps) {
       simTime += STEP;
       if (live) liveTime += STEP;
 
-      const ghostOn = !reduced && autopilotOn && !pointerActive && live && liveTime - idleSince >= idleDelay;
+      /* cursor source: real pointer > ghost > none */
+      const ghostOn =
+        !reduced &&
+        autopilotOn &&
+        !pointerActive &&
+        live &&
+        liveTime - idleSince >= idleDelay;
       const src = pointerActive ? 2 : ghostOn ? 1 : 0;
       if (src === 1) {
         tgtX = w * (0.5 + 0.32 * Math.sin(0.37 * liveTime));
@@ -352,13 +402,16 @@ export default function DataRain(props: DataRainProps) {
         vcy += ((cy - pcy) / STEP - vcy) * K_VEL;
       }
 
-      influence += ((src !== 0 ? 1 : 0) - influence) * (src !== 0 ? K_IN : K_OUT);
+      /* influence envelope */
+      influence +=
+        ((src !== 0 ? 1 : 0) - influence) * (src !== 0 ? K_IN : K_OUT);
       const infl = influence;
 
       const vcMag = Math.sqrt(vcx * vcx + vcy * vcy);
       const a = obsR + Math.min(vcMag * 0.025, 36);
       curA = a;
 
+      /* shed Kármán puffs */
       if (infl > 0.3 && vcMag > 60) {
         const dxm = cx - pcx;
         const dym = cy - pcy;
@@ -374,6 +427,7 @@ export default function DataRain(props: DataRainProps) {
         shedAcc = 0;
       }
 
+      /* evolve puffs, build compact live list */
       aCount = 0;
       const puffDrift = 0.5 * 115 * flow * STEP;
       for (let j = 0; j < PUFFS; j++) {
@@ -386,7 +440,7 @@ export default function DataRain(props: DataRainProps) {
         pAge[j] = age;
         pGamma[j] *= PUFF_DECAY;
         pY[j] += puffDrift;
-        const c2 = 676 + 90 * age;
+        const c2 = 676 + 90 * age; // 26² + 90·age (viscous spreading)
         aX[aCount] = pX[j];
         aY[aCount] = pY[j];
         aG[aCount] = pGamma[j] / TAU;
@@ -395,6 +449,7 @@ export default function DataRain(props: DataRainProps) {
         aCount++;
       }
 
+      /* sway phases */
       const ph0 = WAVE_0.om * simTime + WAVE_0.ph;
       const ph1 = WAVE_1.om * simTime + WAVE_1.ph;
       const ph2 = WAVE_2.om * simTime + WAVE_2.ph;
@@ -423,13 +478,14 @@ export default function DataRain(props: DataRainProps) {
         const z = pz[i];
         const v0e = v0[i] * flow;
 
+        /* base + divergence-free sway */
         const c0 = Math.cos(k0x * x0 + k0y * y0 + ph0);
         const c1 = Math.cos(k1x * x0 + k1y * y0 + ph1);
         const c2 = Math.cos(k2x * x0 + k2y * y0 + ph2);
         let tx = (a0u * c0 + a1u * c1 + a2u * c2) * z;
         let ty = v0e + (a0v * c0 + a1v * c1 + a2v * c2) * z;
 
-        const zf = 0.55 + 0.45 * z;
+        const zf = 0.55 + 0.45 * z; // far lines are influenced less
         const aE = a * zf;
         const rx = x0 - cx;
         const ry = y0 - cy;
@@ -452,15 +508,17 @@ export default function DataRain(props: DataRainProps) {
             }
             const ex = Ux / U;
             const ey = Uy / U;
-            const s = rx * ex + ry * ey;
-            const n = -rx * ey + ry * ex;
+            const s = rx * ex + ry * ey; // along relative flow (+ = downstream)
+            const n = -rx * ey + ry * ex; // across flow
 
+            /* static wake deficit */
             if (s > 0 && s < 12 * aE) {
               const wd = 0.9 * aE + 0.2 * s;
               const nn = n / wd;
               deficit = 0.55 * Math.exp(-s / (3 * aE)) * Math.exp(-nn * nn);
             }
 
+            /* potential flow around a cylinder — perturbation part only */
             const near = 9 * aE;
             if (d2 < near * near) {
               const rho2 = Math.max(s * s + n * n, aE * aE * 0.64);
@@ -479,6 +537,7 @@ export default function DataRain(props: DataRainProps) {
           }
         }
 
+        /* Lamb–Oseen vortex puffs (decay on their own, so not scaled by influence) */
         let vorX = 0;
         let vorY = 0;
         for (let j = 0; j < aCount; j++) {
@@ -499,6 +558,7 @@ export default function DataRain(props: DataRainProps) {
         tx = tx * keep + pertX * infl + vorX;
         ty = ty * keep + pertY * infl + vorY;
 
+        /* inertia */
         let ux = vx[i] + (tx - vx[i]) * K_RELAX;
         let uy = vy[i] + (ty - vy[i]) * K_RELAX;
         const sp2 = ux * ux + uy * uy;
@@ -510,6 +570,7 @@ export default function DataRain(props: DataRainProps) {
         let x = x0 + ux * STEP;
         let y = y0 + uy * STEP;
 
+        /* never enter the disc */
         if (projectOn) {
           const aP = aE * projScale;
           const qx = x - cx;
@@ -535,13 +596,16 @@ export default function DataRain(props: DataRainProps) {
         px[i] = x;
         py[i] = y;
 
+        /* respawn (full history reset → no streaks across the screen) */
         if (y > respawnBottom || x < -120 || x > respawnRight || y < -600) {
           seedParticle(i, false);
           continue;
         }
 
+        /* smoothed speed ratio drives hue */
         qv[i] += (Math.sqrt(ux * ux + uy * uy) / v0e - qv[i]) * K_Q;
 
+        /* synaptic firing */
         if (rand() < FIRE_P) {
           fire[i] = 1;
         } else {
@@ -555,6 +619,8 @@ export default function DataRain(props: DataRainProps) {
       }
     };
 
+    /* ─────────────── rendering ─────────────── */
+
     const render = (): void => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
@@ -562,10 +628,14 @@ export default function DataRain(props: DataRainProps) {
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
+      /* subtle cursor halo (one gradient, scaled by transform — no allocation) */
       if (influence > 0.02 && haloGradient) {
         const speed = Math.sqrt(vcx * vcx + vcy * vcy);
         const r = 1.5 * curA;
-        ctx.globalAlpha = Math.min(1, (0.05 + Math.min(speed / 4000, 0.07)) * influence);
+        ctx.globalAlpha = Math.min(
+          1,
+          (0.05 + Math.min(speed / 4000, 0.07)) * influence,
+        );
         ctx.setTransform(dpr * r, 0, 0, dpr * r, dpr * cx, dpr * cy);
         ctx.fillStyle = haloGradient;
         ctx.fillRect(-1, -1, 2, 2);
@@ -573,6 +643,7 @@ export default function DataRain(props: DataRainProps) {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
+      /* classify */
       groupCount.fill(0);
       for (let i = 0; i < active; i++) {
         const qq = qv[i];
@@ -582,6 +653,7 @@ export default function DataRain(props: DataRainProps) {
         groupList[g][groupCount[g]++] = i;
       }
 
+      /* trails: group × age bucket, one stroke each */
       for (let g = 0; g < 6; g++) {
         const cnt = groupCount[g];
         if (cnt === 0) continue;
@@ -609,6 +681,7 @@ export default function DataRain(props: DataRainProps) {
         }
       }
 
+      /* white-hot head sparks: fastest lines and firing lines */
       const prevHead = head === 0 ? L - 1 : head - 1;
       ctx.lineWidth = HEAD_WIDTH;
       for (let depth = 0; depth < 2; depth++) {
@@ -629,9 +702,12 @@ export default function DataRain(props: DataRainProps) {
         ctx.stroke();
       }
 
+      /* bloom: quarter-res copy, blurred by CSS */
       bctx.clearRect(0, 0, bw, bh);
       bctx.drawImage(main, 0, 0, bw, bh);
     };
+
+    /* ─────────────── lifecycle helpers ─────────────── */
 
     const presim = (seconds: number): void => {
       const n = Math.round(seconds / STEP);
@@ -639,6 +715,7 @@ export default function DataRain(props: DataRainProps) {
     };
 
     const rebuildStatic = (): void => {
+      // reduced motion: parked cursor, pre-simulated field, ONE frame
       seedAll();
       active = 0;
       applyCount(true);
@@ -685,12 +762,16 @@ export default function DataRain(props: DataRainProps) {
         rebuildStatic();
         return;
       }
+      // keep the field; only recycle lines that are now out of bounds
       for (let i = 0; i < active; i++) {
-        if (px[i] < -120 || px[i] > w + 120 || py[i] > h + 40) seedParticle(i, false);
+        if (px[i] < -120 || px[i] > w + 120 || py[i] > h + 40)
+          seedParticle(i, false);
       }
       applyCount(true);
       render();
     };
+
+    /* ─────────────── input ─────────────── */
 
     const onMove = (e: PointerEvent): void => {
       const r = root.getBoundingClientRect();
@@ -707,6 +788,8 @@ export default function DataRain(props: DataRainProps) {
     const onUp = (e: PointerEvent): void => {
       if (e.pointerType !== "mouse") onLeave();
     };
+
+    /* ─────────────── main loop ─────────────── */
 
     const frame = (now: number): void => {
       if (disposed) return;
@@ -725,6 +808,7 @@ export default function DataRain(props: DataRainProps) {
       if (n > 0) render();
       const work = performance.now() - t0;
 
+      /* adaptive quality (dpr never changes at runtime) */
       if (dtRaw > 0 && dtRaw < 100) {
         frameEma += (dtRaw - frameEma) * 0.05;
         workEma += (work - workEma) * 0.05;
@@ -767,6 +851,8 @@ export default function DataRain(props: DataRainProps) {
         start();
       }
     };
+
+    /* ─────────────── init ─────────────── */
 
     resize();
     buildStyles();
@@ -832,15 +918,53 @@ export default function DataRain(props: DataRainProps) {
   }, [props.count, palette?.calm, palette?.mid, palette?.hot]);
 
   const fullscreen = props.fullscreen ?? true;
-  const cls =
-    "dr-root" + (fullscreen ? "" : " dr-root--contained") + (props.className ? " " + props.className : "");
+  // All styling is inline so this component works without any extra CSS in index.css
+  const rootStyle: CSSProperties = {
+    position: fullscreen ? "fixed" : "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    overflow: "hidden",
+    pointerEvents: "none",
+    zIndex: 0,
+  };
+  const canvasStyle: CSSProperties = {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    display: "block",
+  };
 
   return (
-    <div ref={rootRef} className={cls} aria-hidden="true">
-      <canvas ref={bloomRef} className="dr-bloom" />
-      <canvas ref={mainRef} className="dr-main" />
-      <div className="dr-vignette" />
-      <div className="dr-grain" />
+    <div
+      ref={rootRef}
+      className={props.className}
+      style={{
+        ...rootStyle,
+        ["--dr-calm" as string]: "#ff4b00",
+        ["--dr-mid" as string]: "#ff7900",
+        ["--dr-hot" as string]: "#ffb038",
+        ["--dr-core" as string]: "#fff0d6",
+      }}
+      aria-hidden="true"
+    >
+      <canvas
+        ref={bloomRef}
+        style={{ ...canvasStyle, filter: "blur(10px)", opacity: 0.85 }}
+      />
+      <canvas
+        ref={mainRef}
+        style={{ ...canvasStyle, filter: "brightness(1.5)" }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse at center, transparent 40%, rgba(3,3,3,0.55) 100%)",
+        }}
+      />
     </div>
   );
 }
