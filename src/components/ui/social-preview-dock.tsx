@@ -89,6 +89,8 @@ export interface SocialPreviewDockProps {
   items?: SocialPreviewItem[];
   /** Address for the copy pill. Omit it and the pill isn't rendered. */
   email?: string;
+  /** Called when a preview card opens or closes, e.g. to dim the page behind it. */
+  onPreviewChange?: (open: boolean) => void;
   /** Fetch the live GitHub card. Needs `profile.username`. */
   live?: boolean;
   /**
@@ -828,6 +830,7 @@ export function SocialPreviewDock({
   profile = {},
   items,
   email,
+  onPreviewChange,
   live = true,
   bannerColors = DEFAULT_BANNER_COLORS,
   className,
@@ -886,6 +889,15 @@ export function SocialPreviewDock({
     setBox({ x, width, height });
     openRef.current = true;
   }, [active, github]);
+
+  /* Mirror the open state out so a host can dim the page behind the card. */
+  React.useEffect(() => {
+    onPreviewChange?.(active !== null);
+  }, [active, onPreviewChange]);
+
+  React.useEffect(() => {
+    return () => onPreviewChange?.(false);
+  }, [onPreviewChange]);
 
   const hide = React.useCallback(() => {
     openRef.current = false;
