@@ -1,23 +1,39 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { RoundedBox } from "@react-three/drei";
+import {
+  RoundedBox,
+  Edges,
+  Html,
+  Environment,
+  Lightformer,
+  useCursor,
+} from "@react-three/drei";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import * as THREE from "three";
 import type { ServiceOffering } from "../../data/services";
 
-const LAYER_SIZE: ReadonlyArray<readonly [number, number, number]> = [
-  [2.15, 0.16, 1.55],
-  [3.0, 0.18, 2.0],
-  [2.55, 0.2, 2.55],
-  [2.8, 0.16, 1.9],
-  [3.15, 0.12, 1.6],
+/* -------------------------------------------------------------------------- */
+/*  Layout constants                                                          */
+/* -------------------------------------------------------------------------- */
+
+/** [width, depth] of each plate. Order matches SERVICES. */
+const LAYER_FOOTPRINT: ReadonlyArray<readonly [number, number]> = [
+  [2.3, 1.7],
+  [3.0, 2.0],
+  [2.6, 2.6],
+  [2.9, 1.9],
+  [3.1, 1.7],
 ];
 
-const LAYER_Y = [1.14, 0.57, 0, -0.57, -1.14];
-const LAYER_TINT = ["#18161b", "#14151a", "#19161a", "#15151a", "#1a1717"];
+const PLATE_H = 0.2;
+/** Exploded view: a full unit between plates so every layer reads on its own. */
+const LAYER_Y = [2.0, 1.0, 0, -1.0, -2.0];
+const FLOOR_Y = -2.55;
 
 const ACCENT = "#ff7900";
 const HOT = "#ffb15c";
+const EMBER = "#ff5200";
+const EDGE_IDLE = "#5a3a22";
 
 interface CoreDrag {
   targetX: number;
@@ -27,6 +43,10 @@ interface CoreDrag {
   dragging: boolean;
   lastX: number;
   lastY: number;
+}
+
+interface LevelRef {
+  current: number;
 }
 
 interface CapabilityCoreProps {
@@ -42,17 +62,395 @@ function detectWebGL(): boolean {
   if (typeof document === "undefined") return false;
   try {
     const canvas = document.createElement("canvas");
-    return Boolean(
-      canvas.getContext("webgl2") || canvas.getContext("webgl"),
-    );
+    return Boolean(canvas.getContext("webgl2") || canvas.getContext("webgl"));
   } catch {
     return false;
   }
 }
 
-/** One inspectable plate in the capability stack. */
+/**
+ * Materials tagged with `userData.glow` get brighter as a layer becomes
+ * active. One traversal only when the level actually changed.
+ */
+function applyGlow(root: THREE.Object3D, level: number) {
+  root.traverse((obj) => {
+    const mesh = obj as THREE.Mesh;
+    if (!mesh.isMesh) return;
+    const mat = mesh.material as THREE.Material;
+    const glow = mat.userData?.glow as number | undefined;
+    if (glow === undefined) return;
+    if ("emissiveIntensity" in mat) {
+      (mat as THREE.MeshStandardMaterial).emissiveIntensity =
+        glow * (0.3 + 1.3 * level);
+    } else if (mat.transparent) {
+      mat.opacity = Math.min(1, glow * (0.35 + 0.65 * level));
+    }
+  });
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Glyphs: one bold, readable object per layer                               */
+/* -------------------------------------------------------------------------- */
+
+interface GlyphProps {
+  level: LevelRef;
+  reducedMotion: boolean;
+}
+
+/** 01 Mobile: two upright phones (iOS + Android). */
+const PhoneGlyph: React.FC = () => (
+  <group>
+    {[-0.34, 0.34].map((x, i) => (
+      <group key={x} position={[x, 0.27, 0]} rotation-y={i === 0 ? 0.3 : -0.3}>
+        <RoundedBox args={[0.34, 0.54, 0.05]} radius={0.04} smoothness={3}>
+          <meshPhysicalMaterial
+            color="#14141a"
+            metalness={0.8}
+            roughness={0.3}
+            clearcoat={1}
+            clearcoatRoughness={0.2}
+          />
+          <Edges threshold={35} color="#7a5230" />
+        </RoundedBox>
+        <mesh position={[0, 0, 0.027]}>
+          <planeGeometry args={[0.28, 0.46]} />
+          <meshStandardMaterial
+            color="#2a1608"
+            emissive={ACCENT}
+            emissiveIntensity={0.5}
+            userData={{ glow: 0.8 }}
+          />
+        </mesh>
+        {[
+          [-0.07, 0.1],
+          [0.07, 0.1],
+          [-0.07, -0.04],
+          [0.07, -0.04],
+        ].map(([tx, ty]) => (
+          <mesh key={`${tx}-${ty}`} position={[tx, ty, 0.029]}>
+            <planeGeometry args={[0.094, 0.094]} />
+            <meshBasicMaterial
+              color={HOT}
+              transparent
+              opacity={0.5}
+              userData={{ glow: 0.9 }}
+            />
+          </mesh>
+        ))}
+        <mesh position={[0, -0.16, 0.029]}>
+          <planeGeometry args={[0.2, 0.05]} />
+          <meshBasicMaterial color="#120a04" transparent opacity={0.85} />
+        </mesh>
+      </group>
+    ))}
+  </group>
+);
+
+/** 02 Web: an upright browser window with a title bar and content lines. */
+const BrowserGlyph: React.FC = () => (
+  <group position={[0, 0.3, -0.1]} rotation-y={-0.14}>
+    <RoundedBox args={[1.25, 0.56, 0.05]} radius={0.03} smoothness={3}>
+      <meshPhysicalMaterial
+        color="#14141a"
+        metalness={0.8}
+        roughness={0.3}
+        clearcoat={1}
+        clearcoatRoughness={0.2}
+      />
+      <Edges threshold={35} color="#7a5230" />
+    </RoundedBox>
+    <mesh position={[0, 0.235, 0.027]}>
+      <planeGeometry args={[1.2, 0.07]} />
+      <meshBasicMaterial color="#2a180a" />
+    </mesh>
+    {[-0.54, -0.47, -0.4].map((x, i) => (
+      <mesh key={x} position={[x, 0.235, 0.03]}>
+        <circleGeometry args={[0.016, 12]} />
+        <meshBasicMaterial color={i === 0 ? HOT : ACCENT} />
+      </mesh>
+    ))}
+    {[
+      { w: 0.62, y: 0.1 },
+      { w: 0.44, y: 0.02 },
+      { w: 0.54, y: -0.06 },
+      { w: 0.3, y: -0.14 },
+    ].map(({ w, y }) => (
+      <mesh key={y} position={[-0.58 + 0.06 + w / 2, y, 0.028]}>
+        <planeGeometry args={[w, 0.034]} />
+        <meshBasicMaterial
+          color={ACCENT}
+          transparent
+          opacity={0.5}
+          userData={{ glow: 0.95 }}
+        />
+      </mesh>
+    ))}
+    <mesh position={[0.4, -0.02, 0.028]}>
+      <planeGeometry args={[0.32, 0.36]} />
+      <meshStandardMaterial
+        color="#2a1608"
+        emissive={ACCENT}
+        emissiveIntensity={0.4}
+        userData={{ glow: 0.7 }}
+      />
+    </mesh>
+  </group>
+);
+
+/** 03 Realtime: pulses radiating from a core, with nodes orbiting it. */
+const RealtimeGlyph: React.FC<GlyphProps> = ({ level, reducedMotion }) => {
+  const orbit = useRef<THREE.Group>(null);
+  const pulses = useRef<(THREE.Mesh | null)[]>([]);
+
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
+    if (orbit.current && !reducedMotion) orbit.current.rotation.y = t * 0.9;
+    pulses.current.forEach((mesh, i) => {
+      if (!mesh) return;
+      const p = reducedMotion ? 0.25 + i * 0.3 : (t * 0.35 + i / 3) % 1;
+      mesh.scale.setScalar(0.25 + p * 0.9);
+      (mesh.material as THREE.MeshBasicMaterial).opacity =
+        (1 - p) * (0.3 + 0.6 * level.current);
+    });
+  });
+
+  return (
+    <group>
+      {[0, 1, 2].map((i) => (
+        <mesh
+          key={i}
+          ref={(m) => {
+            pulses.current[i] = m;
+          }}
+          rotation-x={-Math.PI / 2}
+        >
+          <ringGeometry args={[0.97, 1, 64]} />
+          <meshBasicMaterial
+            color={ACCENT}
+            transparent
+            opacity={0.4}
+            depthWrite={false}
+            side={THREE.DoubleSide}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      ))}
+      <mesh rotation-x={-Math.PI / 2} position={[0, 0.004, 0]}>
+        <ringGeometry args={[0.6, 0.615, 64]} />
+        <meshBasicMaterial
+          color={HOT}
+          transparent
+          opacity={0.4}
+          side={THREE.DoubleSide}
+          userData={{ glow: 0.9 }}
+        />
+      </mesh>
+      <mesh position={[0, 0.16, 0]}>
+        <sphereGeometry args={[0.13, 24, 24]} />
+        <meshStandardMaterial
+          color="#2a1608"
+          emissive={HOT}
+          emissiveIntensity={1}
+          userData={{ glow: 1.3 }}
+        />
+      </mesh>
+      <group ref={orbit} position={[0, 0.16, 0]}>
+        {[0, 1, 2].map((i) => {
+          const a = (i / 3) * Math.PI * 2;
+          return (
+            <mesh key={i} position={[Math.cos(a) * 0.6, 0, Math.sin(a) * 0.6]}>
+              <sphereGeometry args={[0.055, 16, 16]} />
+              <meshStandardMaterial
+                color="#2a1608"
+                emissive={ACCENT}
+                emissiveIntensity={1}
+                userData={{ glow: 1 }}
+              />
+            </mesh>
+          );
+        })}
+      </group>
+    </group>
+  );
+};
+
+const CMS_HEIGHTS = [0.18, 0.34, 0.22, 0.4, 0.16, 0.3, 0.24, 0.2, 0.36];
+
+/** 04 CMS: a grid of content blocks that ripple when the layer is active. */
+const CmsGlyph: React.FC<GlyphProps> = ({ level, reducedMotion }) => {
+  const blocks = useRef<(THREE.Group | null)[]>([]);
+
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
+    blocks.current.forEach((g, i) => {
+      if (!g) return;
+      g.scale.y = reducedMotion
+        ? 1
+        : 1 + Math.sin(t * 1.5 + i * 0.8) * 0.2 * level.current;
+    });
+  });
+
+  return (
+    <group>
+      {CMS_HEIGHTS.map((h, i) => {
+        const col = i % 3;
+        const row = Math.floor(i / 3);
+        return (
+          <group
+            key={i}
+            ref={(g) => {
+              blocks.current[i] = g;
+            }}
+            position={[(col - 1) * 0.36, 0, (row - 1) * 0.36]}
+          >
+            <RoundedBox
+              args={[0.28, h, 0.28]}
+              radius={0.02}
+              smoothness={2}
+              position={[0, h / 2, 0]}
+            >
+              <meshStandardMaterial
+                color="#2b180c"
+                metalness={0.5}
+                roughness={0.35}
+                emissive={ACCENT}
+                emissiveIntensity={0.4}
+                userData={{ glow: 0.45 + h }}
+              />
+            </RoundedBox>
+          </group>
+        );
+      })}
+    </group>
+  );
+};
+
+/** 05 Performance: a speedometer whose needle sweeps to the top when active. */
+const PerformanceGlyph: React.FC<GlyphProps> = ({ level, reducedMotion }) => {
+  const needle = useRef<THREE.Group>(null);
+  const value = useRef(0);
+
+  useFrame(({ clock }, delta) => {
+    if (!needle.current) return;
+    const target = level.current > 0.5 ? 0.92 : 0.38;
+    value.current = reducedMotion
+      ? target
+      : THREE.MathUtils.damp(value.current, target, 3, Math.min(delta, 0.1));
+    const jitter =
+      reducedMotion || level.current < 0.5
+        ? 0
+        : Math.sin(clock.elapsedTime * 9) * 0.015;
+    needle.current.rotation.z = Math.PI * (1 - value.current) + jitter;
+  });
+
+  const segments = [
+    { rot: (2 * Math.PI) / 3, color: "#7a3d0c", glow: 0.5 },
+    { rot: Math.PI / 3, color: ACCENT, glow: 0.9 },
+    { rot: 0, color: HOT, glow: 1.2 },
+  ];
+
+  return (
+    <group>
+      <group position={[0, 0.07, 0]} rotation-y={-0.14}>
+        {segments.map(({ rot, color, glow }) => (
+          <mesh key={rot} rotation-z={rot}>
+            <torusGeometry args={[0.46, 0.045, 12, 24, Math.PI / 3 - 0.04]} />
+            <meshStandardMaterial
+              color="#2a1608"
+              emissive={color}
+              emissiveIntensity={0.6}
+              userData={{ glow }}
+            />
+          </mesh>
+        ))}
+        <group ref={needle}>
+          <mesh position={[0.22, 0, 0.01]}>
+            <boxGeometry args={[0.44, 0.03, 0.022]} />
+            <meshStandardMaterial
+              color="#2a1608"
+              emissive={HOT}
+              emissiveIntensity={1.2}
+            />
+          </mesh>
+        </group>
+        <mesh rotation-x={Math.PI / 2}>
+          <cylinderGeometry args={[0.055, 0.055, 0.04, 20]} />
+          <meshStandardMaterial
+            color="#3a342e"
+            metalness={0.9}
+            roughness={0.25}
+          />
+        </mesh>
+      </group>
+      {[0.5, 0.8, 1.1].map((len, i) => (
+        <mesh key={len} position={[-0.55 + len / 2, 0.006, 0.4 + i * 0.1]}>
+          <boxGeometry args={[len, 0.012, 0.04]} />
+          <meshBasicMaterial
+            color={i === 2 ? HOT : ACCENT}
+            transparent
+            opacity={0.45}
+            userData={{ glow: 0.95 }}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+};
+
+/** PCB-style traces running from the glyph to the plate edge. */
+const TRACE_START: ReadonlyArray<number | null> = [0.62, 0.8, null, 0.8, 0.8];
+
+const Traces: React.FC<{ index: number; width: number }> = ({
+  index,
+  width,
+}) => {
+  const start = TRACE_START[index];
+  if (start === null || start === undefined) return null;
+  const dir = index % 2 === 0 ? 1 : -1;
+  const baseLen = width / 2 - start - 0.2;
+
+  return (
+    <group>
+      {[
+        { z: -0.5, shorten: 0 },
+        { z: 0.5, shorten: 0.2 },
+      ].map(({ z, shorten }) => {
+        const len = baseLen - shorten;
+        if (len < 0.1) return null;
+        return (
+          <group key={z}>
+            <mesh position={[dir * (start + len / 2), 0.004, z]}>
+              <boxGeometry args={[len, 0.008, 0.016]} />
+              <meshBasicMaterial
+                color={ACCENT}
+                transparent
+                opacity={0.4}
+                userData={{ glow: 0.9 }}
+              />
+            </mesh>
+            <mesh position={[dir * (start + len + 0.03), 0.008, z]}>
+              <boxGeometry args={[0.06, 0.014, 0.06]} />
+              <meshBasicMaterial
+                color={HOT}
+                transparent
+                opacity={0.5}
+                userData={{ glow: 1 }}
+              />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+};
+
+/* -------------------------------------------------------------------------- */
+/*  One inspectable plate                                                     */
+/* -------------------------------------------------------------------------- */
+
 const ServiceLayer: React.FC<{
   index: number;
+  label: string;
   active: boolean;
   preview: boolean;
   reducedMotion: boolean;
@@ -61,6 +459,7 @@ const ServiceLayer: React.FC<{
   onPreview: (index: number | null) => void;
 }> = ({
   index,
+  label,
   active,
   preview,
   reducedMotion,
@@ -69,50 +468,47 @@ const ServiceLayer: React.FC<{
   onPreview,
 }) => {
   const groupRef = useRef<THREE.Group>(null);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const [width, height, depth] = LAYER_SIZE[index];
+  const glyphRef = useRef<THREE.Group>(null);
+  const plateMat = useRef<THREE.MeshPhysicalMaterial>(null);
+  const level = useRef(0.18);
+  const applied = useRef(-1);
+  const [hovered, setHovered] = useState(false);
+  useCursor(hovered);
+
+  const [width, depth] = LAYER_FOOTPRINT[index];
   const baseY = LAYER_Y[index];
-  const top = height / 2 + 0.012;
+  const top = PLATE_H / 2;
 
   useFrame((_, delta) => {
-    if (!groupRef.current) return;
+    const group = groupRef.current;
+    if (!group) return;
     const step = Math.min(delta, 0.1);
-    const yTarget = baseY + (active ? 0.19 : preview ? 0.075 : 0);
-    const scaleTarget = active ? 1.018 : preview ? 1.008 : 1;
-    const glowTarget = active ? 0.2 : preview ? 0.1 : 0.025;
+    const yTarget = baseY + (active ? 0.14 : preview ? 0.06 : 0);
+    const levelTarget = active ? 1 : preview ? 0.6 : 0.18;
 
     if (reducedMotion) {
-      groupRef.current.position.y = yTarget;
-      groupRef.current.scale.setScalar(scaleTarget);
-      if (materialRef.current) {
-        materialRef.current.emissiveIntensity = glowTarget;
-      }
-      return;
-    }
-
-    groupRef.current.position.y = THREE.MathUtils.damp(
-      groupRef.current.position.y,
-      yTarget,
-      5.5,
-      step,
-    );
-    const scale = THREE.MathUtils.damp(
-      groupRef.current.scale.x,
-      scaleTarget,
-      5.5,
-      step,
-    );
-    groupRef.current.scale.setScalar(scale);
-
-    if (materialRef.current) {
-      materialRef.current.emissiveIntensity = THREE.MathUtils.damp(
-        materialRef.current.emissiveIntensity,
-        glowTarget,
-        6,
+      group.position.y = yTarget;
+      level.current = levelTarget;
+    } else {
+      group.position.y = THREE.MathUtils.damp(
+        group.position.y,
+        yTarget,
+        5.5,
         step,
       );
+      level.current = THREE.MathUtils.damp(level.current, levelTarget, 6, step);
+    }
+
+    if (Math.abs(level.current - applied.current) > 0.002) {
+      applied.current = level.current;
+      if (glyphRef.current) applyGlow(glyphRef.current, level.current);
+      if (plateMat.current) {
+        plateMat.current.emissiveIntensity = 0.02 + level.current * 0.16;
+      }
     }
   });
+
+  const edgeColor = active ? HOT : preview ? ACCENT : EDGE_IDLE;
 
   return (
     <group
@@ -120,10 +516,12 @@ const ServiceLayer: React.FC<{
       position={[0, baseY, 0]}
       onPointerEnter={(event) => {
         event.stopPropagation();
+        setHovered(true);
         onPreview(index);
       }}
       onPointerLeave={(event) => {
         event.stopPropagation();
+        setHovered(false);
         onPreview(null);
       }}
       onClick={(event) => {
@@ -131,170 +529,101 @@ const ServiceLayer: React.FC<{
         if (!drag.current || drag.current.moved < 7) onSelect(index);
       }}
     >
-      <RoundedBox
-        args={[width, height, depth]}
-        radius={0.045}
-        smoothness={4}
-      >
-        <meshStandardMaterial
-          ref={materialRef}
-          color={LAYER_TINT[index]}
-          metalness={0.46}
-          roughness={0.4}
-          emissive="#ff5200"
-          emissiveIntensity={0.025}
+      {/* Body: glossy dark metal with a lit edge */}
+      <RoundedBox args={[width, PLATE_H, depth]} radius={0.05} smoothness={3}>
+        <meshPhysicalMaterial
+          ref={plateMat}
+          color="#0d0d12"
+          metalness={0.85}
+          roughness={0.26}
+          clearcoat={1}
+          clearcoatRoughness={0.18}
+          emissive={EMBER}
+          emissiveIntensity={0.04}
         />
+        <Edges threshold={35} color={edgeColor} />
       </RoundedBox>
 
-      {/* Corner fasteners keep the stack reading as a physical assembly. */}
+      {/* Recessed top panel */}
+      <RoundedBox
+        args={[width - 0.36, 0.012, depth - 0.36]}
+        radius={0.01}
+        smoothness={2}
+        position={[0, top + 0.002, 0]}
+      >
+        <meshStandardMaterial color="#07070a" metalness={0.6} roughness={0.5} />
+        <Edges threshold={35} color="#2d1c10" />
+      </RoundedBox>
+
+      {/* Corner fasteners */}
       {[
         [-1, -1],
         [1, -1],
         [-1, 1],
         [1, 1],
-      ].map(([sx, sz], screwIndex) => (
+      ].map(([sx, sz]) => (
         <mesh
-          key={`screw-${screwIndex}`}
+          key={`screw-${sx}-${sz}`}
           position={[
-            sx * (width / 2 - 0.12),
-            top,
-            sz * (depth / 2 - 0.12),
+            sx * (width / 2 - 0.1),
+            top + 0.006,
+            sz * (depth / 2 - 0.1),
           ]}
         >
-          <cylinderGeometry args={[0.028, 0.028, 0.018, 10]} />
+          <cylinderGeometry args={[0.04, 0.04, 0.018, 12]} />
           <meshStandardMaterial
-            color="#4b443e"
+            color="#6a6058"
             metalness={0.9}
             roughness={0.25}
           />
         </mesh>
       ))}
 
-      {/* Each module carries a different top-side signature. */}
-      {index === 0 && (
-        <group position={[0.55, 0, 0.16]}>
-          <mesh position={[0, top, 0]}>
-            <boxGeometry args={[0.42, 0.018, 0.74]} />
-            <meshStandardMaterial
-              color="#17141a"
-              metalness={0.62}
-              roughness={0.28}
-            />
-          </mesh>
-          <mesh position={[0, top + 0.013, 0]}>
-            <boxGeometry args={[0.32, 0.006, 0.62]} />
-            <meshStandardMaterial
-              color={ACCENT}
-              emissive="#ff5a00"
-              emissiveIntensity={active ? 0.9 : 0.4}
-              metalness={0.3}
-              roughness={0.25}
-            />
-          </mesh>
-          <mesh position={[0, top + 0.017, -0.28]}>
-            <boxGeometry args={[0.12, 0.006, 0.035]} />
-            <meshBasicMaterial color={HOT} />
-          </mesh>
-        </group>
-      )}
+      {/* Glyph + traces */}
+      <group ref={glyphRef} position={[0, top + 0.012, 0]}>
+        <Traces index={index} width={width} />
+        {index === 0 && <PhoneGlyph />}
+        {index === 1 && <BrowserGlyph />}
+        {index === 2 && (
+          <RealtimeGlyph level={level} reducedMotion={reducedMotion} />
+        )}
+        {index === 3 && (
+          <CmsGlyph level={level} reducedMotion={reducedMotion} />
+        )}
+        {index === 4 && (
+          <PerformanceGlyph level={level} reducedMotion={reducedMotion} />
+        )}
+      </group>
 
-      {index === 1 && (
-        <group position={[-0.68, 0, -0.36]}>
-          <mesh position={[0, top, 0]}>
-            <boxGeometry args={[1.08, 0.018, 0.66]} />
-            <meshStandardMaterial
-              color="#17151a"
-              metalness={0.58}
-              roughness={0.3}
-            />
-          </mesh>
-          {[-0.21, 0, 0.21].map((z) => (
-            <mesh key={`web-bar-${z}`} position={[0, top + 0.013, z]}>
-              <boxGeometry args={[0.88, 0.006, 0.032]} />
-              <meshBasicMaterial
-                color={ACCENT}
-                transparent
-                opacity={active ? 0.95 : 0.42}
-              />
-            </mesh>
-          ))}
-        </group>
-      )}
-
-      {index === 2 && (
-        <group position={[0.04, 0, 0.04]}>
-          {[0.18, 0.33, 0.48].map((radius, ringIndex) => (
-            <mesh
-              key={`signal-ring-${radius}`}
-              rotation-x={-Math.PI / 2}
-              position={[0, top + 0.004 + ringIndex * 0.002, 0]}
-            >
-              <ringGeometry args={[radius, radius + 0.011, 64]} />
-              <meshBasicMaterial
-                color={ACCENT}
-                transparent
-                opacity={active ? 0.85 : 0.33}
-                side={THREE.DoubleSide}
-              />
-            </mesh>
-          ))}
-          <mesh position={[0, top + 0.016, 0]}>
-            <sphereGeometry args={[0.06, 16, 16]} />
-            <meshBasicMaterial color={HOT} />
-          </mesh>
-        </group>
-      )}
-
-      {index === 3 && (
-        <group position={[-0.66, 0, 0.12]}>
-          {[-0.22, 0, 0.22].map((x) =>
-            [-0.18, 0, 0.18].map((z) => (
-              <mesh key={`cms-${x}-${z}`} position={[x, top, z]}>
-                <boxGeometry args={[0.13, 0.02, 0.13]} />
-                <meshStandardMaterial
-                  color={ACCENT}
-                  emissive="#ff5a00"
-                  emissiveIntensity={active ? 0.5 : 0.16}
-                  metalness={0.4}
-                  roughness={0.3}
-                />
-              </mesh>
-            )),
-          )}
-        </group>
-      )}
-
-      {index === 4 && (
-        <group position={[0.2, 0, 0.16]}>
-          {[0.45, 0.72, 0.98, 1.24].map((length, barIndex) => (
-            <mesh
-              key={`speed-${length}`}
-              position={[-0.56 + length / 2, top, -0.16 + barIndex * 0.11]}
-            >
-              <boxGeometry args={[length, 0.014, 0.052]} />
-              <meshBasicMaterial
-                color={barIndex === 3 ? HOT : ACCENT}
-                transparent
-                opacity={active ? 0.95 : 0.42}
-              />
-            </mesh>
-          ))}
-        </group>
-      )}
-
-      <mesh position={[0, top, 0]}>
-        <boxGeometry args={[0.4, 0.024, 0.28]} />
-        <meshStandardMaterial
-          color="#211a14"
-          emissive="#ff4b00"
-          emissiveIntensity={active ? 0.9 : 0.24}
-          metalness={0.55}
-          roughness={0.3}
-        />
-      </mesh>
+      {/* In-scene label, anchored to the front-left corner */}
+      <Html
+        position={[-width / 2 + 0.02, -PLATE_H / 2 - 0.16, depth / 2 + 0.1]}
+        zIndexRange={[10, 0]}
+        pointerEvents="none"
+        style={{ pointerEvents: "none" }}
+      >
+        <div
+          style={{ transform: "translateY(-50%)" }}
+          className={`flex items-center gap-1.5 whitespace-nowrap rounded-sm border px-1.5 py-[3px] font-mono text-[9px] font-bold uppercase tracking-[0.16em] transition-colors duration-300 ${
+            active
+              ? "border-[#ff7900] bg-[#ff7900] text-black"
+              : preview
+                ? "border-[#ff7900]/70 bg-[#140c06]/90 text-[#ffb066]"
+                : "border-[#2e2a26] bg-[#07070a]/80 text-[#8f8a81]"
+          }`}
+        >
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <span className="opacity-50">/</span>
+          <span>{label}</span>
+        </div>
+      </Html>
     </group>
   );
 };
+
+/* -------------------------------------------------------------------------- */
+/*  Scene extras                                                              */
+/* -------------------------------------------------------------------------- */
 
 /** A ring that glides to the active layer instead of blinking between rows. */
 const ActiveHalo: React.FC<{
@@ -308,14 +637,14 @@ const ActiveHalo: React.FC<{
   useFrame((_, delta) => {
     if (!groupRef.current || !innerRef.current || !outerRef.current) return;
     const step = Math.min(delta, 0.1);
-    const targetY = LAYER_Y[activeIndex] + 0.02;
-    const targetScale =
-      Math.max(LAYER_SIZE[activeIndex][0], LAYER_SIZE[activeIndex][2]) * 0.62;
+    const [w, d] = LAYER_FOOTPRINT[activeIndex];
+    const targetY = LAYER_Y[activeIndex] + 0.14;
+    const targetScale = Math.max(w, d) * 0.62;
 
     if (reducedMotion) {
       groupRef.current.position.y = targetY;
       groupRef.current.scale.setScalar(targetScale);
-      innerRef.current.opacity = 0.58;
+      innerRef.current.opacity = 0.55;
       outerRef.current.opacity = 0.16;
       return;
     }
@@ -326,16 +655,12 @@ const ActiveHalo: React.FC<{
       5,
       step,
     );
-    const scale = THREE.MathUtils.damp(
-      groupRef.current.scale.x,
-      targetScale,
-      5,
-      step,
+    groupRef.current.scale.setScalar(
+      THREE.MathUtils.damp(groupRef.current.scale.x, targetScale, 5, step),
     );
-    groupRef.current.scale.setScalar(scale);
     innerRef.current.opacity = THREE.MathUtils.damp(
       innerRef.current.opacity,
-      0.58,
+      0.55,
       5,
       step,
     );
@@ -377,7 +702,7 @@ const ActiveHalo: React.FC<{
   );
 };
 
-/** A small custom shader: two crossed planes form a rising energy column. */
+/** Energy column that runs through the gaps between plates. */
 const EnergyBeam: React.FC<{ reducedMotion: boolean }> = ({
   reducedMotion,
 }) => {
@@ -400,10 +725,10 @@ const EnergyBeam: React.FC<{ reducedMotion: boolean }> = ({
           uniform float uTime;
           varying vec2 vUv;
           void main() {
-            float band = fract(vUv.y * 2.5 - uTime * 0.22);
+            float band = fract(vUv.y * 4.0 - uTime * 0.25);
             float pulse = smoothstep(0.0, 0.1, band) * smoothstep(0.42, 0.1, band);
             float edge = smoothstep(0.0, 0.16, vUv.x) * smoothstep(1.0, 0.84, vUv.x);
-            float alpha = (0.07 + pulse * 0.68) * edge;
+            float alpha = (0.08 + pulse * 0.7) * edge;
             gl_FragColor = vec4(1.0, 0.48, 0.08, alpha);
           }
         `,
@@ -414,25 +739,23 @@ const EnergyBeam: React.FC<{ reducedMotion: boolean }> = ({
   useEffect(() => () => material.dispose(), [material]);
 
   useFrame(({ clock }) => {
-    if (!reducedMotion) {
-      material.uniforms.uTime.value = clock.elapsedTime;
-    }
+    if (!reducedMotion) material.uniforms.uTime.value = clock.elapsedTime;
   });
 
   return (
-    <group>
-      <mesh position={[0, 0, 0]}>
-        <planeGeometry args={[0.22, 3.6]} />
+    <group position={[0, 0.2, 0]}>
+      <mesh>
+        <planeGeometry args={[0.2, 5.4]} />
         <primitive object={material} attach="material" />
       </mesh>
-      <mesh position={[0, 0, 0]} rotation-y={Math.PI / 2}>
-        <planeGeometry args={[0.22, 3.6]} />
+      <mesh rotation-y={Math.PI / 2}>
+        <planeGeometry args={[0.2, 5.4]} />
         <primitive object={material} attach="material" />
       </mesh>
-      <mesh position={[0, 0, 0]}>
-        <cylinderGeometry args={[0.012, 0.012, 3.6, 8]} />
+      <mesh>
+        <cylinderGeometry args={[0.01, 0.01, 5.4, 8]} />
         <meshBasicMaterial
-          color="#ffb15c"
+          color={HOT}
           transparent
           opacity={0.4}
           blending={THREE.AdditiveBlending}
@@ -446,11 +769,12 @@ const EnergyBeam: React.FC<{ reducedMotion: boolean }> = ({
 const CoreDust: React.FC<{ reducedMotion: boolean }> = ({ reducedMotion }) => {
   const pointsRef = useRef<THREE.Points>(null);
   const positions = useMemo(() => {
-    const array = new Float32Array(84 * 3);
-    for (let i = 0; i < 84; i++) {
+    const count = 72;
+    const array = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
       const angle = i * 2.399963;
-      const radius = 2.1 + ((i * 37) % 23) / 10;
-      const y = -1.9 + ((i * 53) % 38) / 10;
+      const radius = 2.2 + ((i * 37) % 23) / 12;
+      const y = -2.4 + ((i * 53) % 52) / 10;
       array[i * 3] = Math.cos(angle) * radius;
       array[i * 3 + 1] = y;
       array[i * 3 + 2] = Math.sin(angle) * radius;
@@ -470,10 +794,10 @@ const CoreDust: React.FC<{ reducedMotion: boolean }> = ({ reducedMotion }) => {
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.028}
+        size={0.03}
         color="#ff9b4a"
         transparent
-        opacity={0.55}
+        opacity={0.5}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
@@ -482,7 +806,66 @@ const CoreDust: React.FC<{ reducedMotion: boolean }> = ({ reducedMotion }) => {
   );
 };
 
+/** Soft orange pool of light under the stack. Fakes bloom without post-processing. */
+const FloorGlow: React.FC = () => {
+  const texture = useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 128;
+    canvas.height = 128;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grad.addColorStop(0, "rgba(255,121,0,0.55)");
+      grad.addColorStop(0.5, "rgba(255,121,0,0.14)");
+      grad.addColorStop(1, "rgba(255,121,0,0)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 128, 128);
+    }
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  }, []);
+
+  useEffect(() => () => texture.dispose(), [texture]);
+
+  return (
+    <group position={[0, FLOOR_Y, 0]}>
+      <mesh rotation-x={-Math.PI / 2}>
+        <planeGeometry args={[7.5, 7.5]} />
+        <meshBasicMaterial
+          map={texture}
+          transparent
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+        />
+      </mesh>
+      <mesh rotation-x={-Math.PI / 2}>
+        <ringGeometry args={[2.05, 2.062, 96]} />
+        <meshBasicMaterial
+          color={ACCENT}
+          transparent
+          opacity={0.2}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+        />
+      </mesh>
+      <mesh rotation-x={-Math.PI / 2}>
+        <ringGeometry args={[2.85, 2.857, 96]} />
+        <meshBasicMaterial
+          color={ACCENT}
+          transparent
+          opacity={0.08}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+        />
+      </mesh>
+    </group>
+  );
+};
+
 const StackScene: React.FC<{
+  labels: string[];
   activeIndex: number;
   previewIndex: number | null;
   reducedMotion: boolean;
@@ -490,6 +873,7 @@ const StackScene: React.FC<{
   onSelect: (index: number) => void;
   onPreview: (index: number | null) => void;
 }> = ({
+  labels,
   activeIndex,
   previewIndex,
   reducedMotion,
@@ -532,16 +916,42 @@ const StackScene: React.FC<{
       5,
       step,
     );
-    stackRef.current.position.y =
-      Math.sin(clock.elapsedTime * 0.58) * 0.026;
+    stackRef.current.position.y = Math.sin(clock.elapsedTime * 0.58) * 0.026;
   });
 
   return (
     <>
-      <ambientLight intensity={0.38} />
+      {/* Procedural studio lighting: gives the metal something to reflect, no network fetch. */}
+      <Environment resolution={128} frames={1}>
+        <Lightformer
+          form="rect"
+          intensity={2.4}
+          color="#fff1e0"
+          position={[0, 6, 0]}
+          rotation-x={Math.PI / 2}
+          scale={[10, 10, 1]}
+        />
+        <Lightformer
+          form="rect"
+          intensity={3}
+          color="#ff7a1a"
+          position={[-6, 1, 0]}
+          rotation-y={Math.PI / 2}
+          scale={[8, 3, 1]}
+        />
+        <Lightformer
+          form="rect"
+          intensity={1.6}
+          color="#8ea6ff"
+          position={[5, 2, -5]}
+          rotation-y={-Math.PI / 4}
+          scale={[6, 3, 1]}
+        />
+      </Environment>
+      <ambientLight intensity={0.25} />
       <directionalLight
         position={[4.5, 6, 4]}
-        intensity={3.4}
+        intensity={2.2}
         color="#fff3e4"
       />
       <directionalLight
@@ -549,18 +959,14 @@ const StackScene: React.FC<{
         intensity={1.4}
         color="#ff6a12"
       />
-      <directionalLight
-        position={[3, 1.5, -5]}
-        intensity={1.2}
-        color="#8ea6ff"
-      />
 
       <group ref={stackRef}>
         <EnergyBeam reducedMotion={reducedMotion} />
-        {LAYER_SIZE.map((_, index) => (
+        {LAYER_FOOTPRINT.map((_, index) => (
           <ServiceLayer
             key={index}
             index={index}
+            label={labels[index] ?? ""}
             active={activeIndex === index}
             preview={previewIndex === index}
             reducedMotion={reducedMotion}
@@ -569,32 +975,8 @@ const StackScene: React.FC<{
             onPreview={onPreview}
           />
         ))}
-        <ActiveHalo
-          activeIndex={activeIndex}
-          reducedMotion={reducedMotion}
-        />
-        <group position={[0, -1.6, 0]}>
-          <mesh rotation-x={-Math.PI / 2}>
-            <ringGeometry args={[2.05, 2.062, 96]} />
-            <meshBasicMaterial
-              color={ACCENT}
-              transparent
-              opacity={0.16}
-              side={THREE.DoubleSide}
-              depthWrite={false}
-            />
-          </mesh>
-          <mesh rotation-x={-Math.PI / 2}>
-            <ringGeometry args={[2.75, 2.757, 96]} />
-            <meshBasicMaterial
-              color={ACCENT}
-              transparent
-              opacity={0.06}
-              side={THREE.DoubleSide}
-              depthWrite={false}
-            />
-          </mesh>
-        </group>
+        <ActiveHalo activeIndex={activeIndex} reducedMotion={reducedMotion} />
+        <FloorGlow />
       </group>
 
       <CoreDust reducedMotion={reducedMotion} />
@@ -602,34 +984,57 @@ const StackScene: React.FC<{
   );
 };
 
-const CssStackFallback: React.FC<{ activeIndex: number }> = ({
-  activeIndex,
-}) => (
-  <div className="flex h-full w-full items-center justify-center">
+/* -------------------------------------------------------------------------- */
+/*  CSS fallback (no WebGL)                                                   */
+/* -------------------------------------------------------------------------- */
+
+const CssStackFallback: React.FC<{
+  activeIndex: number;
+  onSelect: (index: number) => void;
+}> = ({ activeIndex, onSelect }) => (
+  <div
+    className="flex h-full w-full items-center justify-center"
+    style={{ perspective: "1100px" }}
+  >
     <div
-      className="relative h-48 w-56"
-      style={{ transform: "rotateX(56deg) rotateZ(-30deg)" }}
+      className="relative h-0 w-0"
+      style={{
+        transformStyle: "preserve-3d",
+        transform: "rotateX(60deg) rotateZ(-38deg)",
+      }}
     >
-      {LAYER_SIZE.map(([width, , depth], index) => (
-        <div
-          key={index}
-          className={`absolute left-1/2 top-1/2 rounded border transition-all duration-500 ${
-            activeIndex === index
-              ? "border-[#ff7900] bg-[#ff7900]/15 shadow-[0_0_30px_rgba(255,121,0,0.3)]"
-              : "border-[#3a3028] bg-[#121116]"
-          }`}
-          style={{
-            width: `${width * 38}px`,
-            height: `${depth * 30}px`,
-            transform: `translate(-50%, -50%) translateY(${
-              (index - 2) * 24
-            }px) translateZ(${activeIndex === index ? 18 : 0}px)`,
-          }}
-        />
-      ))}
+      {LAYER_FOOTPRINT.map(([width, depth], index) => {
+        const isActive = activeIndex === index;
+        const z = LAYER_Y[index] * 44 + (isActive ? 12 : 0);
+        return (
+          <div
+            key={index}
+            onClick={() => onSelect(index)}
+            className={`absolute cursor-pointer rounded-md border transition-all duration-500 ${
+              isActive
+                ? "border-[#ff7900] bg-[#ff7900]/20 shadow-[0_0_30px_rgba(255,121,0,0.35)]"
+                : "border-[#4a3320] bg-[#121116]"
+            }`}
+            style={{
+              left: 0,
+              top: 0,
+              width: `${width * 40}px`,
+              height: `${depth * 40}px`,
+              transform: `translate(-50%, -50%) translateZ(${z}px)`,
+            }}
+          />
+        );
+      })}
     </div>
   </div>
 );
+
+/* -------------------------------------------------------------------------- */
+/*  Public component                                                          */
+/* -------------------------------------------------------------------------- */
+
+const ARROW_BTN =
+  "inline-flex h-10 w-10 items-center justify-center rounded border border-[#2a2a32] text-[#a39f96] outline-none transition-colors hover:border-[#ff7900]/60 hover:text-[#ff7900] focus-visible:ring-2 focus-visible:ring-[#ff7900] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07070a] sm:h-8 sm:w-8";
 
 export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
   services,
@@ -641,7 +1046,7 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
 }) => {
   const hostRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<CoreDrag>({
-    targetX: 0.06,
+    targetX: 0.1,
     targetY: 0,
     velocityY: 0,
     moved: 0,
@@ -686,12 +1091,12 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
     const dy = event.clientY - drag.lastY;
 
     drag.moved += Math.abs(dx) + Math.abs(dy);
-    drag.targetY = THREE.MathUtils.clamp(drag.targetY + dx * 0.008, -0.95, 0.95);
-    drag.targetX = THREE.MathUtils.clamp(
-      drag.targetX + dy * 0.004,
-      -0.24,
-      0.32,
+    drag.targetY = THREE.MathUtils.clamp(
+      drag.targetY + dx * 0.008,
+      -0.95,
+      0.95,
     );
+    drag.targetX = THREE.MathUtils.clamp(drag.targetX + dy * 0.004, -0.15, 0.4);
     drag.velocityY = dx * 0.00085;
     drag.lastX = event.clientX;
     drag.lastY = event.clientY;
@@ -702,6 +1107,10 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
   };
 
   const active = services[activeIndex] ?? services[0];
+  const labels = useMemo(
+    () => services.map((s) => s.id.toUpperCase()),
+    [services],
+  );
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-[#26262e] bg-[#07070a] shadow-[16px_22px_70px_rgba(0,0,0,0.62)]">
@@ -722,6 +1131,12 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
             "radial-gradient(ellipse at 50% 48%, black 8%, transparent 74%)",
         }}
       />
+
+      {/* Screen-reader announcement (the 3D view itself is decorative) */}
+      <p className="sr-only" aria-live="polite">
+        {active.num} of {String(services.length).padStart(2, "0")}:{" "}
+        {active.title}
+      </p>
 
       {/* Console chrome */}
       <div className="relative z-20 flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 font-mono text-[9px] uppercase tracking-[0.18em]">
@@ -748,17 +1163,17 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
         onPointerLeave={endDrag}
-        className="relative h-[350px] cursor-grab touch-pan-y select-none active:cursor-grabbing sm:h-[430px] lg:h-[500px]"
+        className="relative isolate h-[390px] cursor-grab touch-pan-y select-none active:cursor-grabbing sm:h-[460px] lg:h-[520px]"
       >
         {webgl ? (
           <Canvas
-            dpr={[1, 1.8]}
+            dpr={[1, 1.75]}
             frameloop={inView ? "always" : "demand"}
             camera={{
-              position: [4.6, 3.4, 6.3],
-              fov: 32,
+              position: [5.4, 3.4, 7.8],
+              fov: 36,
               near: 0.1,
-              far: 40,
+              far: 50,
             }}
             gl={{
               alpha: true,
@@ -766,12 +1181,13 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
               powerPreference: "high-performance",
             }}
             onCreated={({ camera, gl }) => {
-              camera.lookAt(0, 0.05, 0);
+              camera.lookAt(0, 0.1, 0);
               gl.toneMapping = THREE.ACESFilmicToneMapping;
-              gl.toneMappingExposure = 1.15;
+              gl.toneMappingExposure = 1.1;
             }}
           >
             <StackScene
+              labels={labels}
               activeIndex={activeIndex}
               previewIndex={previewIndex}
               reducedMotion={reducedMotion}
@@ -781,7 +1197,7 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
             />
           </Canvas>
         ) : (
-          <CssStackFallback activeIndex={activeIndex} />
+          <CssStackFallback activeIndex={activeIndex} onSelect={onSelect} />
         )}
 
         <div
@@ -794,7 +1210,7 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
           <span className="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[#ff7900]/50" />
         </div>
 
-        <div className="pointer-events-none absolute inset-x-4 top-4 z-10 flex items-center justify-between font-mono text-[8px] uppercase tracking-[0.18em] text-[#ffb066]/90 sm:inset-x-5">
+        <div className="pointer-events-none absolute inset-x-4 top-4 z-10 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.18em] text-[#ffb066]/90 sm:inset-x-5">
           <span className="flex items-center gap-1.5">
             <span className="h-1 w-1 bg-[#ff7900]" />
             {active.short}
@@ -803,10 +1219,10 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
         </div>
 
         <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 flex justify-center">
-          <span className="font-mono text-[8px] uppercase tracking-[0.24em] text-[#ffb066]/90 sm:hidden">
+          <span className="font-mono text-[9px] uppercase tracking-[0.24em] text-[#ffb066]/90 sm:hidden">
             [ TAP A LAYER ]
           </span>
-          <span className="hidden font-mono text-[8px] uppercase tracking-[0.24em] text-[#ffb066]/80 sm:inline">
+          <span className="hidden font-mono text-[9px] uppercase tracking-[0.24em] text-[#ffb066]/80 sm:inline">
             [ CLICK A LAYER TO INSPECT ]
           </span>
         </div>
@@ -815,35 +1231,57 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
       {/* Console footer */}
       <div className="relative z-20 flex flex-col gap-3 border-t border-white/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <div className="font-display text-sm font-bold tracking-tight text-white sm:text-base">
+          <div className="truncate font-display text-sm font-bold tracking-tight text-white sm:text-base">
             {active.num} <span className="text-[#ff7900]">/</span>{" "}
             {active.short}
           </div>
-          <div className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-[#8f8a81]">
-            MODULE LOCKED · SIGNAL STABLE
+          <div className="mt-0.5 truncate font-mono text-[9px] uppercase tracking-[0.14em] text-[#8f8a81]">
+            {active.subtitle}
           </div>
         </div>
-        <div className="flex shrink-0 items-center gap-1 self-end sm:self-auto">
+
+        <div className="flex shrink-0 items-center justify-between gap-1 sm:justify-end">
           <button
             type="button"
             onClick={() =>
-              onSelect(
-                (activeIndex - 1 + services.length) % services.length,
-              )
+              onSelect((activeIndex - 1 + services.length) % services.length)
             }
             aria-label="Previous capability layer"
-            className="inline-flex h-8 w-8 items-center justify-center rounded border border-[#2a2a32] text-[#a39f96] outline-none transition-colors hover:border-[#ff7900]/60 hover:text-[#ff7900] focus-visible:ring-2 focus-visible:ring-[#ff7900] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07070a]"
+            className={ARROW_BTN}
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <span className="w-10 text-center font-mono text-[9px] tracking-[0.15em] text-[#8f8a81]">
-            {active.num}/05
-          </span>
+
+          <div
+            role="group"
+            aria-label="Capability layers"
+            className="flex items-center"
+          >
+            {services.map((service, index) => (
+              <button
+                key={service.id}
+                type="button"
+                onClick={() => onSelect(index)}
+                aria-label={`Show ${service.short}`}
+                aria-current={index === activeIndex ? "true" : undefined}
+                className="group/seg flex h-10 w-6 items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#ff7900] sm:h-8"
+              >
+                <span
+                  className={`h-1 rounded-full transition-all duration-300 ${
+                    index === activeIndex
+                      ? "w-5 bg-[#ff7900]"
+                      : "w-2.5 bg-[#2e2e36] group-hover/seg:bg-[#6b4a2e]"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+
           <button
             type="button"
             onClick={() => onSelect((activeIndex + 1) % services.length)}
             aria-label="Next capability layer"
-            className="inline-flex h-8 w-8 items-center justify-center rounded border border-[#2a2a32] text-[#a39f96] outline-none transition-colors hover:border-[#ff7900]/60 hover:text-[#ff7900] focus-visible:ring-2 focus-visible:ring-[#ff7900] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07070a]"
+            className={ARROW_BTN}
           >
             <ChevronRight className="h-4 w-4" />
           </button>
