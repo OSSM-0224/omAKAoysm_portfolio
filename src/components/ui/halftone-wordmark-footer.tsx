@@ -41,7 +41,7 @@ export interface HalftoneWordmarkFooterProps {
   dotGap?: number;
   /** Pointer push radius in CSS px. */
   radius?: number;
-  /** How much of the cap height hangs below the bottom edge, 0-0.6. */
+  /** Cap height hanging below the bottom edge, -0.4 to 0.6. Negative lifts the word (use it so a lowercase y keeps its tail). */
   crop?: number;
   grain?: number;
   interactive?: boolean;
@@ -263,7 +263,7 @@ export default function HalftoneWordmarkFooter({
       m.font = o.fontWeight + " " + fit + "px " + o.fontFamily;
       const box = m.measureText(word);
       const cap = box.actualBoundingBoxAscent || fit * 0.72;
-      const c = Math.max(0, Math.min(0.6, o.crop));
+      const c = Math.max(-0.4, Math.min(0.6, o.crop));
       m.fillStyle = "#000";
       m.textBaseline = "alphabetic";
       m.fillText(word, (w - box.width) / 2, h + cap * c);
