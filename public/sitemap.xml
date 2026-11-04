@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://omoysm.com/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://omoysm.com/Neon%20Orange%20Rim-Lit%20Portrait%20Cutout.png</image:loc>
+      <image:title>OM (OYSM) Developer Portfolio</image:title>
+      <image:caption>Full-Stack Web & Mobile Developer Portfolio</image:caption>
+    </image:image>
+  </url>
+</urlset>

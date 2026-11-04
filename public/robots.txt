@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /dist/ 
+Sitemap: https://omoysm.com/sitemap.xml
+
+# AI / LLM crawl hints
+Crawler-delay: 2

@@ -105,7 +105,7 @@ export default function App() {
       <div className={`transition-opacity duration-700 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         <Navbar onContactClick={handleContactClick} />
 
-        <main>
+        <main aria-label="Portfolio content" id="main-content">
           <HeroSection
             onExploreClick={handleExploreClick}
             onContactClick={handleContactClick}
