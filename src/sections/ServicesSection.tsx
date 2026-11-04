@@ -1,126 +1,226 @@
-import React from 'react';
-import { Terminal, AppWindow, Smartphone, Sparkles, Box, Gauge, ArrowRight } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  AppWindow,
+  ArrowUpRight,
+  Box,
+  Gauge,
+  Plus,
+  Smartphone,
+  Sparkles,
+} from "lucide-react";
+import { SERVICES } from "../data/services";
+import { CapabilityCore } from "../components/three/CapabilityCore";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
-const SERVICES = [
-  {
-    num: '01',
-    title: 'Mobile App Engineering (React Native & Android)',
-    subtitle: 'From prototype to Google Play Store release',
-    icon: Smartphone,
-    description: 'Production mobile apps built with React Native 0.82 and Native Android Java. Integrated with Zego Cloud encrypted video, offline-first AES storage, Google Maps GPS telemetry, and background services.',
-    deliverables: ['Cross-platform React Native iOS & Android', 'Native Java Android services & background daemons', 'Google Play Store release & AAB signing', 'Zego Cloud live audio/video calling'],
-  },
-  {
-    num: '02',
-    title: 'Full-Stack Web Applications (MERN)',
-    subtitle: 'Layered controller-service-repo architectures',
-    icon: AppWindow,
-    description: 'Bespoke web applications built with React 19, TypeScript, Express, and MongoDB. Engineered for concurrency, rock-solid data consistency, and high-velocity workflows.',
-    deliverables: ['Custom RESTful backend APIs', 'Schema normalization & migration scripts', 'Dual-token JWT session security', 'Reactive stateful dashboards'],
-  },
-  {
-    num: '03',
-    title: 'Real-Time Systems & WebSocket Engines',
-    subtitle: 'Sub-50ms synchronized bidirectional streams',
-    icon: Sparkles,
-    description: 'High-frequency live auction suites, collaborative sports match scoring, and multi-user data feeds that update across thousands of concurrent clients without stutter or desync.',
-    deliverables: ['Socket.io event clusters & rooms', 'Optimistic UI with rollback protection', 'Conflict-free state resolution', 'Exportable PDF certificates & logs'],
-  },
-  {
-    num: '04',
-    title: 'Client Ecosystems & Headless CMS',
-    subtitle: 'Healthcare, sports, and corporate platforms',
-    icon: Box,
-    description: 'High-conversion digital suites for medical practices, clinics, and non-profits. Sanity Headless CMS content pipelines, doctor consultation intakes, and trust-first designs.',
-    deliverables: ['Multi-speciality clinic platforms', 'Sanity Headless CMS schemas', 'Automated appointment calendars', 'WCAG AA accessible interfaces'],
-  },
-  {
-    num: '05',
-    title: 'Performance & Technical SEO Architecture',
-    subtitle: 'Lighthouse 95+ and programmatic search indexing',
-    icon: Gauge,
-    description: 'Transforming slow sites into sub-second powerhouses. Eliminating cumulative layout shifts (CLS), optimizing bundle chunks, and deploying structured schema.org data.',
-    deliverables: ['Core Web Vitals greenline audits', 'Vite bundle splitting & tree-shaking', 'Dynamic Open Graph social cards', 'JSON-LD structured rich data'],
-  },
-];
+const SERVICE_ICONS = {
+  mobile: Smartphone,
+  web: AppWindow,
+  realtime: Sparkles,
+  cms: Box,
+  performance: Gauge,
+} as const;
 
-export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({ onContactClick }) => {
+const CSS = `
+@keyframes service-reveal {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.service-reveal { animation: service-reveal 340ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .service-reveal { animation: none; }
+}
+`;
+
+export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
+  onContactClick,
+}) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const reducedMotion = useReducedMotion();
+  const activeService = SERVICES[activeIndex];
+
   return (
     <section
       id="services"
-      className="relative w-full py-28 px-6 sm:px-8 md:px-12 bg-[#040406] border-t border-[#1c1c1c]"
+      className="relative w-full overflow-hidden border-t border-[#1c1c1c] bg-[#040406] px-6 py-24 sm:px-8 sm:py-28 md:px-12"
     >
-      <div className="max-w-7xl mx-auto w-full space-y-16">
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-8 border-b border-[#1c1c1c]">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#ff7900] tracking-wider uppercase">
-              <Terminal className="w-3.5 h-3.5" />
-              <span>06. CAPABILITIES &amp; OFFERINGS</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display text-white">
-              Web &amp; Mobile Engineering Services
+      <style>{CSS}</style>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 top-20 h-[420px] w-[420px] rounded-full bg-[#ff7900]/[0.045] blur-[120px]"
+      />
+
+      <div className="relative mx-auto w-full max-w-7xl">
+        {/* Section lead: the stack is the argument, so let it lead without a kicker. */}
+        <div className="flex flex-col gap-8 border-b border-[#1c1c1c] pb-9 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <h2 className="text-balance font-display text-4xl font-bold leading-[0.98] tracking-tight text-white sm:text-5xl md:text-6xl">
+              Five layers.
+              <span className="block text-[#ff7900]">One builder.</span>
             </h2>
+            <p className="mt-5 max-w-2xl text-pretty text-sm leading-relaxed text-[#a39f96] sm:text-base">
+              Mobile, web, real-time, CMS, and performance. Select a layer to
+              inspect the system inside it, or drag the core to look around the
+              stack.
+            </p>
           </div>
-          <div className="font-mono text-xs text-[#737069]">
-            [COMMISSION_CAPACITY_OPEN]
+
+          <div className="flex shrink-0 flex-col gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#6f6b63] lg:items-end">
+            <span className="flex items-center gap-2 text-[#ff9029]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#ff7900] shadow-[0_0_8px_#ff7900]" />
+              05 modules / signal online
+            </span>
+            <span className="text-[#4e4a45]">Select to inspect</span>
           </div>
         </div>
 
-        {/* Services List / Cards */}
-        <div className="space-y-6">
-          {SERVICES.map((srv, idx) => {
-            const Icon = srv.icon;
-            return (
-              <div
-                key={idx}
-                className="group p-6 sm:p-8 rounded-2xl bg-[#0a0a0d] border border-[#1b1b22] hover:border-[#ff7900]/60 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,121,0,0.12)] flex flex-col lg:flex-row lg:items-center justify-between gap-8"
-              >
-                <div className="space-y-4 max-w-2xl">
-                  <div className="flex items-center gap-4">
-                    <span className="font-mono text-xs text-[#ff7900] font-bold px-2 py-0.5 rounded bg-[#1f1308] border border-[#ff7900]/30">
-                      {srv.num}
-                    </span>
-                    <span className="text-xs font-mono text-[#737069]">
-                      {srv.subtitle}
-                    </span>
-                  </div>
+        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-start">
+          {/* Interactive 3D core */}
+          <div className="lg:sticky lg:top-24 lg:col-span-5">
+            <CapabilityCore
+              services={SERVICES}
+              activeIndex={activeIndex}
+              previewIndex={previewIndex}
+              onSelect={setActiveIndex}
+              onPreview={setPreviewIndex}
+              reducedMotion={reducedMotion}
+            />
+            <div className="mt-3 flex items-center justify-between px-1 font-mono text-[9px] uppercase tracking-[0.18em] text-[#514d47]">
+              <span>05 module stack</span>
+              <span>OM / OYSM</span>
+            </div>
+          </div>
 
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-5 h-5 text-[#ff7900] shrink-0" />
-                    <h3 className="text-xl sm:text-2xl font-bold font-display text-white group-hover:text-[#ff7900] transition-colors">
-                      {srv.title}
-                    </h3>
-                  </div>
-
-                  <p className="text-xs sm:text-sm text-[#a39f96] leading-relaxed">
-                    {srv.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {srv.deliverables.map((item, dIdx) => (
-                      <span
-                        key={dIdx}
-                        className="text-[11px] font-mono text-[#8a8780] bg-[#121216] px-2.5 py-1 rounded border border-[#212129]"
-                      >
-                        · {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="shrink-0 flex items-center lg:flex-col lg:items-end justify-between border-t lg:border-t-0 pt-4 lg:pt-0 border-[#1c1c1c]">
-                  <button
-                    onClick={onContactClick}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-mono font-medium text-white bg-[#121217] hover:bg-[#ff7900] hover:text-black border border-[#262630] hover:border-[#ff7900] transition-all group-hover:shadow-[0_0_20px_rgba(255,121,0,0.25)]"
-                  >
-                    <span>COMMISSION THIS</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+          {/* Service manifest */}
+          <div className="lg:col-span-7">
+            <div className="overflow-hidden rounded-2xl border border-[#24242b] bg-[#07070a] shadow-[14px_20px_50px_rgba(0,0,0,0.35)]">
+              <div className="flex items-center justify-between gap-3 border-b border-[#1c1c22] px-5 py-3 font-mono text-[9px] uppercase tracking-[0.18em] text-[#737069]">
+                <span>Service_manifest</span>
+                <span className="text-[#ff7900]">Select to inspect</span>
               </div>
-            );
-          })}
+
+              {SERVICES.map((service, index) => {
+                const Icon = SERVICE_ICONS[service.id as keyof typeof SERVICE_ICONS];
+                const isActive = activeIndex === index;
+
+                return (
+                  <div
+                    key={service.id}
+                    className="border-b border-[#1b1b22] last:border-b-0"
+                  >
+                    <button
+                      type="button"
+                      aria-expanded={isActive}
+                      aria-controls={`service-panel-${service.id}`}
+                      onClick={() => setActiveIndex(index)}
+                      onMouseEnter={() => setPreviewIndex(index)}
+                      onMouseLeave={() => setPreviewIndex(null)}
+                      onFocus={() => setPreviewIndex(index)}
+                      onBlur={() => setPreviewIndex(null)}
+                      className={`group relative flex w-full items-start gap-4 px-5 py-5 text-left outline-none transition-colors duration-300 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[#ff7900]/60 sm:px-6 ${
+                        isActive
+                          ? "bg-[#0f0c09]"
+                          : "hover:bg-[#0b0b0f]"
+                      }`}
+                    >
+                      <span
+                        className={`mt-1 w-5 shrink-0 font-mono text-[10px] font-bold tracking-[0.12em] transition-colors ${
+                          isActive
+                            ? "text-[#ff7900]"
+                            : "text-[#5f5b54] group-hover:text-[#9a958c]"
+                        }`}
+                      >
+                        {service.num}
+                      </span>
+
+                      <span className="min-w-0 flex-1">
+                        <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                          <span
+                            className={`font-display text-base font-bold leading-snug tracking-tight transition-colors sm:text-lg ${
+                              isActive
+                                ? "text-white"
+                                : "text-[#ddd8ce] group-hover:text-white"
+                            }`}
+                          >
+                            {service.title}
+                          </span>
+                          <Icon
+                            aria-hidden="true"
+                            className={`h-3.5 w-3.5 shrink-0 transition-colors ${
+                              isActive
+                                ? "text-[#ff7900]"
+                                : "text-[#625e57] group-hover:text-[#9a958c]"
+                            }`}
+                          />
+                        </span>
+                        <span className="mt-1 block font-mono text-[10px] leading-relaxed text-[#77736b] sm:text-[11px]">
+                          {service.subtitle}
+                        </span>
+                      </span>
+
+                      <span
+                        aria-hidden="true"
+                        className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
+                          isActive
+                            ? "border-[#ff7900] bg-[#ff7900] text-black"
+                            : "border-[#2c2c35] text-[#8a8780] group-hover:border-[#ff7900]/50 group-hover:text-[#ff7900]"
+                        }`}
+                      >
+                        <Plus
+                          className={`h-3.5 w-3.5 transition-transform duration-300 ${
+                            isActive ? "rotate-45" : ""
+                          }`}
+                        />
+                      </span>
+                    </button>
+
+                    {isActive && (
+                      <div
+                        id={`service-panel-${service.id}`}
+                        role="region"
+                        aria-label={service.title}
+                        className="service-reveal border-t border-[#ff7900]/15 bg-[#0b0a0d] px-5 pb-6 pt-5 sm:px-6"
+                      >
+                        <p className="max-w-[62ch] text-[13px] leading-[1.75] text-[#b6b1a8] sm:text-sm">
+                          {service.description}
+                        </p>
+
+                        <div className="mt-5 grid gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                          {service.deliverables.map((item) => (
+                            <div
+                              key={item}
+                              className="flex items-start gap-2.5 text-[11px] leading-relaxed text-[#a39f96] sm:text-xs"
+                            >
+                              <span className="mt-[7px] h-1 w-1 shrink-0 bg-[#ff7900]" />
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="mt-6 flex flex-col gap-3 border-t border-[#1b1b22] pt-5 sm:flex-row sm:items-center sm:justify-between">
+                          <button
+                            type="button"
+                            onClick={onContactClick}
+                            className="group/cta inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#ff7900] px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-black outline-none transition-colors hover:bg-[#ff8b1a] focus-visible:ring-2 focus-visible:ring-[#ff7900] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0a0d] sm:w-auto"
+                          >
+                            Commission this module
+                            <ArrowUpRight
+                              aria-hidden="true"
+                              className="h-4 w-4 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5"
+                            />
+                          </button>
+                          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#5f5b54]">
+                            [ {activeService.num} / {activeService.short} /
+                            ready ]
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>

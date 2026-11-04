@@ -135,8 +135,6 @@ const ServiceLayer: React.FC<{
         args={[width, height, depth]}
         radius={0.045}
         smoothness={4}
-        castShadow
-        receiveShadow
       >
         <meshStandardMaterial
           ref={materialRef}
@@ -383,51 +381,53 @@ const ActiveHalo: React.FC<{
 const EnergyBeam: React.FC<{ reducedMotion: boolean }> = ({
   reducedMotion,
 }) => {
-  const uniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
+  const material = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: { uTime: { value: 0 } },
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        side: THREE.DoubleSide,
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform float uTime;
+          varying vec2 vUv;
+          void main() {
+            float band = fract(vUv.y * 2.5 - uTime * 0.22);
+            float pulse = smoothstep(0.0, 0.1, band) * smoothstep(0.42, 0.1, band);
+            float edge = smoothstep(0.0, 0.16, vUv.x) * smoothstep(1.0, 0.84, vUv.x);
+            float alpha = (0.04 + pulse * 0.45) * edge;
+            gl_FragColor = vec4(1.0, 0.48, 0.08, alpha);
+          }
+        `,
+      }),
+    [],
+  );
+
+  useEffect(() => () => material.dispose(), [material]);
 
   useFrame(({ clock }) => {
     if (!reducedMotion) {
-      uniforms.uTime.value = clock.elapsedTime;
+      material.uniforms.uTime.value = clock.elapsedTime;
     }
   });
-
-  const material = (
-    <shaderMaterial
-      uniforms={uniforms}
-      transparent
-      depthWrite={false}
-      blending={THREE.AdditiveBlending}
-      side={THREE.DoubleSide}
-      vertexShader={`
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `}
-      fragmentShader={`
-        uniform float uTime;
-        varying vec2 vUv;
-        void main() {
-          float band = fract(vUv.y * 2.5 - uTime * 0.22);
-          float pulse = smoothstep(0.0, 0.1, band) * smoothstep(0.42, 0.1, band);
-          float edge = smoothstep(0.0, 0.16, vUv.x) * smoothstep(1.0, 0.84, vUv.x);
-          float alpha = (0.04 + pulse * 0.45) * edge;
-          gl_FragColor = vec4(1.0, 0.48, 0.08, alpha);
-        }
-      `}
-    />
-  );
 
   return (
     <group>
       <mesh position={[0, 0, 0]}>
         <planeGeometry args={[0.16, 3.6]} />
-        {material}
+        <primitive object={material} attach="material" />
       </mesh>
       <mesh position={[0, 0, 0]} rotation-y={Math.PI / 2}>
         <planeGeometry args={[0.16, 3.6]} />
-        {material}
+        <primitive object={material} attach="material" />
       </mesh>
     </group>
   );
