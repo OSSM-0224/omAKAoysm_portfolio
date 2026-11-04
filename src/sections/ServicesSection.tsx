@@ -1,24 +1,8 @@
 import React, { useState } from "react";
-import {
-  AppWindow,
-  ArrowUpRight,
-  Box,
-  Gauge,
-  Plus,
-  Smartphone,
-  Sparkles,
-} from "lucide-react";
+import { ArrowUpRight, Plus } from "lucide-react";
 import { SERVICES } from "../data/services";
 import { CapabilityCore } from "../components/three/CapabilityCore";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-
-const SERVICE_ICONS = {
-  mobile: Smartphone,
-  web: AppWindow,
-  realtime: Sparkles,
-  cms: Box,
-  performance: Gauge,
-} as const;
 
 const CSS = `
 @keyframes service-reveal {
@@ -70,7 +54,7 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
               <span className="h-1.5 w-1.5 rounded-full bg-[#ff7900] shadow-[0_0_8px_#ff7900]" />
               05 modules / signal online
             </span>
-            <span className="text-[#4e4a45]">Select to inspect</span>
+            <span className="text-[#6f6b63]">Select to inspect</span>
           </div>
         </div>
 
@@ -85,7 +69,7 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
               onPreview={setPreviewIndex}
               reducedMotion={reducedMotion}
             />
-            <div className="mt-3 flex items-center justify-between px-1 font-mono text-[9px] uppercase tracking-[0.18em] text-[#514d47]">
+            <div className="mt-3 flex items-center justify-between px-1 font-mono text-[9px] uppercase tracking-[0.18em] text-[#6a665f]">
               <span>05 module stack</span>
               <span>OM / OYSM</span>
             </div>
@@ -100,7 +84,6 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
               </div>
 
               {SERVICES.map((service, index) => {
-                const Icon = SERVICE_ICONS[service.id as keyof typeof SERVICE_ICONS];
                 const isActive = activeIndex === index;
 
                 return (
@@ -117,7 +100,7 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
                       onMouseLeave={() => setPreviewIndex(null)}
                       onFocus={() => setPreviewIndex(index)}
                       onBlur={() => setPreviewIndex(null)}
-                      className={`group relative flex w-full items-start gap-4 px-5 py-5 text-left outline-none transition-colors duration-300 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[#ff7900]/60 sm:px-6 ${
+                      className={`group relative flex w-full items-start gap-4 px-5 py-4 text-left outline-none transition-colors duration-300 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[#ff7900]/60 sm:px-6 sm:py-5 ${
                         isActive
                           ? "bg-[#0f0c09]"
                           : "hover:bg-[#0b0b0f]"
@@ -127,31 +110,21 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
                         className={`mt-1 w-5 shrink-0 font-mono text-[10px] font-bold tracking-[0.12em] transition-colors ${
                           isActive
                             ? "text-[#ff7900]"
-                            : "text-[#5f5b54] group-hover:text-[#9a958c]"
+                            : "text-[#7a766e] group-hover:text-[#a8a39a]"
                         }`}
                       >
                         {service.num}
                       </span>
 
                       <span className="min-w-0 flex-1">
-                        <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                          <span
-                            className={`font-display text-base font-bold leading-snug tracking-tight transition-colors sm:text-lg ${
-                              isActive
-                                ? "text-white"
-                                : "text-[#ddd8ce] group-hover:text-white"
-                            }`}
-                          >
-                            {service.title}
-                          </span>
-                          <Icon
-                            aria-hidden="true"
-                            className={`h-3.5 w-3.5 shrink-0 transition-colors ${
-                              isActive
-                                ? "text-[#ff7900]"
-                                : "text-[#625e57] group-hover:text-[#9a958c]"
-                            }`}
-                          />
+                        <span
+                          className={`block font-display text-base font-bold leading-snug tracking-tight transition-colors sm:text-lg ${
+                            isActive
+                              ? "text-white"
+                              : "text-[#ddd8ce] group-hover:text-white"
+                          }`}
+                        >
+                          {service.title}
                         </span>
                         <span className="mt-1 block font-mono text-[10px] leading-relaxed text-[#77736b] sm:text-[11px]">
                           {service.subtitle}
@@ -209,7 +182,7 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
                               className="h-4 w-4 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5"
                             />
                           </button>
-                          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#5f5b54]">
+                          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#8a857c]">
                             [ {activeService.num} / {activeService.short} /
                             ready ]
                           </span>

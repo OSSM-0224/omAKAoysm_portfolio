@@ -79,7 +79,7 @@ const ServiceLayer: React.FC<{
     const step = Math.min(delta, 0.1);
     const yTarget = baseY + (active ? 0.19 : preview ? 0.075 : 0);
     const scaleTarget = active ? 1.018 : preview ? 1.008 : 1;
-    const glowTarget = active ? 0.34 : preview ? 0.17 : 0.035;
+    const glowTarget = active ? 0.2 : preview ? 0.1 : 0.025;
 
     if (reducedMotion) {
       groupRef.current.position.y = yTarget;
@@ -139,10 +139,10 @@ const ServiceLayer: React.FC<{
         <meshStandardMaterial
           ref={materialRef}
           color={LAYER_TINT[index]}
-          metalness={0.72}
-          roughness={0.3}
+          metalness={0.46}
+          roughness={0.4}
           emissive="#ff5200"
-          emissiveIntensity={0.035}
+          emissiveIntensity={0.025}
         />
       </RoundedBox>
 
@@ -403,7 +403,7 @@ const EnergyBeam: React.FC<{ reducedMotion: boolean }> = ({
             float band = fract(vUv.y * 2.5 - uTime * 0.22);
             float pulse = smoothstep(0.0, 0.1, band) * smoothstep(0.42, 0.1, band);
             float edge = smoothstep(0.0, 0.16, vUv.x) * smoothstep(1.0, 0.84, vUv.x);
-            float alpha = (0.04 + pulse * 0.45) * edge;
+            float alpha = (0.07 + pulse * 0.68) * edge;
             gl_FragColor = vec4(1.0, 0.48, 0.08, alpha);
           }
         `,
@@ -422,12 +422,22 @@ const EnergyBeam: React.FC<{ reducedMotion: boolean }> = ({
   return (
     <group>
       <mesh position={[0, 0, 0]}>
-        <planeGeometry args={[0.16, 3.6]} />
+        <planeGeometry args={[0.22, 3.6]} />
         <primitive object={material} attach="material" />
       </mesh>
       <mesh position={[0, 0, 0]} rotation-y={Math.PI / 2}>
-        <planeGeometry args={[0.16, 3.6]} />
+        <planeGeometry args={[0.22, 3.6]} />
         <primitive object={material} attach="material" />
+      </mesh>
+      <mesh position={[0, 0, 0]}>
+        <cylinderGeometry args={[0.012, 0.012, 3.6, 8]} />
+        <meshBasicMaterial
+          color="#ffb15c"
+          transparent
+          opacity={0.4}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
       </mesh>
     </group>
   );
@@ -528,21 +538,21 @@ const StackScene: React.FC<{
 
   return (
     <>
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={0.38} />
       <directionalLight
-        position={[4, 6, 4]}
-        intensity={2.4}
-        color="#fff0dc"
-      />
-      <directionalLight
-        position={[-5, 2.5, -4]}
+        position={[4.5, 6, 4]}
         intensity={3.4}
-        color="#ff5a00"
+        color="#fff3e4"
       />
       <directionalLight
-        position={[0, 2, 6]}
-        intensity={0.7}
-        color="#9fb2ff"
+        position={[-5, 3, -4]}
+        intensity={1.4}
+        color="#ff6a12"
+      />
+      <directionalLight
+        position={[3, 1.5, -5]}
+        intensity={1.2}
+        color="#8ea6ff"
       />
 
       <group ref={stackRef}>
@@ -745,7 +755,7 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
             dpr={[1, 1.8]}
             frameloop={inView ? "always" : "demand"}
             camera={{
-              position: [5.4, 4.15, 7.4],
+              position: [4.6, 3.4, 6.3],
               fov: 32,
               near: 0.1,
               far: 40,
@@ -803,17 +813,17 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
       </div>
 
       {/* Console footer */}
-      <div className="relative z-20 flex items-center justify-between gap-4 border-t border-white/10 px-4 py-3">
+      <div className="relative z-20 flex flex-col gap-3 border-t border-white/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <div className="font-display text-sm font-bold tracking-tight text-white sm:text-base">
             {active.num} <span className="text-[#ff7900]">/</span>{" "}
             {active.short}
           </div>
-          <div className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-[#6f6b63]">
-            MODULE LOCKED · {active.subtitle}
+          <div className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-[#7b776f]">
+            MODULE LOCKED · SIGNAL STABLE
           </div>
         </div>
-        <div className="flex shrink-0 items-center gap-1">
+        <div className="flex shrink-0 items-center gap-1 self-end sm:self-auto">
           <button
             type="button"
             onClick={() =>
