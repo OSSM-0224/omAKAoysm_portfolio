@@ -3,7 +3,8 @@
 import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 /** Tiny local classnames helper (no tailwind-merge / shadcn utils needed). */
-const cn = (...a: Array<string | false | null | undefined>) => a.filter(Boolean).join(" ");
+const cn = (...a: Array<string | false | null | undefined>) =>
+  a.filter(Boolean).join(" ");
 
 /**
  * Social Preview Dock — a row of social links sharing one preview card.
@@ -596,14 +597,32 @@ function Banner({
 }
 
 /** Initials circle when no avatar URL is given, so cards never show a broken image. */
-function Avatar({ src, name, className }: { src?: string; name?: string; className?: string }) {
+function Avatar({
+  src,
+  name,
+  className,
+}: {
+  src?: string;
+  name?: string;
+  className?: string;
+}) {
   if (src) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt="" className={className} />;
   }
-  const initials = (name ?? "?").split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+  const initials = (name ?? "?")
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
   return (
-    <div className={cn(className, "flex items-center justify-center bg-[#ff7900] font-mono text-sm font-bold text-black")}>
+    <div
+      className={cn(
+        className,
+        "flex items-center justify-center bg-[#ff7900] font-mono text-sm font-bold text-black",
+      )}
+    >
       {initials}
     </div>
   );
@@ -627,7 +646,11 @@ function LinkedinCard({
     <div className={cn(CARD, "w-[300px]")}>
       <Banner colors={colors} className="h-14" />
       <div className="px-4 pb-4">
-        <Avatar src={live.avatar ?? profile.avatar} name={profile.name ?? profile.xHandle ?? profile.username} className={OVERLAP_AVATAR} />
+        <Avatar
+          src={live.avatar ?? profile.avatar}
+          name={profile.name ?? profile.xHandle ?? profile.username}
+          className={OVERLAP_AVATAR}
+        />
         <p className="mt-2 text-sm font-medium">{profile.name}</p>
         <div className="mt-2 flex items-end justify-between gap-3">
           <p className="text-xs leading-relaxed text-[#9e9a91]">
@@ -673,7 +696,11 @@ function XCard({
       )}
       <div className="px-4 pb-4">
         <div className="flex items-start justify-between gap-3">
-          <Avatar src={live.avatar ?? profile.avatar} name={profile.name ?? profile.xHandle ?? profile.username} className={OVERLAP_AVATAR} />
+          <Avatar
+            src={live.avatar ?? profile.avatar}
+            name={profile.name ?? profile.xHandle ?? profile.username}
+            className={OVERLAP_AVATAR}
+          />
           {profile.links?.x && (
             <a
               href={profile.links.x}
@@ -899,6 +926,7 @@ export function SocialPreviewDock({
             width: box.width,
             height: box.height,
             opacity: visible ? 1 : 0,
+            backgroundColor: visible ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0)",
           }}
           transition={{
             opacity: FADE,
@@ -907,7 +935,7 @@ export function SocialPreviewDock({
             height: appearing ? { duration: 0 } : SPRING_SIZE,
           }}
           style={{ willChange: "transform, width, height, opacity" }}
-          className="relative overflow-hidden rounded-2xl border border-[#ff7900]/40 bg-[#0d0d10] text-[#f4f1ea]"
+          className="relative overflow-hidden rounded-2xl border border-[#ff7900]/40 text-[#f4f1ea]"
         >
           <AnimatePresence initial={false}>
             {active && (
