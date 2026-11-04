@@ -122,27 +122,29 @@ export const ContactSection: React.FC = () => {
 
               {/* Social Dock */}
               <div className="pt-4 flex justify-center">
-                <SocialPreviewDock
-                  email={emailAddress}
-                  profile={{
-                    username: "OSSM-0224",
-                    xHandle: "OmMhatre",
-                    name: "Om Mhatre",
-                    headline: "Software Engineer & Full Stack Developer",
-                    location: "India",
-                    bio: "Building high-performance web & 3D experiences",
-                    links: {
-                      github: "https://github.com/OSSM-0224",
-                      linkedin:
-                        "https://www.linkedin.com/in/om-mhatre-8b819025b/",
-                      x: "https://x.com/OmMhatre",
-                    },
-                  }}
-                  bannerColors={{
-                    linkedin: ["#ff7900", "#ff5500", "#ff4b00"],
-                    x: ["#ffb038", "#ff7900", "#ff5500"],
-                  }}
-                />
+                <div className="group/social-dock relative rounded-2xl transition-colors duration-300 hover:bg-black/70">
+                  <SocialPreviewDock
+                    email={emailAddress}
+                    profile={{
+                      username: "OSSM-0224",
+                      xHandle: "OmMhatre",
+                      name: "Om Mhatre",
+                      headline: "Software Engineer & Full Stack Developer",
+                      location: "India",
+                      bio: "Building high-performance web & 3D experiences",
+                      links: {
+                        github: "https://github.com/OSSM-0224",
+                        linkedin:
+                          "https://www.linkedin.com/in/om-mhatre-8b819025b/",
+                        x: "https://x.com/OmMhatre",
+                      },
+                    }}
+                    bannerColors={{
+                      linkedin: ["#ff7900", "#ff5500", "#ff4b00"],
+                      x: ["#ffb038", "#ff7900", "#ff5500"],
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -310,23 +312,6 @@ export const ContactSection: React.FC = () => {
               )}
             </div>
           </div>
-        </div>
-        <div className="flex justify-center">
-          <SocialPreviewDock
-            email="ommhatre379@gmail.com"
-            profile={{
-              username: "ommhatre",
-              name: "Om Mhatre",
-              headline: "Full-Stack & Mobile App Developer",
-              location: "Navi Mumbai, India",
-              links: {
-                github: "https://github.com/OSSM-0224",
-                linkedin: "https://www.linkedin.com/in/om-mhatre-8b819025b/",
-                x: "https://x.com/OmMhatre",
-              },
-            }}
-            live={false}
-          />
         </div>
       </div>
     </section>
