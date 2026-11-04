@@ -74,7 +74,7 @@ export const ContactSection: React.FC = () => {
             <span>06. TRANSMISSION CHANNEL // GET IN TOUCH</span>
           </div>
 
-          <h2 className="text-[clamp(2.25rem,5.6vw,5.25rem)] font-black font-display text-white tracking-tighter leading-[0.95]">
+          <h2 className="text-[1.625rem] min-[360px]:text-[1.875rem] min-[390px]:text-[2.0625rem] min-[430px]:text-[2.25rem] sm:text-[clamp(2.25rem,5.6vw,5.25rem)] font-black font-display text-white tracking-tighter leading-[0.95]">
             LET&apos;S BUILD SOMETHING <br />
             <span className="text-[#ff7900] text-glow-orange">
               EXTRA<span className="sm:hidden"><br /></span>ORDINARY.
