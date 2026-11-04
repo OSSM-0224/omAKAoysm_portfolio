@@ -48,9 +48,11 @@ export const SKILLS: Skill[] = [
   { id: "redux", name: "Redux Toolkit", group: "frontend" },
 
   { id: "node", name: "Node / Express", group: "backend" },
-  { id: "socket", name: "Socket.io", group: "backend" },
+  { id: "socket", name: "Socket.io", group: "backen,d" },
+  { id: "python", name: "Python ", group: "backend" },
 
   { id: "mongo", name: "MongoDB", group: "data" },
+  { id: "mysql", name: "MySQL", group: "data" },
   { id: "firebase", name: "Firebase", group: "data" },
   { id: "sanity", name: "Sanity CMS", group: "data" },
 
@@ -67,8 +69,8 @@ export const PROJECTS: Project[] = [
     blurb: "Live on Google Play with 100+ downloads. Built at Tech Vyassa.",
     href: "https://play.google.com/store/apps/details?id=com.techvyassa.ccms1&hl=en_IN",
     // confirm: I don't know CCMS's stack. Only React Native is assumed.
-    core: ["react-native"],
-    used: [],
+    core: ["android", "python", "mysql"],
+    used: ["react", "vite", "tailwind"],
   },
   {
     id: "amrutam",
@@ -89,8 +91,8 @@ export const PROJECTS: Project[] = [
     blurb:
       "One-tap SOS, live GPS tracking and offline first aid. Native Android.",
     href: "https://github.com/ommhatre/EmergencyApp",
-    core: ["android", "firebase", "maps"],
-    used: [],
+    core: ["android", "firebase", "maps", "vercel"],
+    used: ["react", "vite", "tailwind", "redux"],
   },
   {
     id: "bidarena",
@@ -98,8 +100,8 @@ export const PROJECTS: Project[] = [
     name: "BidArena",
     kind: "web",
     blurb: "Real-time auction platform, built in a 24-hour hackathon.",
-    core: ["react", "node", "mongo", "socket"],
-    used: [],
+    core: ["react", "node", "mongo", "socket", "tailwindcss", "mysql"],
+    used: ["vite", "redux", "vercel"],
   },
   {
     id: "cricpulse",
@@ -107,8 +109,8 @@ export const PROJECTS: Project[] = [
     name: "CricPulse (BoundaryLine)",
     kind: "web",
     blurb: "Cricket scoring with real-time score sync. A collaborative build.",
-    core: ["socket"],
-    used: ["react", "node"], // confirm
+    core: ["socket", "tailwind", "mongo"],
+    used: ["react", "node", "redux", "vercel"], // confirm
   },
   {
     id: "fixtures",
@@ -116,8 +118,8 @@ export const PROJECTS: Project[] = [
     name: "Multi-sport Fixtures",
     kind: "web",
     blurb: "Live scoring and fixtures for DSO Navi Mumbai.",
-    core: ["socket"],
-    used: ["react", "node"], // confirm
+    core: ["socket", "mysql", "ts", "redux"],
+    used: ["react", "node", "mongo", "vercel"], // confirm
   },
   {
     id: "crm",
@@ -125,17 +127,18 @@ export const PROJECTS: Project[] = [
     name: "Lead Management CRM",
     kind: "web",
     blurb: "Full-stack CRM with a layered architecture.",
-    core: [],
-    used: ["react", "node"], // confirm
+    core: ["mysql", "vite", "tailwind"],
+    used: ["react", "node", "redux"], // confirm
   },
   {
     id: "childdream",
     short: "Child Dream",
     name: "Child Dream's Social Foundation",
     kind: "web",
-    blurb: "Redesign of an NGO site focused on trust and donations — in development.",
+    blurb:
+      "Redesign of an NGO site focused on trust and donations — in development.",
     core: [],
-    used: ["react", "tailwind"], // confirm
+    used: ["react", "tailwind", "gsap", "ts", "vite"], // confirm
   },
   {
     id: "unique",
@@ -144,7 +147,7 @@ export const PROJECTS: Project[] = [
     kind: "web",
     blurb: "Premium clinic site on Sanity CMS, with prerendering and SEO work.",
     href: "https://uniquedentalcareclinic.com",
-    core: ["react", "vite", "sanity", "cloudflare"],
+    core: ["react", "vite", "sanity", "cloudflare", "ts", "tailwind", "mongo"],
     used: [],
   },
   {
@@ -152,9 +155,10 @@ export const PROJECTS: Project[] = [
     short: "Dr Patil",
     name: "Dr Patil Advance Clinic",
     kind: "web",
-    blurb: "Advanced orthodontic clinic site for Dr. Tanvi and Dr. Piyush Patil.",
+    blurb:
+      "Advanced orthodontic clinic site for Dr. Tanvi and Dr. Piyush Patil.",
     core: [],
-    used: ["react", "tailwind"], // confirm
+    used: ["react", "tailwind", "ts"], // confirm
   },
   {
     id: "oss",
@@ -162,7 +166,7 @@ export const PROJECTS: Project[] = [
     name: "Om Sai Sports",
     kind: "web",
     blurb: "A 3D website for a jersey brand — in development.",
-    core: ["three"],
+    core: ["three", "gsap", "vite", "ts"],
     used: ["react", "tailwind"], // confirm
   },
   {
@@ -172,7 +176,7 @@ export const PROJECTS: Project[] = [
     kind: "web",
     blurb:
       "Residents, flats, vehicles and an admin panel, in several languages.",
-    core: [],
+    core: ["ts", "redux", "gsap", "three", "mongo", "vite", "vercel"],
     used: ["react", "tailwind"], // confirm
   },
   {
@@ -188,9 +192,7 @@ export const PROJECTS: Project[] = [
 
 /** Things I know, but that no project on this map shows yet. */
 export const TOOLBOX = [
-  "Python",
   "C++",
-  "SQL",
   "Docker",
   "Redis",
   "AWS ECS",
