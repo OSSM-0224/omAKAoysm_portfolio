@@ -11,6 +11,7 @@ import {
   Linkedin,
   ExternalLink,
 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { MagneticButton } from "../components/common/MagneticButton";
 import { SocialPreviewDock } from "../components/ui/social-preview-dock";
 
@@ -26,6 +27,7 @@ export const ContactSection: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [socialPreviewActive, setSocialPreviewActive] = useState(false);
 
   const emailAddress = "ommhatre379@gmail.com";
 
@@ -50,8 +52,20 @@ export const ContactSection: React.FC = () => {
   return (
     <section
       id="contact"
-      className="relative w-full py-28 px-6 sm:px-8 md:px-12 bg-[#070707] border-t border-[#1c1c1c] overflow-hidden"
+      className="relative w-full py-28 px-6 sm:px-8 md:px-12 bg-[#070707] border-t border-[#1c1c1c]"
     >
+      <AnimatePresence>
+        {socialPreviewActive && (
+          <motion.div
+            key="social-screen-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[9998] pointer-events-none bg-black/75"
+          />
+        )}
+      </AnimatePresence>
       <div className="max-w-7xl mx-auto w-full space-y-20">
         {/* Giant Display Headline */}
         <div className="space-y-6">
@@ -122,8 +136,9 @@ export const ContactSection: React.FC = () => {
 
               {/* Social Dock */}
               <div className="pt-4 flex justify-center">
-                <div className="group/social-dock relative rounded-2xl transition-colors duration-300 hover:bg-black/70">
+                <div className="group/social-dock relative z-[9999] rounded-2xl">
                   <SocialPreviewDock
+                    onPreviewChange={setSocialPreviewActive}
                     email={emailAddress}
                     profile={{
                       username: "OSSM-0224",
