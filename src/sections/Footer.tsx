@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import HalftoneWordmarkFooter from "../components/ui/halftone-wordmark-footer.tsx";
+import HalftoneWordmarkFooter from "../components/ui/halftone-wordmark-footer";
 
 export const Footer: React.FC = () => {
   const [istTime, setIstTime] = useState("");
@@ -23,6 +23,8 @@ export const Footer: React.FC = () => {
   return (
     <HalftoneWordmarkFooter
       wordmark="oysm"
+      crop={-0.2}
+      height="700px"
       label="OM (OYSM)"
       meta={`Terminal online // ${istTime || "--:--:-- IST"} Mumbai, IN`}
       legal={`© ${new Date().getFullYear()} OM (OYSM). Full-stack web & mobile app developer.`}
