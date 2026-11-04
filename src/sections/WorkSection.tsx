@@ -17,10 +17,11 @@ import {
 } from "lucide-react";
 
 /**
- * Selected work as a 3D ring. Every project is an ASCII tile (its index number
- * printed in halftone glyphs) orbiting a featured tile. The ring turns by
- * itself, pauses when you touch it, and a click on any tile brings it to the
- * front. Pure CSS 3D: no framer-motion, no next/image, no react-icons.
+ * Selected work as a 3D ring. Every project is a mini screenshot tile orbiting
+ * a featured tile (projects without a screenshot fall back to a halftone ASCII
+ * index). The ring turns by itself, pauses when you touch it, and a click on
+ * any tile brings it to the front. Pure CSS 3D: no framer-motion, no
+ * next/image, no react-icons.
  */
 
 // ───────── Customize here ─────────
@@ -294,12 +295,41 @@ const Carousel3D: React.FC<{
                         : `transform ${TURN_MS}ms cubic-bezier(.2,.8,.2,1)`,
                     }}
                   >
-                    <span className="block overflow-hidden rounded-lg border border-[#ff7900]/30 bg-[#050507] shadow-[0_6px_24px_rgba(0,0,0,0.6)] transition-colors group-hover:border-[#ff7900] sm:rounded-xl">
-                      <AsciiTile
-                        text={pad(p.index)}
-                        seed={p.id}
-                        className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 lg:h-24 lg:w-24"
-                      />
+                    <span className="block w-20 overflow-hidden rounded-lg border border-[#ff7900]/30 bg-[#050507] shadow-[0_6px_24px_rgba(0,0,0,0.6)] transition-all duration-300 group-hover:border-[#ff7900] group-hover:shadow-[0_10px_28px_rgba(255,121,0,0.22)] sm:w-24 sm:rounded-xl md:w-28">
+                      {/* Mini browser chrome keeps the ring tiles reading as live sites */}
+                      <span className="flex items-center gap-[3px] border-b border-white/10 bg-[#0b0b0f] px-1.5 py-1">
+                        <span className="h-[3px] w-[3px] rounded-full bg-[#ff5f57]/80" />
+                        <span className="h-[3px] w-[3px] rounded-full bg-[#febc2e]/80" />
+                        <span className="h-[3px] w-[3px] rounded-full bg-[#28c840]/80" />
+                        <span className="ml-auto h-[3px] w-[3px] rounded-full bg-[#ff7900]/50" />
+                      </span>
+
+                      <span className="relative block aspect-[1.9/1] w-full overflow-hidden bg-[#0b0b0f]">
+                        {p.image ? (
+                          <img
+                            src={p.image}
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            draggable={false}
+                            className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.06]"
+                          />
+                        ) : (
+                          <span className="flex h-full w-full items-center justify-center">
+                            <AsciiTile
+                              text={pad(p.index)}
+                              seed={p.id}
+                              className="h-9 w-9 sm:h-11 sm:w-11"
+                            />
+                          </span>
+                        )}
+                        <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+                        {!p.image && (
+                          <span className="absolute bottom-1 left-1 rounded-sm border border-[#ff7900]/40 bg-black/70 px-1 py-px font-mono text-[6px] font-bold uppercase tracking-wider text-[#ff9029]">
+                            concept
+                          </span>
+                        )}
+                      </span>
                     </span>
                   </button>
                 </div>
