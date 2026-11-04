@@ -209,6 +209,7 @@ export const PROJECTS: Project[] = [
     liveUrl: "https://github.com/ommhatre/EmergencyApp",
     githubUrl: "https://github.com/ommhatre/EmergencyApp",
     accentColor: "#ff3b00",
+    image: "/web_screens/sos.png",
   },
   {
     id: "multi-sport-fixtures",
@@ -358,6 +359,7 @@ export const PROJECTS: Project[] = [
     liveUrl: "https://patil-orthodontics.in",
     githubUrl: "https://github.com/ommhatre/patil-orthodontics-clinic",
     accentColor: "#ff7900",
+    image: "/web_screens/drpatiladvanceclinic_landingpage.png",
   },
   {
     id: "om-sai-sports",
