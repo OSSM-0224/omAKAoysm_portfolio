@@ -149,6 +149,18 @@ const AsciiTile: React.FC<{
 
 const pad = (n: string | number) => String(n).padStart(2, "0");
 
+/** Display URL for the screenshot browser chrome. */
+const projectDomain = (p: Project) => {
+  if (p.liveUrl && p.liveUrl !== "#") {
+    try {
+      return new URL(p.liveUrl).hostname.replace(/^www\./, "");
+    } catch {
+      /* fall through to local label */
+    }
+  }
+  return `${p.id}.local`;
+};
+
 const Carousel3D: React.FC<{
   projects: Project[];
   onSelectProject: (p: Project) => void;
@@ -299,22 +311,64 @@ const Carousel3D: React.FC<{
           <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
             <div
               key={active.id}
-              className="wk-feature relative overflow-hidden rounded-2xl border border-[#ff7900]/50 bg-[#050507] shadow-[0_0_60px_rgba(255,121,0,0.25)]"
+              className="wk-feature relative w-[68%] max-w-[420px] overflow-hidden rounded-xl border border-[#ff7900]/50 bg-[#050507] shadow-[0_0_60px_rgba(255,121,0,0.25)] sm:w-[78%] sm:rounded-2xl"
             >
-              <AsciiTile
-                text={pad(active.index)}
-                seed={active.id + "-hero"}
-                hot
-                className="h-44 w-44 sm:h-48 sm:w-48 md:h-64 md:w-64 lg:h-80 lg:w-80"
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#050507] via-[#050507]/80 to-transparent px-3 pb-2.5 pt-8 font-mono">
-                <div className="truncate text-[11px] font-bold text-white sm:text-xs">
-                  {active.title}
-                </div>
-                <div className="truncate text-[10px] text-[#ff7900]">
-                  {active.category}
-                </div>
-              </div>
+              {active.image ? (
+                <>
+                  {/* Browser chrome */}
+                  <div className="flex items-center gap-1.5 border-b border-white/10 bg-[#0b0b0f] px-2.5 py-1.5 sm:px-3 sm:py-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#ff5f57]/80" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#febc2e]/80" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#28c840]/80" />
+                    <span className="ml-1.5 truncate font-mono text-[8px] tracking-wide text-[#737069] sm:text-[9px]">
+                      {projectDomain(active)}
+                    </span>
+                    <span className="ml-auto shrink-0 rounded-sm border border-[#ff7900]/30 px-1 py-px font-mono text-[7px] font-bold uppercase tracking-wider text-[#ff9029] sm:text-[8px]">
+                      live
+                    </span>
+                  </div>
+                  <div className="relative aspect-[1.9/1] w-full overflow-hidden bg-[#0b0b0f]">
+                    <img
+                      src={active.image}
+                      alt={`${active.title} landing page preview`}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover object-top"
+                    />
+                    <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5" />
+                  </div>
+                  <div className="flex items-end justify-between gap-3 border-t border-white/10 bg-[#0b0b0f] px-2.5 py-1.5 font-mono sm:px-3 sm:py-2">
+                    <div className="min-w-0">
+                      <div className="truncate text-[10px] font-bold text-white sm:text-[11px]">
+                        {active.title}
+                      </div>
+                      <div className="truncate text-[8px] text-[#ff7900] sm:text-[9px]">
+                        {active.category}
+                      </div>
+                    </div>
+                    <span className="shrink-0 text-[8px] uppercase tracking-wider text-[#737069] sm:text-[9px]">
+                      preview
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <AsciiTile
+                    text={pad(active.index)}
+                    seed={active.id + "-hero"}
+                    hot
+                    className="h-44 w-44 sm:h-48 sm:w-48 md:h-64 md:w-64 lg:h-80 lg:w-80"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#050507] via-[#050507]/80 to-transparent px-3 pb-2.5 pt-8 font-mono">
+                    <div className="truncate text-[11px] font-bold text-white sm:text-xs">
+                      {active.title}
+                    </div>
+                    <div className="truncate text-[10px] text-[#ff7900]">
+                      {active.category}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -375,6 +429,11 @@ const Carousel3D: React.FC<{
                   PLAY STORE
                 </span>
               )}
+              {active.status === "In Development" && (
+                <span className="rounded border border-amber-500/30 bg-amber-950/40 px-1.5 py-0.5 font-mono text-[9px] text-amber-400">
+                  IN DEVELOPMENT
+                </span>
+              )}
             </div>
             <div className="font-mono text-xs text-[#737069]">
               {active.role}
@@ -398,6 +457,12 @@ const Carousel3D: React.FC<{
           <p className="mt-3 text-sm leading-relaxed text-[#a39f96]">
             {active.description}
           </p>
+          {active.status === "In Development" && (
+            <p className="mt-3 inline-flex items-center gap-1.5 rounded border border-amber-500/20 bg-amber-950/20 px-2 py-1 font-mono text-[10px] text-amber-400/90">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+              CONCEPT BUILD — NOT SHIPPED YET
+            </p>
+          )}
         </div>
 
         {active.metrics?.length > 0 && (
@@ -454,6 +519,10 @@ const Carousel3D: React.FC<{
                 <span>LIVE</span>
                 <ExternalLink className="h-3 w-3 text-[#ff7900]" />
               </a>
+            ) : active.status === "In Development" ? (
+              <span className="py-1 font-mono text-xs text-amber-400/80">
+                IN DEVELOPMENT
+              </span>
             ) : (
               <span className="py-1 font-mono text-xs text-[#737069]">
                 LOCAL READY
@@ -502,6 +571,16 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     "All" | ProjectCategory
   >("All");
+
+  // Warm the cache so the ring can swap screenshots without a flash.
+  useEffect(() => {
+    PROJECTS.forEach((p) => {
+      if (!p.image) return;
+      const img = new window.Image();
+      img.decoding = "async";
+      img.src = p.image;
+    });
+  }, []);
 
   const counts = useMemo(() => {
     const map: Record<string, number> = {

@@ -174,7 +174,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="flex items-center gap-4">
           <span>REACT NATIVE &amp; ANDROID</span>
           <span>·</span>
-          <span>11 WEB CASE STUDIES</span>
+          <span>9 WEB CASE STUDIES</span>
           <span>·</span>
           <span>SUB-50MS SOCKETS</span>
         </div>
