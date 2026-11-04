@@ -1,4 +1,5 @@
 export type ProjectCategory = 'MERN' | 'Mobile' | 'UI/UX' | 'Real-Time' | 'Client';
+export type ProjectStatus = 'Live' | 'In Development';
 
 export interface Project {
   id: string;
@@ -17,6 +18,8 @@ export interface Project {
   liveUrl: string;
   githubUrl: string;
   accentColor: string;
+  image?: string;
+  status?: ProjectStatus;
   playStoreUrl?: string;
 }
 
@@ -43,6 +46,7 @@ export const PROJECTS: Project[] = [
     liveUrl: 'https://bidarena.demo.dev',
     githubUrl: 'https://github.com/ommhatre/bidarena-auction-engine',
     accentColor: '#ff7900',
+    image: '/web_screens/bidarena_landingpage.png',
   },
   {
     id: 'ccms-mobile',
@@ -113,6 +117,7 @@ export const PROJECTS: Project[] = [
     liveUrl: 'https://cricpulse.app',
     githubUrl: 'https://github.com/ommhatre/cricpulse-boundaryline',
     accentColor: '#ff7900',
+    image: '/web_screens/cricplus_landingpage.png',
   },
   {
     id: 'emergency-app',
@@ -160,6 +165,7 @@ export const PROJECTS: Project[] = [
     liveUrl: '#',
     githubUrl: 'https://github.com/OSSM-0224/DSO-Navi-Mumbai-Fixtures',
     accentColor: '#ff7900',
+    image: '/web_screens/dso_landingpage.png',
   },
   {
     id: 'lead-management-crm',
@@ -183,6 +189,7 @@ export const PROJECTS: Project[] = [
     liveUrl: 'https://lead-crm-layered.dev',
     githubUrl: 'https://github.com/ommhatre/lead-management-crm-core',
     accentColor: '#ff7900',
+    image: '/web_screens/heros_landingpage.png',
   },
   {
     id: 'child-dreams-foundation',
@@ -192,9 +199,9 @@ export const PROJECTS: Project[] = [
     category: 'UI/UX & Creative',
     filterCategories: ['UI/UX', 'Client'],
     role: 'Frontend & UI/UX Specialist',
-    duration: 'Pro Bono / Community Project',
-    description: 'Complete website redesign focused on donor credibility, transparent impact reports, recurring micro-donations, and SEO reach.',
-    longDescription: 'Transformed an outdated NGO web presence into an empathetic, high-converting digital platform. Highlights transparent spending disclosures, photo journals of field missions, integrated tax exemption certificate generation, and seamless payment gateways. Ready to launch with clean UI and donation flows.',
+    duration: 'Pro Bono / In Development',
+    description: 'Ongoing website redesign focused on donor credibility, transparent impact reports, recurring micro-donations, and SEO reach.',
+    longDescription: 'Currently in development: the outdated NGO web presence is being rebuilt into an empathetic, high-converting digital platform. Planned highlights include transparent spending disclosures, photo journals of field missions, automated 80G tax receipt generation, and seamless donation gateways.',
     tags: ['React', 'TailwindCSS', 'Razorpay', 'Vite', 'Framer Motion', 'SEO'],
     features: [
       'Transparent campaign financial breakdown and impact counter',
@@ -202,10 +209,11 @@ export const PROJECTS: Project[] = [
       'Optimized mobile donation flow with UPI and card integration',
       'Accessibility-first layout compliant with WCAG AA guidelines'
     ],
-    metrics: ['NGO Ready', 'Donation Flow Complete', 'SEO Optimized'],
+    metrics: ['In Development', 'Donation Flow In Progress', 'NGO Concept'],
     liveUrl: '#',
     githubUrl: 'https://github.com/OSSM-0224/Child-Dreams-Social-Foundation',
     accentColor: '#ff7900',
+    status: 'In Development',
   },
   {
     id: 'unique-dental-care',
@@ -229,34 +237,12 @@ export const PROJECTS: Project[] = [
     liveUrl: '#',
     githubUrl: 'https://github.com/OSSM-0224/Unique-Dental-Care',
     accentColor: '#ff7900',
-  },
-  {
-    id: 'fixora',
-    index: '10',
-    title: 'FIXORA Dental Practice',
-    subtitle: 'Luxury Modern Aesthetic Dental Clinic',
-    category: 'UI/UX Design',
-    filterCategories: ['UI/UX', 'Client'],
-    role: 'Frontend Developer & Designer',
-    duration: 'Client Contract',
-    description: 'Aesthetic, ultra-clean dental practice showcase featuring fluid micro-interactions, patient trust badges, and interactive virtual consultation intake.',
-    longDescription: 'Created for a boutique aesthetic dentistry studio. Embraces minimalist typography, subtle depth, high-definition cosmetic dentistry showcases, doctor bios, and a frictionless 3-step consultation booking funnel. Auth/session flow and appointment system ready.',
-    tags: ['React', 'TailwindCSS', 'Motion', 'Vite', 'Accessible UI'],
-    features: [
-      'Frictionless 3-step consultation intake with smart questionnaire',
-      'Smooth micro-interactions and scroll-triggered treatment visualizer',
-      'Doctor credentials, international fellowships, and press features',
-      'Mobile-optimized touch interactions and zero-shift layout'
-    ],
-    metrics: ['Clinic Ready', 'Auth Flow Built', 'Booking Ready'],
-    liveUrl: '#',
-    githubUrl: 'https://github.com/OSSM-0224/Fixora-Dental-Practice',
-    accentColor: '#ff7900',
+    image: '/web_screens/uniquedentalcare_landingpage.png',
   },
   {
     id: 'orthodontic-clinic',
-    index: '11',
-    title: 'Orthodontic Clinic Showcase',
+    index: '10',
+    title: 'Dr Patil Advance Clinic',
     subtitle: 'Dr. Tanvi Patil & Dr. Piyush Patil Clinic',
     category: 'UI/UX & Client',
     filterCategories: ['UI/UX', 'Client'],
@@ -278,15 +264,15 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'om-sai-sports',
-    index: '12',
+    index: '11',
     title: 'OSS – Om Sai Sports',
     subtitle: 'Premium 3D Custom Jersey Brand Showcase',
     category: 'UI/UX & 3D Web',
     filterCategories: ['UI/UX'],
     role: '3D Web Developer',
-    duration: 'Brand Experience',
-    description: 'Cutting-edge athletic apparel brand website featuring interactive 3D jersey customizer, sublimation preview, and bulk ordering.',
-    longDescription: 'A high-impact e-commerce and brand experience for sports teams. Empowers cricket and football clubs to inspect 3D jersey textures, customize squad numbers, collar trims, team emblems, and generate instant quotation specs. Built with Vite + React + Three.js.',
+    duration: 'In Development',
+    description: 'In-development athletic apparel brand website featuring an interactive 3D jersey customizer, sublimation preview, and bulk ordering.',
+    longDescription: 'Currently in development: a high-impact e-commerce and brand experience for sports teams. Will empower cricket and football clubs to inspect 3D jersey textures, customize squad numbers, collar trims, team emblems, and generate instant quotation specs. Being built with Vite + React + Three.js.',
     tags: ['Three.js', 'React', 'Vite', 'TailwindCSS', 'TypeScript'],
     features: [
       'Interactive 3D jersey model inspection with 360-degree rotation',
@@ -294,14 +280,15 @@ export const PROJECTS: Project[] = [
       'Bulk team roster upload and quote generator for team orders',
       'High-saturation neon athletic aesthetic reflecting modern sportswear'
     ],
-    metrics: ['3D WebGL Configurator', 'Ready to Run Locally', 'Brand Site Complete'],
+    metrics: ['In Development', '3D Configurator Planned', 'Brand Concept'],
     liveUrl: '#',
     githubUrl: 'https://github.com/OSSM-0224/Om-Sai-Sports',
     accentColor: '#ff7900',
+    status: 'In Development',
   },
   {
     id: 'society-management-app',
-    index: '13',
+    index: '12',
     title: 'Society Management App',
     subtitle: 'Residential Complex ERP & Security Suite',
     category: 'MERN & Mobile PWA',
@@ -322,29 +309,6 @@ export const PROJECTS: Project[] = [
     liveUrl: '#',
     githubUrl: 'https://github.com/OSSM-0224/Society-Management-App',
     accentColor: '#ff7900',
-  },
-  {
-    id: 'auth-signup-app',
-    index: '14',
-    title: 'Auth & Session Security Suite',
-    subtitle: 'Production MERN Auth Pipeline',
-    category: 'MERN Security',
-    filterCategories: ['MERN'],
-    role: 'Backend & Security Engineer',
-    duration: 'Open-Source Blueprint',
-    description: 'Hardened authentication system with JWT access/refresh rotation, rate limiting, bcrypt salt, email verification, and secure session handling.',
-    longDescription: 'A rock-solid reference implementation for enterprise auth. Includes HTTP-only secure cookie sessions, CSRF protection ideas, brute-force rate limiters, password reset flows, and role-based access. Perfect for Fixora and other projects.',
-    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Bcrypt'],
-    features: [
-      'Dual-token JWT architecture with refresh token rotation',
-      'Strict rate-limiting and IP throttling against credential stuffing',
-      'HTTP-only secure cookies with proper SameSite settings',
-      'Password hashing with bcrypt and secure reset flows',
-      'Role-based authorization middleware'
-    ],
-    metrics: ['Auth Ready', 'Security Hardened', 'Reusable Module'],
-    liveUrl: '#',
-    githubUrl: 'https://github.com/OSSM-0224/MERN-Auth-Security-Suite',
-    accentColor: '#ff7900',
+    image: '/web_screens/sheetaldhara_landingpage.png',
   },
 ];
