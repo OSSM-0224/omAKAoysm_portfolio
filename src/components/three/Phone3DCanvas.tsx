@@ -191,26 +191,26 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
     phoneGroup.rotation.y = -0.22;
     phoneGroup.rotation.x = 0.12;
 
-    // Interactive mouse rotation & dragging
+    // Interactive pointer rotation & dragging (mouse, pen, touch)
     let isDragging = false;
-    let prevMousePos = { x: 0, y: 0 };
+    let prevPointerPos = { x: 0, y: 0 };
     let targetRotY = -0.22;
     let targetRotX = 0.12;
 
-    const onMouseDown = (e: MouseEvent) => {
+    const onPointerDown = (e: PointerEvent) => {
       isDragging = true;
-      prevMousePos = { x: e.clientX, y: e.clientY };
+      prevPointerPos = { x: e.clientX, y: e.clientY };
     };
 
-    const onMouseMove = (e: MouseEvent) => {
+    const onPointerMove = (e: PointerEvent) => {
       if (isDragging) {
-        const deltaX = e.clientX - prevMousePos.x;
-        const deltaY = e.clientY - prevMousePos.y;
+        const deltaX = e.clientX - prevPointerPos.x;
+        const deltaY = e.clientY - prevPointerPos.y;
         targetRotY += deltaX * 0.01;
         targetRotX += deltaY * 0.01;
-        prevMousePos = { x: e.clientX, y: e.clientY };
-      } else {
-        // Ambient tilt follow
+        prevPointerPos = { x: e.clientX, y: e.clientY };
+      } else if (e.pointerType === 'mouse') {
+        // Ambient tilt follow (mouse only; touch drags are explicit)
         const normX = (e.clientX / window.innerWidth) * 2 - 1;
         const normY = -(e.clientY / window.innerHeight) * 2 + 1;
         targetRotY = -0.22 + normX * 0.35;
@@ -218,13 +218,14 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
       }
     };
 
-    const onMouseUp = () => {
+    const onPointerUp = () => {
       isDragging = false;
     };
 
-    container.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
+    container.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerUp);
 
     const onResize = () => {
       if (!container) return;
@@ -259,9 +260,10 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
 
     return () => {
       cancelAnimationFrame(animId);
-      container.removeEventListener('mousedown', onMouseDown);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
+      container.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
       window.removeEventListener('resize', onResize);
 
       if (renderer.domElement && container.contains(renderer.domElement)) {
@@ -316,7 +318,7 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
   return (
     <div
       ref={mountRef}
-      className={`w-full h-[520px] relative cursor-grab active:cursor-grabbing select-none z-10 ${className}`}
+      className={`w-full h-[520px] relative touch-pan-y cursor-grab active:cursor-grabbing select-none z-10 ${className}`}
     />
   );
 };
