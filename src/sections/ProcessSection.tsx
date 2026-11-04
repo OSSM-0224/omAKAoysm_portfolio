@@ -75,13 +75,13 @@ export const ProcessSection: React.FC = () => {
               The 4-Step Engineering Cycle
             </h2>
           </div>
-          <div className="font-mono text-xs text-[#737069]">
+          <div className="whitespace-nowrap font-mono text-xs text-[#737069]">
             [DISCOVER → DESIGN → BUILD → SHIP]
           </div>
         </div>
 
         {/* Process Timeline Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 relative">
           {STEPS.map((step, idx) => {
             const Icon = step.icon;
             return (

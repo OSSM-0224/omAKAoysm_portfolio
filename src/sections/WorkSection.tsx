@@ -256,7 +256,7 @@ const Carousel3D: React.FC<{
       className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12"
     >
       {/* ── The ring ── */}
-      <div className="flex flex-col items-center lg:col-span-7">
+      <div className="flex flex-col items-center overflow-hidden lg:col-span-7">
         <div
           ref={containerRef}
           className="relative flex aspect-[5/3] w-[92%] max-w-[620px] items-center justify-center select-none"
@@ -671,7 +671,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-3 font-mono text-xs text-[#8a8780] lg:text-right">
+          <div className="flex shrink-0 items-center gap-3 whitespace-nowrap font-mono text-xs text-[#8a8780] lg:text-right">
             <Layers className="h-4 w-4 text-[#ff7900]" />
             <span>
               DISPLAYING{" "}

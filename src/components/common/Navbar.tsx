@@ -40,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
           </a>
 
           {/* Zone 2: 4-5 single-line clean text navigation links */}
-          <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[#c5c2bb]">
+          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-[#c5c2bb]">
             <a
               href="#about"
               className="hover:text-[#ff7900] transition-colors whitespace-nowrap shrink-0"
@@ -87,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-white hover:text-[#ff7900] transition-colors rounded-lg bg-[#141418] border border-[#262630]"
+              className="lg:hidden p-2 text-white hover:text-[#ff7900] transition-colors rounded-lg bg-[#141418] border border-[#262630]"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -98,7 +98,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 bg-[#040405]/95 backdrop-blur-xl md:hidden pt-24 px-8 pb-12 flex flex-col justify-between border-b border-[#262630]">
+        <div className="fixed inset-0 z-30 overflow-y-auto bg-[#040405]/95 backdrop-blur-xl lg:hidden pt-24 px-8 pb-12 flex flex-col justify-between gap-10 border-b border-[#262630]">
           <nav className="flex flex-col gap-6 text-xl font-display font-medium">
             <a
               href="#about"

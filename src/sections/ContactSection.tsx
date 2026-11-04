@@ -74,10 +74,10 @@ export const ContactSection: React.FC = () => {
             <span>06. TRANSMISSION CHANNEL // GET IN TOUCH</span>
           </div>
 
-          <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-display text-white tracking-tighter leading-[0.95]">
+          <h2 className="text-[clamp(2.25rem,5.6vw,5.25rem)] font-black font-display text-white tracking-tighter leading-[0.95]">
             LET&apos;S BUILD SOMETHING <br />
             <span className="text-[#ff7900] text-glow-orange">
-              EXTRAORDINARY.
+              EXTRA<span className="sm:hidden"><br /></span>ORDINARY.
             </span>
           </h2>
 
@@ -198,7 +198,7 @@ export const ContactSection: React.FC = () => {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                     <div className="space-y-2">
                       <label className="text-xs font-mono text-[#8a8780] uppercase tracking-wider">
                         YOUR NAME / BRAND *
@@ -232,7 +232,7 @@ export const ContactSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                     <div className="space-y-2">
                       <label className="text-xs font-mono text-[#8a8780] uppercase tracking-wider">
                         PROJECT SCOPE
