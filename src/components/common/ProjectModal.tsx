@@ -13,13 +13,25 @@ interface ProjectModalProps {
   totalCount?: number;
 }
 
+/** Display URL for the screenshot browser chrome. */
+const projectDomain = (p: Project) => {
+  if (p.liveUrl && p.liveUrl !== '#') {
+    try {
+      return new URL(p.liveUrl).hostname.replace(/^www\./, '');
+    } catch {
+      /* fall through to local label */
+    }
+  }
+  return `${p.id}.local`;
+};
+
 export const ProjectModal: React.FC<ProjectModalProps> = ({
   project,
   onClose,
   onNext,
   onPrev,
   currentIndex = 0,
-  totalCount = 14,
+  totalCount = 12,
 }) => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalCardRef = useRef<HTMLDivElement>(null);
@@ -222,6 +234,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     GOOGLE PLAY
                   </span>
                 )}
+                {project.status === 'In Development' && (
+                  <span className="text-[9px] font-mono text-amber-400 bg-amber-950/40 border border-amber-500/30 px-1.5 py-0.5 rounded">
+                    IN DEVELOPMENT
+                  </span>
+                )}
               </div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-white">
                 {project.title}
@@ -229,6 +246,12 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               <p className="text-base text-[#a39f96] max-w-xl font-sans">
                 {project.subtitle}
               </p>
+              {project.status === 'In Development' && (
+                <p className="inline-flex items-center gap-1.5 rounded border border-amber-500/20 bg-amber-950/20 px-2 py-1 font-mono text-[10px] text-amber-400/90">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  CONCEPT BUILD — NOT SHIPPED YET
+                </p>
+              )}
             </div>
 
             <div className="shrink-0 flex items-center md:items-end flex-col">
@@ -238,6 +261,33 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               <AsciiNumber value={project.index} size="md" color="text-[#ff7900]" />
             </div>
           </div>
+
+          {/* Landing page preview */}
+          {project.image && (
+            <div className="overflow-hidden rounded-xl border border-[#262626] bg-[#080808]">
+              <div className="flex items-center gap-1.5 px-3 py-2 border-b border-[#1f1f1f] bg-[#0b0b0b]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff5f57]/80" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#febc2e]/80" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#28c840]/80" />
+                <span className="ml-2 truncate font-mono text-[10px] text-[#737069]">
+                  {projectDomain(project)}
+                </span>
+                <span className="ml-auto shrink-0 rounded border border-[#ff7900]/30 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-[#ff7900]">
+                  live preview
+                </span>
+              </div>
+              <div className="relative aspect-[1.9/1] w-full overflow-hidden bg-[#0b0b0b]">
+                <img
+                  src={project.image}
+                  alt={`${project.title} landing page screenshot`}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover object-top"
+                />
+                <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5" />
+              </div>
+            </div>
+          )}
 
           {/* Quick Info Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4 rounded-xl bg-[#121212] border border-[#1f1f1f]">
@@ -345,6 +395,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   <span>VIEW ON GOOGLE PLAY</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
+              ) : project.status === 'In Development' ? (
+                <span className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-mono font-semibold text-amber-400 bg-amber-950/20 border border-amber-500/30 rounded-md">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  <span>IN DEVELOPMENT</span>
+                </span>
               ) : (
                 <a
                   href={project.liveUrl}
