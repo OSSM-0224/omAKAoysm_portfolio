@@ -42,7 +42,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       id="hero"
       className="relative min-h-screen w-full flex flex-col justify-between pt-28 pb-12 px-6 sm:px-8 md:px-12 overflow-hidden"
     >
-      <DataRain fullscreen={false} className="absolute inset-0 -z-10 h-full w-full block" count={5000} flowSpeed={1.0} obstacleRadius={80} />
+      <DataRain
+        fullscreen={false}
+        className="absolute inset-0 -z-10 h-full w-full block"
+        count={5000}
+        flowSpeed={1.0}
+        obstacleRadius={80}
+      />
 
       {/* Top Meta Terminal Banner */}
       <div className="relative z-10 max-w-7xl mx-auto w-full flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-[#8a8780] border-b border-[#1c1c1c] pb-4">
@@ -155,7 +161,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="lg:col-span-5 relative flex items-center justify-center">
           <div className="relative w-full max-w-md aspect-[4/5] overflow-hidden rounded-2xl border border-[#ff7900]/30 shadow-[0_0_60px_rgba(255,121,0,0.25)]">
             <img
-              src="/om-portrait.webp"
+              src="/Neon Orange Rim-Lit Portrait Cutout.png"
               alt="Om, aka OYSM"
               className="block w-full h-full object-cover object-top bg-[#030303]"
             />

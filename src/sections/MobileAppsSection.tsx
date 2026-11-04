@@ -9,20 +9,9 @@ export const MobileAppsSection: React.FC = () => {
   const activeApp = MOBILE_APPS[activeAppIndex];
 
   React.useEffect(() => {
-    const scanlines = document.querySelector('.scanlines-overlay') as HTMLElement | null;
-    const prevDisplay = scanlines?.style.display;
-    const prevOpacity = scanlines?.style.opacity;
-    if (scanlines) {
-      scanlines.style.display = 'none';
-      scanlines.style.opacity = '0';
-    }
     document.body.classList.add('mobile-preview-active');
     return () => {
       document.body.classList.remove('mobile-preview-active');
-      if (scanlines) {
-        scanlines.style.display = prevDisplay || '';
-        scanlines.style.opacity = prevOpacity || '';
-      }
     };
   }, []);
 

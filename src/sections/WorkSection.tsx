@@ -177,7 +177,7 @@ const TiltProjectCard: React.FC<{
                 <Download className="w-3 h-3" />
                 <span>PLAY STORE</span>
               </a>
-            ) : (
+            ) : project.liveUrl && project.liveUrl !== '#' ? (
               <a
                 href={project.liveUrl}
                 target="_blank"
@@ -188,6 +188,10 @@ const TiltProjectCard: React.FC<{
                 <span>LIVE</span>
                 <ExternalLink className="w-3 h-3 text-[#ff7900]" />
               </a>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-xs font-mono text-[#737069] py-1">
+                <span>LOCAL READY</span>
+              </span>
             )}
 
             <span className="text-[#333]">·</span>

@@ -141,21 +141,7 @@ body {
   background-size: 160px 160px;
 }
 
-/* Custom Scanlines */
-.scanlines-overlay {
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%,
-    rgba(0, 0, 0, 0.25) 50%
-  ),
-  linear-gradient(
-    90deg,
-    rgba(255, 0, 0, 0.03),
-    rgba(0, 255, 0, 0.01),
-    rgba(0, 0, 255, 0.03)
-  );
-  background-size: 100% 4px, 6px 100%;
-  pointer-events: none;
-}
+/* Custom Scanlines removed */
 
 /* Subtle Noise Texture */
 .noise-overlay {
@@ -198,13 +184,6 @@ body {
 
 .border-glow-orange {
   box-shadow: inset 0 0 15px rgba(255, 121, 0, 0.2), 0 0 15px rgba(255, 75, 0, 0.35);
-}
-
-/* Hide CRT scanlines over mobile 3D preview */
-.mobile-preview-active .scanlines-overlay {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
 }
 
 .mobile-preview-canvas canvas {
