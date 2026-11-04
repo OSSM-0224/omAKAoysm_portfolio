@@ -54,7 +54,9 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
               <span className="h-1.5 w-1.5 rounded-full bg-[#ff7900] shadow-[0_0_8px_#ff7900]" />
               05 modules / signal online
             </span>
-            <span className="text-[#6f6b63]">Select to inspect</span>
+            <span className="text-[#8a857c]">
+              React / Node / Native
+            </span>
           </div>
         </div>
 
@@ -69,7 +71,7 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
               onPreview={setPreviewIndex}
               reducedMotion={reducedMotion}
             />
-            <div className="mt-3 flex items-center justify-between px-1 font-mono text-[9px] uppercase tracking-[0.18em] text-[#6a665f]">
+            <div className="mt-3 flex items-center justify-between px-1 font-mono text-[9px] uppercase tracking-[0.18em] text-[#8a857c]">
               <span>05 module stack</span>
               <span>OM / OYSM</span>
             </div>
@@ -78,7 +80,7 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
           {/* Service manifest */}
           <div className="lg:col-span-7">
             <div className="overflow-hidden rounded-2xl border border-[#24242b] bg-[#07070a] shadow-[14px_20px_50px_rgba(0,0,0,0.35)]">
-              <div className="flex items-center justify-between gap-3 border-b border-[#1c1c22] px-5 py-3 font-mono text-[9px] uppercase tracking-[0.18em] text-[#737069]">
+              <div className="flex items-center justify-between gap-3 border-b border-[#1c1c22] px-5 py-3 font-mono text-[9px] uppercase tracking-[0.18em] text-[#8f8a81]">
                 <span>Service_manifest</span>
                 <span className="text-[#ff7900]">Select to inspect</span>
               </div>
@@ -110,7 +112,7 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
                         className={`mt-1 w-5 shrink-0 font-mono text-[10px] font-bold tracking-[0.12em] transition-colors ${
                           isActive
                             ? "text-[#ff7900]"
-                            : "text-[#7a766e] group-hover:text-[#a8a39a]"
+                            : "text-[#8f8a81] group-hover:text-[#b0aba2]"
                         }`}
                       >
                         {service.num}
@@ -126,7 +128,11 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
                         >
                           {service.title}
                         </span>
-                        <span className="mt-1 block font-mono text-[10px] leading-relaxed text-[#77736b] sm:text-[11px]">
+                        <span
+                          className={`mt-1 block font-mono text-[10px] leading-relaxed sm:text-[11px] ${
+                            isActive ? "text-[#b6b1a8]" : "text-[#8f8a81]"
+                          }`}
+                        >
                           {service.subtitle}
                         </span>
                       </span>
@@ -182,9 +188,14 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
                               className="h-4 w-4 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5"
                             />
                           </button>
-                          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#8a857c]">
-                            [ {activeService.num} / {activeService.short} /
-                            ready ]
+                          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#8f8a81]">
+                            <span className="hidden sm:inline">
+                              [ {activeService.num} / {activeService.short} /
+                              ready ]
+                            </span>
+                            <span className="sm:hidden">
+                              [ {activeService.num} / ready ]
+                            </span>
                           </span>
                         </div>
                       </div>

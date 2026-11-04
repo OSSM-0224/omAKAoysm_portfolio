@@ -794,7 +794,7 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
           <span className="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[#ff7900]/50" />
         </div>
 
-        <div className="pointer-events-none absolute inset-x-4 top-4 z-10 flex items-center justify-between font-mono text-[8px] uppercase tracking-[0.18em] text-[#ff9029]/70 sm:inset-x-5">
+        <div className="pointer-events-none absolute inset-x-4 top-4 z-10 flex items-center justify-between font-mono text-[8px] uppercase tracking-[0.18em] text-[#ffb066]/90 sm:inset-x-5">
           <span className="flex items-center gap-1.5">
             <span className="h-1 w-1 bg-[#ff7900]" />
             {active.short}
@@ -803,10 +803,10 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
         </div>
 
         <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 flex justify-center">
-          <span className="font-mono text-[8px] uppercase tracking-[0.24em] text-[#ff7900]/60 sm:hidden">
+          <span className="font-mono text-[8px] uppercase tracking-[0.24em] text-[#ffb066]/90 sm:hidden">
             [ TAP A LAYER ]
           </span>
-          <span className="hidden font-mono text-[8px] uppercase tracking-[0.24em] text-[#ff7900]/50 sm:inline">
+          <span className="hidden font-mono text-[8px] uppercase tracking-[0.24em] text-[#ffb066]/80 sm:inline">
             [ CLICK A LAYER TO INSPECT ]
           </span>
         </div>
@@ -819,7 +819,7 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
             {active.num} <span className="text-[#ff7900]">/</span>{" "}
             {active.short}
           </div>
-          <div className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-[#7b776f]">
+          <div className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-[#8f8a81]">
             MODULE LOCKED · SIGNAL STABLE
           </div>
         </div>
@@ -836,7 +836,7 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <span className="w-10 text-center font-mono text-[9px] tracking-[0.15em] text-[#7b776f]">
+          <span className="w-10 text-center font-mono text-[9px] tracking-[0.15em] text-[#8f8a81]">
             {active.num}/05
           </span>
           <button
