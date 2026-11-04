@@ -345,7 +345,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* Bottom Status & Scroll Indicator */}
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-4 border-t border-[#1c1c1c] pt-6 font-mono text-xs text-[#737069] sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 sm:flex sm:flex-wrap sm:items-center sm:gap-x-3">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
           <span className="whitespace-nowrap">REACT NATIVE &amp; ANDROID</span>
           <span aria-hidden="true" className="hidden text-[#3b3b42] sm:inline">
             ·
