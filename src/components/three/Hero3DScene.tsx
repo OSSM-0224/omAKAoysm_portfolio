@@ -132,7 +132,7 @@ export const Hero3DScene: React.FC<Hero3DSceneProps> = ({ className = '' }) => {
         { text: '  return developer.shipToProduction(projects);', color: '#ffaa44' },
         { text: '}', color: '#ff7722' },
         { text: '', color: '' },
-        { text: '⚡ SYSTEM READY // 11 PRODUCTION DEPLOYMENTS ONLINE', color: '#ff5500' },
+        { text: '⚡ SYSTEM READY // 9 PRODUCTION DEPLOYMENTS ONLINE', color: '#ff5500' },
       ];
 
       let yPos = 85;

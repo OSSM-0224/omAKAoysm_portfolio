@@ -133,7 +133,7 @@ export const PROJECTS: Project[] = [
     short: "Child Dream",
     name: "Child Dream's Social Foundation",
     kind: "web",
-    blurb: "Full redesign of an NGO site, built around trust and donations.",
+    blurb: "Redesign of an NGO site focused on trust and donations — in development.",
     core: [],
     used: ["react", "tailwind"], // confirm
   },
@@ -148,20 +148,11 @@ export const PROJECTS: Project[] = [
     used: [],
   },
   {
-    id: "fixora",
-    short: "FIXORA",
-    name: "FIXORA",
-    kind: "web",
-    blurb: "Premium dental clinic website.",
-    core: [],
-    used: ["react", "tailwind"], // confirm
-  },
-  {
     id: "ortho",
-    short: "Ortho clinic",
-    name: "Orthodontic clinic site",
+    short: "Dr Patil",
+    name: "Dr Patil Advance Clinic",
     kind: "web",
-    blurb: "Treatment showcase for a two-doctor orthodontic practice.",
+    blurb: "Advanced orthodontic clinic site for Dr. Tanvi and Dr. Piyush Patil.",
     core: [],
     used: ["react", "tailwind"], // confirm
   },
@@ -170,7 +161,7 @@ export const PROJECTS: Project[] = [
     short: "Om Sai Sports",
     name: "Om Sai Sports",
     kind: "web",
-    blurb: "A 3D website for a jersey brand.",
+    blurb: "A 3D website for a jersey brand — in development.",
     core: ["three"],
     used: ["react", "tailwind"], // confirm
   },
@@ -183,16 +174,6 @@ export const PROJECTS: Project[] = [
       "Residents, flats, vehicles and an admin panel, in several languages.",
     core: [],
     used: ["react", "tailwind"], // confirm
-  },
-  {
-    id: "auth",
-    short: "Auth app",
-    name: "Auth & Signup App",
-    kind: "web",
-    blurb:
-      "React frontend on Vercel, Express API on Render, MongoDB underneath.",
-    core: ["react", "vite", "node", "mongo", "vercel"],
-    used: [],
   },
   {
     id: "portfolio",
