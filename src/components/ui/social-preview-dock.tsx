@@ -788,7 +788,7 @@ function CopyEmailButton({ email }: { email: string }) {
       type="button"
       onClick={copy}
       data-copied={copied ? "" : undefined}
-      className="group relative flex items-center justify-center rounded-2xl bg-[#ff7900] px-5 py-2.5 font-mono text-sm font-bold text-black shadow-[0_0_24px_rgba(255,121,0,0.45)] outline-none transition-transform focus-visible:ring-2 focus-visible:ring-[#ffb038] focus-visible:ring-offset-2 focus-visible:ring-offset-[#030303] active:scale-95"
+      className="group relative flex items-center justify-center whitespace-nowrap rounded-2xl bg-[#ff7900] px-4 py-2.5 font-mono text-xs font-bold text-black shadow-[0_0_24px_rgba(255,121,0,0.45)] outline-none transition-transform focus-visible:ring-2 focus-visible:ring-[#ffb038] focus-visible:ring-offset-2 focus-visible:ring-offset-[#030303] active:scale-95 sm:text-sm"
     >
       {/* Both labels stack so the pill can't change width mid-transition. */}
       <span className="transition-all duration-500 group-data-[copied]:opacity-0 group-data-[copied]:blur-[2px]">
@@ -968,7 +968,7 @@ export function SocialPreviewDock({
       </div>
 
       {/* ── The row itself ── */}
-      <div className="relative z-10 flex items-center gap-2">
+      <div className="relative z-10 flex flex-wrap items-center justify-center gap-2">
         {email && <CopyEmailButton email={email} />}
         {links.map((item, i) => (
           <a

@@ -1229,7 +1229,7 @@ export const CapabilityCore: React.FC<CapabilityCoreProps> = ({
       </div>
 
       {/* Console footer */}
-      <div className="relative z-20 flex flex-col gap-3 border-t border-white/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="relative z-20 flex flex-col gap-3 border-t border-white/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between lg:flex-col lg:items-stretch xl:flex-row xl:items-center xl:justify-between">
         <div className="min-w-0">
           <div className="truncate font-display text-sm font-bold tracking-tight text-white sm:text-base">
             {active.num} <span className="text-[#ff7900]">/</span>{" "}
