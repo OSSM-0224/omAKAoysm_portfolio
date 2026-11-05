@@ -44,6 +44,8 @@ export interface SocialProfile {
   username?: string;
   /** X handle, without the @. */
   xHandle?: string;
+  /** Instagram handle, without the @. */
+  instagramHandle?: string;
   /** Display name on the LinkedIn card. */
   name?: string;
   /** Square image URL. The live GitHub avatar replaces it when it arrives. */
@@ -67,7 +69,12 @@ export interface SocialProfile {
   levels?: string;
   /** Banner image for the X card. Takes precedence over the gradient. */
   cover?: string;
-  links?: { github?: string; linkedin?: string; x?: string };
+  links?: {
+    github?: string;
+    linkedin?: string;
+    x?: string;
+    instagram?: string;
+  };
 }
 
 export interface SocialPreviewItem {
@@ -129,6 +136,8 @@ const DEFAULT_BANNER_COLORS = {
   linkedin: ["#1a0d03", "#ff4b00", "#ff7900", "#ffb038"],
   x: ["#ff7900", "#2a1204", "#ffb038", "#ff4b00"],
 };
+
+const INSTAGRAM_BANNER_COLORS = ["#ff4b00", "#ff7900", "#ffb038", "#ff5500"];
 
 /* ── Live GitHub data ──
    Both endpoints are public, unauthenticated and send `access-control-allow-
@@ -207,6 +216,22 @@ const LinkedinMark = () => (
 const XMark = () => (
   <svg viewBox="0 0 251 256" fill="currentColor" aria-hidden="true">
     <path d="M149.079 108.399L242.33 0h-22.098l-80.97 94.12L74.59 0H0l97.796 142.328L0 256h22.1l85.507-99.395L175.905 256h74.59L149.073 108.399zM118.81 143.58l-9.909-14.172l-78.84-112.773h33.943l63.625 91.011l9.909 14.173l82.705 118.3H186.3l-67.49-96.533z" />
+  </svg>
+);
+
+const InstagramMark = () => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3" y="3" width="18" height="18" rx="5.2" />
+    <circle cx="12" cy="12" r="4.1" />
+    <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none" />
   </svg>
 );
 
@@ -724,6 +749,56 @@ function XCard({
   );
 }
 
+function InstagramCard({
+  profile,
+  live,
+  colors,
+}: {
+  profile: SocialProfile;
+  live: GithubLive;
+  colors: string[];
+}) {
+  const handle =
+    profile.instagramHandle ??
+    profile.links?.instagram?.split("/").filter(Boolean).pop() ??
+    "instagram";
+
+  return (
+    <div className={cn(CARD, "w-[300px]")}>
+      <Banner colors={colors} className="h-20" />
+      <div className="px-4 pb-4">
+        <div className="flex items-start justify-between gap-3">
+          <Avatar
+            src={live.avatar ?? profile.avatar}
+            name={profile.name ?? handle}
+            className={OVERLAP_AVATAR}
+          />
+          {profile.links?.instagram && (
+            <a
+              href={profile.links.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              tabIndex={-1}
+              className="mt-2 shrink-0 rounded-full bg-[#ff7900] px-4 py-1.5 text-xs font-bold text-black transition-opacity hover:opacity-90"
+            >
+              Follow
+            </a>
+          )}
+        </div>
+        <p className="mt-1.5 text-sm font-medium">@{handle}</p>
+        {profile.name && (
+          <p className="text-xs text-[#9e9a91]">{profile.name}</p>
+        )}
+        {profile.bio && (
+          <p className="mt-1.5 text-xs leading-relaxed text-[#9e9a91]">
+            {profile.bio}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function defaultItems(
   profile: SocialProfile,
   live: GithubLive,
@@ -757,6 +832,19 @@ function defaultItems(
       href: links.x,
       icon: <XMark />,
       card: <XCard profile={profile} live={live} colors={bannerColors.x} />,
+    },
+    links.instagram && {
+      id: "instagram",
+      label: "Instagram",
+      href: links.instagram,
+      icon: <InstagramMark />,
+      card: (
+        <InstagramCard
+          profile={profile}
+          live={live}
+          colors={INSTAGRAM_BANNER_COLORS}
+        />
+      ),
     },
   ].filter(Boolean) as SocialPreviewItem[];
 }
