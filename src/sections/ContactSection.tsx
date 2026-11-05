@@ -143,6 +143,7 @@ export const ContactSection: React.FC = () => {
                     profile={{
                       username: "OSSM-0224",
                       xHandle: "OmMhatre",
+                      instagramHandle: "__om_mhatre__",
                       name: "Om Mhatre",
                       headline: "Software Engineer & Full Stack Developer",
                       location: "India",
@@ -152,6 +153,8 @@ export const ContactSection: React.FC = () => {
                         linkedin:
                           "https://www.linkedin.com/in/om-mhatre-8b819025b/",
                         x: "https://x.com/OmMhatre",
+                        instagram:
+                          "https://www.instagram.com/__om_mhatre__/",
                       },
                     }}
                     bannerColors={{
