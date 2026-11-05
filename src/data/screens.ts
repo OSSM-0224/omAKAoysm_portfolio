@@ -1,6 +1,7 @@
 export interface MobileApp {
   id: string;
   name: string;
+  shortName: string;
   tagline: string;
   platform: 'Google Play & Android' | 'React Native 0.82' | 'Native Android (Java)';
   badgeText: string;
@@ -18,6 +19,7 @@ export const MOBILE_APPS: MobileApp[] = [
   {
     id: 'ccms',
     name: 'CCMS (Canteen Coupon Management System)',
+    shortName: 'CCMS',
     tagline: 'Production Cafeteria ERP with 100+ Active Play Store Downloads',
     platform: 'Google Play & Android',
     badgeText: 'LIVE ON GOOGLE PLAY · 100+ DOWNLOADS',
@@ -32,7 +34,7 @@ export const MOBILE_APPS: MobileApp[] = [
       'Full wallet balance top-up, daily meal quotas, and cafeteria telemetry',
     ],
     tech: ['Java', 'Android', 'Redux', 'MySQL Workbench', 'Flask', 'PlayStore'],
-    screenshots: ['/screens/screen_page_ccms.png', '/screens/screen_page_ccms.png'],
+    screenshots: ['/screens/ccms-1.svg', '/screens/screen_page_ccms.png'],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.techvyassa.ccms1&hl=en_IN',
     githubUrl: 'https://github.com/ommhatre',
     accentColor: '#ff7900',
@@ -40,6 +42,7 @@ export const MOBILE_APPS: MobileApp[] = [
   {
     id: 'amrutam-pharma',
     name: 'Amrutam Pharma ERP & Tele-Consult',
+    shortName: 'Amrutam Pharma',
     tagline: 'Enterprise Pharma Suite with Zego Cloud Video & AES Storage',
     platform: 'React Native 0.82',
     badgeText: 'REACT NATIVE 0.82 · AES-256 ENCRYPTED',
@@ -69,6 +72,7 @@ export const MOBILE_APPS: MobileApp[] = [
   {
     id: 'emergency-app',
     name: 'EmergencyApp — Safety & SOS',
+    shortName: 'EmergencyApp',
     tagline: 'Native Android Java App with Live Google Maps GPS Beacon',
     platform: 'Native Android (Java)',
     badgeText: 'NATIVE ANDROID JAVA · GOOGLE MAPS SDK',
@@ -91,7 +95,7 @@ export const MOBILE_APPS: MobileApp[] = [
       'SensorManager',
       'Material Design',
     ],
-    screenshots: ['/screens/sos_home_page.png', '/screens/emergency-1.png'],
+    screenshots: ['/screens/emergency-1.svg', '/screens/sos_home_page.png'],
     githubUrl: 'https://github.com/ommhatre/EmergencyApp',
     accentColor: '#ff3b00',
   },
