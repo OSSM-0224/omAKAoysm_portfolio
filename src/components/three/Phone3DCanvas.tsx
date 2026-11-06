@@ -5,12 +5,15 @@ interface Phone3DCanvasProps {
   screenshotUrl: string;
   accentColor?: string;
   className?: string;
+  /** Height utility for the render surface. Defaults to the original 520px. */
+  heightClassName?: string;
 }
 
 export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
   screenshotUrl,
   accentColor = '#ff7900',
   className = '',
+  heightClassName = 'h-[520px]',
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const [webGlSupported, setWebGlSupported] = useState(true);
@@ -318,7 +321,7 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
   return (
     <div
       ref={mountRef}
-      className={`w-full h-[520px] relative touch-pan-y cursor-grab active:cursor-grabbing select-none z-10 ${className}`}
+      className={`w-full ${heightClassName} relative touch-pan-y cursor-grab active:cursor-grabbing select-none z-10 ${className}`}
     />
   );
 };
