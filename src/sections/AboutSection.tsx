@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AsciiNumber } from "../components/common/AsciiNumber";
 import { Terminal, ShieldCheck, Zap, Smartphone } from "lucide-react";
 
 const BIO_WORDS = [
