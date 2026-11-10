@@ -252,13 +252,18 @@
       }
 
       .cursor-ring span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
         color: var(--amber);
         font-family: var(--font-mono);
         font-size: 7px;
         font-weight: 600;
         letter-spacing: 0.14em;
+        white-space: nowrap;
         opacity: 0;
-        transform: scale(0.6);
+        transform: translate(-50%, 9px) scale(0.7);
+        transform-origin: center center;
         transition:
           opacity 0.2s ease,
           transform 0.2s ease;
@@ -268,8 +273,12 @@
         width: 46px;
         height: 46px;
         border-color: var(--accent);
-        background: rgba(255, 121, 0, 0.1);
-        box-shadow: 0 0 28px rgba(255, 121, 0, 0.22);
+        background: rgba(7, 7, 9, 0.86);
+        box-shadow:
+          0 0 0 1px rgba(255, 121, 0, 0.18),
+          0 0 30px rgba(255, 121, 0, 0.24);
+        -webkit-backdrop-filter: blur(3px);
+        backdrop-filter: blur(3px);
       }
 
       .cursor.is-active .cursor-ring::before {
@@ -278,13 +287,14 @@
 
       .cursor.is-active .cursor-ring span {
         opacity: 1;
-        transform: scale(1);
+        transform: translate(-50%, 9px) scale(1);
       }
 
       .cursor.is-down .cursor-ring {
         width: 34px;
         height: 34px;
-        background: rgba(255, 121, 0, 0.2);
+        border-color: var(--amber);
+        background: rgba(255, 121, 0, 0.18);
       }
 
       @media (pointer: fine) {
