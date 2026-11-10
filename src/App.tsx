@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { Suspense, useState, useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { Navbar } from "./components/common/Navbar";
 import { CustomCursor } from "./components/common/CustomCursor";
-import { ProjectPage } from "./components/common/ProjectPage";
 import { Loader } from "./sections/Loader";
 import { HeroSection } from "./sections/HeroSection";
 import { AboutSection } from "./sections/AboutSection";
@@ -13,6 +12,14 @@ import { ServicesSection } from "./sections/ServicesSection";
 import { ContactSection } from "./sections/ContactSection";
 import { Footer } from "./sections/Footer";
 import { Project, PROJECTS } from "./data/projects";
+
+/* Case-study code is only fetched when a project opens, keeping the landing
+   bundle lighter for first paint. */
+const ProjectPage = React.lazy(() =>
+  import("./components/common/ProjectPage").then((module) => ({
+    default: module.ProjectPage,
+  })),
+);
 
 const projectFromHash = (): Project | null => {
   const match = window.location.hash.match(/^#project\/([^/?#]+)$/);
@@ -196,15 +203,24 @@ export default function App() {
 
       {/* Full-screen case study page with global keyboard + slideshow navigation */}
       {selectedProject && (
-        <ProjectPage
-          project={selectedProject}
-          nextProject={nextProject}
-          onClose={closeProject}
-          onNext={handleNextProject}
-          onPrev={handlePrevProject}
-          currentIndex={currentIndex}
-          totalCount={PROJECTS.length}
-        />
+        <Suspense
+          fallback={
+            <div
+              aria-hidden="true"
+              className="fixed inset-0 z-[70] bg-[#050505]"
+            />
+          }
+        >
+          <ProjectPage
+            project={selectedProject}
+            nextProject={nextProject}
+            onClose={closeProject}
+            onNext={handleNextProject}
+            onPrev={handlePrevProject}
+            currentIndex={currentIndex}
+            totalCount={PROJECTS.length}
+          />
+        </Suspense>
       )}
     </div>
   );

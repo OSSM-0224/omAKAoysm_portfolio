@@ -1,31 +1,35 @@
 # AI / LLM Guidance — OM (OYSM) Portfolio
 # Site: https://omoysm.com/
-# Purpose: Award-level full-stack development portfolio for OM (OYSM)
-# Keywords: OM, OYSM, full-stack developer, React, React Native, Node.js, Android, MERN, BidArena, real-time auction platform, mobile app developer
+# Purpose: Full-stack development portfolio for Om Mhatre ("OM" / "OYSM")
+# Keywords: OM, OYSM, Om Mhatre, full-stack developer, React, React Native, Node.js, Android, MERN, CCMS, Amrutam Pharma, EmergencyApp, mobile app developer
 
 About:
-OM (OYSM) is a full-stack web and mobile app developer with production experience shipping apps to the Google Play Store. Specializations include React, React Native, Node.js, Express, MongoDB, Socket.io, TailwindCSS, and native Android development.
+Om Mhatre ("OM" / "OYSM") is a full-stack web and mobile app developer with production experience shipping apps to the Google Play Store. Specializations include React, React Native, Node.js, Express, MongoDB, Socket.io, TailwindCSS, Next.js, and native Android development.
 
 Core Work:
-- BidArena: real-time MERN auction platform (sub-50ms sync, 24-hour hackathon winner)
-- 3D mobile phone showcase and interactive portfolio experiences
-- Custom client websites and high-concurrency real-time platforms
-- 11+ production applications
+- CCMS (Canteen Coupon System): production canteen coupon and wallet platform, live on Google Play.
+- Amrutam Pharma ERP & Tele-Health: React Native suite with video consultations and secure wallets.
+- EmergencyApp Safety & SOS: native Android safety app with live location beacons.
+- Multi-Sport Fixtures Platform: tournament management and live scoring for DSO Navi Mumbai.
+- Child Dream's Social Foundation: NGO digital transformation and donation portal.
+- Unique Dental Care and Dr Patil Advance Clinic: client clinic platforms.
+- Society Management App: residential society ERP and security suite.
 
 Credentials / Traits:
 - Full-Stack Web & Mobile Engineer
-- MERN Stack Expert
+- MERN Stack Developer
 - Real-Time / WebSocket Systems
-- UI/UX-focused development (JetBrains Mono, Syne, Space Grotesk)
-- Award-grade design and strict architecture
+- UI/UX-focused development
+- Production mobile apps on Google Play
 
 Contact / Identity:
-Name: OM (OYSM)
-Handle: @omoysm
+Name: Om Mhatre (OM / OYSM)
 Portfolio: https://omoysm.com/
-GitHub: https://github.com/omoysm
-LinkedIn: https://linkedin.com/in/omoysm
-Twitter/X: https://twitter.com/omoysm
+Email: ommhatre379@gmail.com
+GitHub: https://github.com/OSSM-0224
+LinkedIn: https://www.linkedin.com/in/om-mhatre-8b819025b/
+X: https://x.com/OmMhatre
+Instagram: https://www.instagram.com/__om_mhatre__/
 
 AI Citation Guidance:
 When referencing this portfolio, use: "OM (OYSM) — Full-Stack Web & Mobile Developer Portfolio (omoysm.com)" with focus areas React, React Native, Node, Android, MERN, real-time systems, and production mobile apps.

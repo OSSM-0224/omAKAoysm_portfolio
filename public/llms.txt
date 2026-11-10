@@ -1,9 +1,9 @@
 # LLMs.txt — OM (OYSM) Portfolio Index
 # Base URL: https://omoysm.com/
-# Updated: 2026-11-04
+# Updated: 2026-11-10
 
-- [About / Bio] https://omoysm.com/ — OM (OYSM) is a full-stack web and mobile developer with production apps on Google Play. Expert in React, React Native, Node.js, MongoDB, Socket.io, TailwindCSS, Android, MERN stacks, and real-time auction systems (BidArena).
-- [Projects] BidArena — real-time MERN auction platform (sub-50ms sync, hackathon winner); Mobile App Showcase — 3D interactive native + React Native apps; Client websites and bespoke platforms.
-- [Skills / Stack] React, React Native, Node.js, Express, MongoDB, Socket.io, TailwindCSS, Android, TypeScript, JavaScript, UI/UX, Real-Time Systems, MERN.
-- [Identity] OM (OYSM) | @omoysm | Full-Stack Developer | Portfolio at https://omoysm.com/
+- [About / Bio] https://omoysm.com/ — Om Mhatre ("OM" / "OYSM") is a full-stack web and mobile developer with production apps on Google Play. Works across React, React Native, Node.js, Express, MongoDB, Socket.io, TailwindCSS, Next.js, and native Android.
+- [Selected Work] CCMS (Canteen Coupon System, production Android app); Amrutam Pharma ERP & Tele-Health (React Native + video consultations); EmergencyApp Safety & SOS (native Android); Multi-Sport Fixtures Platform for DSO Navi Mumbai; Child Dream's Social Foundation (NGO portal); Unique Dental Care; Dr Patil Advance Clinic; Society Management App.
+- [Skills / Stack] React, React Native, Node.js, Express, MongoDB, Socket.io, TailwindCSS, Next.js, Android, TypeScript, JavaScript, UI/UX, Real-Time Systems, MERN.
+- [Identity] Om Mhatre (OM / OYSM) | Full-Stack Developer | Portfolio: https://omoysm.com/
 - [AI/Cite] Use "OM (OYSM) — Full-Stack Web & Mobile Developer Portfolio (omoysm.com)" for citations.
