@@ -1,5 +1,26 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const SCREEN_WIDTH = 1.46;
+const SCREEN_HEIGHT = 2.94;
+const SCREEN_ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+
+const roundedRectShape = (width: number, height: number, radius: number) => {
+  const shape = new THREE.Shape();
+  const x = -width / 2;
+  const y = -height / 2;
+  shape.moveTo(x + radius, y);
+  shape.lineTo(x + width - radius, y);
+  shape.quadraticCurveTo(x + width, y, x + width, y + radius);
+  shape.lineTo(x + width, y + height - radius);
+  shape.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  shape.lineTo(x + radius, y + height);
+  shape.quadraticCurveTo(x, y + height, x, y + height - radius);
+  shape.lineTo(x, y + radius);
+  shape.quadraticCurveTo(x, y, x + radius, y);
+  return shape;
+};
 
 interface Phone3DCanvasProps {
   screenshotUrl: string;
@@ -64,7 +85,7 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
 
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.08;
     renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio, 1.8));
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = !isSoftwareGl;
@@ -72,26 +93,35 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
 
     container.appendChild(renderer.domElement);
 
+    // Image-based studio lighting so the titanium chassis keeps its form
+    // even where the directional lights do not hit.
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    const roomEnvironment = new RoomEnvironment();
+    const environmentTarget = pmremGenerator.fromScene(roomEnvironment, 0.04);
+    scene.environment = environmentTarget.texture;
+    scene.environmentIntensity = 0.8;
+
     // Studio 3-Point Lighting
-    const keyLight = new THREE.DirectionalLight(0xffeedd, 2.2);
+    const keyLight = new THREE.DirectionalLight(0xfff1e2, 2.0);
     keyLight.position.set(3, 4, 3);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(new THREE.Color(accentColor), 3.5);
-    rimLight.position.set(-3, 2, -2);
+    const rimLight = new THREE.DirectionalLight(new THREE.Color(accentColor), 4.2);
+    rimLight.position.set(-3, 1.5, -2.5);
     scene.add(rimLight);
 
-    const ambientLight = new THREE.AmbientLight(0x222222, 1.2);
+    const ambientLight = new THREE.AmbientLight(0x3a2a1f, 0.9);
     scene.add(ambientLight);
 
     // -------------------------------------------------------------
     // PROCEDURAL 3D SMARTPHONE COMPONENT HIERARCHY:
-    // 1. Phone Body / Chassis (Matte Obsidian)
-    // 2. Bezel Edge Ring (Polished Titanium)
+    // 1. Phone Body / Chassis (Brushed Warm Titanium)
+    // 2. Black Glass Bezel
     // 3. Screen Plane with Dynamic Texture Map
     // 4. Punch-Hole Camera Pill
-    // 5. Side Power & Volume Buttons
-    // 6. Soft Radial Contact Shadow
+    // 5. Orange Power Key & Graphite Volume Rocker
+    // 6. Dark Rear Inlay & Camera Module
+    // 7. Soft Radial Contact Shadow
     // -------------------------------------------------------------
     const phoneGroup = new THREE.Group();
     scene.add(phoneGroup);
@@ -101,19 +131,8 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
     const phoneD = 0.12;
     const cornerR = 0.18;
 
-    // 1. Phone Body Chassis (Rounded Box Shape)
-    const shape = new THREE.Shape();
-    const x = -phoneW / 2;
-    const y = -phoneH / 2;
-    shape.moveTo(x + cornerR, y);
-    shape.lineTo(x + phoneW - cornerR, y);
-    shape.quadraticCurveTo(x + phoneW, y, x + phoneW, y + cornerR);
-    shape.lineTo(x + phoneW, y + phoneH - cornerR);
-    shape.quadraticCurveTo(x + phoneW, y + phoneH, x + phoneW - cornerR, y + phoneH);
-    shape.lineTo(x + cornerR, y + phoneH);
-    shape.quadraticCurveTo(x, y + phoneH, x, y + phoneH - cornerR);
-    shape.lineTo(x, y + cornerR);
-    shape.quadraticCurveTo(x, y, x + cornerR, y);
+    // 1. Phone Body Chassis (Brushed Warm Titanium)
+    const shape = roundedRectShape(phoneW, phoneH, cornerR);
 
     const extrudeSettings = {
       depth: phoneD,
@@ -128,43 +147,109 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
     chassisGeo.center();
 
     const chassisMat = new THREE.MeshStandardMaterial({
-      color: 0x141416,
-      metalness: 0.88,
-      roughness: 0.22,
+      color: 0xd8d3c9,
+      metalness: 0.84,
+      roughness: 0.24,
+      envMapIntensity: 1.05,
     });
     const chassisMesh = new THREE.Mesh(chassisGeo, chassisMat);
     phoneGroup.add(chassisMesh);
 
-    // 2. Screen Display Plane
-    const screenGeo = new THREE.PlaneGeometry(1.5, 3.0);
+    // 2. Black Glass Bezel
+    const bezelGeo = new THREE.ShapeGeometry(roundedRectShape(1.54, 3.08, 0.12));
+    const bezelMat = new THREE.MeshStandardMaterial({
+      color: 0x060606,
+      metalness: 0.6,
+      roughness: 0.18,
+      envMapIntensity: 0.55,
+    });
+    const bezelMesh = new THREE.Mesh(bezelGeo, bezelMat);
+    bezelMesh.position.z = phoneD / 2 + 0.034;
+    phoneGroup.add(bezelMesh);
+
+    // 3. Screen Display Plane
+    const screenGeo = new THREE.PlaneGeometry(SCREEN_WIDTH, SCREEN_HEIGHT);
     const screenMat = new THREE.MeshBasicMaterial({
       color: 0xffffff,
+      toneMapped: false,
     });
     const screenMesh = new THREE.Mesh(screenGeo, screenMat);
-    screenMesh.position.z = phoneD / 2 + 0.032;
+    screenMesh.position.z = phoneD / 2 + 0.038;
     phoneGroup.add(screenMesh);
     screenMeshRef.current = screenMesh;
 
-    // 3. Punch Hole Camera
+    // 4. Punch Hole Camera
     const cameraPillGeo = new THREE.CapsuleGeometry(0.04, 0.12, 8, 12);
-    const cameraMat = new THREE.MeshBasicMaterial({ color: 0x050505 });
+    const cameraMat = new THREE.MeshStandardMaterial({
+      color: 0x050505,
+      metalness: 0.8,
+      roughness: 0.15,
+    });
     const cameraMesh = new THREE.Mesh(cameraPillGeo, cameraMat);
     cameraMesh.rotation.z = Math.PI / 2;
-    cameraMesh.position.set(0, 1.34, phoneD / 2 + 0.035);
+    cameraMesh.position.set(0, 1.34, phoneD / 2 + 0.044);
     phoneGroup.add(cameraMesh);
 
-    // 4. Side Volume Buttons
+    // 5. Side Volume Rocker & Orange Power Key
     const btnGeo = new THREE.BoxGeometry(0.02, 0.35, 0.06);
-    const btnMat = new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.9, roughness: 0.2 });
+    const btnMat = new THREE.MeshStandardMaterial({
+      color: 0x393732,
+      metalness: 0.92,
+      roughness: 0.22,
+    });
     const volumeBtn = new THREE.Mesh(btnGeo, btnMat);
     volumeBtn.position.set(-phoneW / 2 - 0.025, 0.4, 0);
     phoneGroup.add(volumeBtn);
 
-    const powerBtn = new THREE.Mesh(btnGeo, btnMat);
+    const powerBtnMat = new THREE.MeshStandardMaterial({
+      color: 0xff5500,
+      metalness: 0.62,
+      roughness: 0.26,
+      emissive: 0x3a0c00,
+      emissiveIntensity: 0.6,
+    });
+    const powerBtn = new THREE.Mesh(btnGeo, powerBtnMat);
     powerBtn.position.set(phoneW / 2 + 0.025, 0.5, 0);
     phoneGroup.add(powerBtn);
 
-    // 5. Contact Shadow Plane Grounding
+    // 6. Dark Rear Inlay & Camera Module (visible when dragged 180°)
+    const rearPanelGeo = new THREE.ShapeGeometry(
+      roundedRectShape(1.42, 3.0, 0.14),
+    );
+    const rearPanelMat = new THREE.MeshStandardMaterial({
+      color: 0x191817,
+      metalness: 0.55,
+      roughness: 0.38,
+      envMapIntensity: 0.5,
+    });
+    const rearPanel = new THREE.Mesh(rearPanelGeo, rearPanelMat);
+    rearPanel.position.z = -phoneD / 2 - 0.032;
+    rearPanel.rotation.y = Math.PI;
+    phoneGroup.add(rearPanel);
+
+    const rearCameraGeo = new THREE.CircleGeometry(0.17, 48);
+    const rearCameraMat = new THREE.MeshStandardMaterial({
+      color: 0x080808,
+      metalness: 0.75,
+      roughness: 0.12,
+    });
+    const rearCamera = new THREE.Mesh(rearCameraGeo, rearCameraMat);
+    rearCamera.position.set(-0.36, 1.06, -phoneD / 2 - 0.035);
+    rearCamera.rotation.y = Math.PI;
+    phoneGroup.add(rearCamera);
+
+    const rearRingGeo = new THREE.RingGeometry(0.176, 0.198, 48);
+    const rearRingMat = new THREE.MeshBasicMaterial({
+      color: 0xff5500,
+      toneMapped: false,
+      side: THREE.DoubleSide,
+    });
+    const rearRing = new THREE.Mesh(rearRingGeo, rearRingMat);
+    rearRing.position.copy(rearCamera.position);
+    rearRing.rotation.y = Math.PI;
+    phoneGroup.add(rearRing);
+
+    // 7. Contact Shadow Plane Grounding
     const shadowGeo = new THREE.PlaneGeometry(2.8, 2.8);
     const shadowCanvas = document.createElement('canvas');
     shadowCanvas.width = 128;
@@ -273,26 +358,75 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
         container.removeChild(renderer.domElement);
       }
       renderer.dispose();
+      environmentTarget.dispose();
+      roomEnvironment.dispose();
+      pmremGenerator.dispose();
       chassisGeo.dispose();
       chassisMat.dispose();
+      bezelGeo.dispose();
+      bezelMat.dispose();
       screenGeo.dispose();
       screenMat.dispose();
+      cameraPillGeo.dispose();
+      cameraMat.dispose();
+      btnGeo.dispose();
+      btnMat.dispose();
+      powerBtnMat.dispose();
+      rearPanelGeo.dispose();
+      rearPanelMat.dispose();
+      rearCameraGeo.dispose();
+      rearCameraMat.dispose();
+      rearRingGeo.dispose();
+      rearRingMat.dispose();
+      shadowGeo.dispose();
+      shadowTexture.dispose();
+      shadowMat.dispose();
     };
   }, [accentColor]);
 
   // Load screenshot texture and apply to screen
   useEffect(() => {
-    if (!screenMeshRef.current || !screenshotUrl) return;
+    if (!screenshotUrl) return;
+
+    let cancelled = false;
+    let appliedTexture: THREE.Texture | null = null;
 
     textureLoader.load(
       screenshotUrl,
       (texture) => {
+        if (cancelled) {
+          texture.dispose();
+          return;
+        }
+
         texture.colorSpace = THREE.SRGBColorSpace;
-        texture.anisotropy = 4;
+        texture.anisotropy = 8;
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+
+        // Crop to fill the screen plane instead of stretching real screenshots
+        // whose aspect ratio differs from the display.
+        const image = texture.image as { width?: number; height?: number } | undefined;
+        const imageAspect =
+          image?.width && image?.height ? image.width / image.height : SCREEN_ASPECT;
+
+        if (imageAspect < SCREEN_ASPECT) {
+          const visibleHeight = imageAspect / SCREEN_ASPECT;
+          texture.repeat.set(1, visibleHeight);
+          texture.offset.set(0, (1 - visibleHeight) / 2);
+        } else if (imageAspect > SCREEN_ASPECT) {
+          const visibleWidth = SCREEN_ASPECT / imageAspect;
+          texture.repeat.set(visibleWidth, 1);
+          texture.offset.set((1 - visibleWidth) / 2, 0);
+        }
+
         if (screenMeshRef.current) {
           const mat = screenMeshRef.current.material as THREE.MeshBasicMaterial;
           mat.map = texture;
           mat.needsUpdate = true;
+          appliedTexture = texture;
+        } else {
+          texture.dispose();
         }
       },
       undefined,
@@ -300,7 +434,12 @@ export const Phone3DCanvas: React.FC<Phone3DCanvasProps> = ({
         console.warn('Failed to load screen texture, using fallback:', err);
       }
     );
-  }, [screenshotUrl, textureLoader]);
+
+    return () => {
+      cancelled = true;
+      appliedTexture?.dispose();
+    };
+  }, [screenshotUrl, textureLoader, accentColor]);
 
   if (!webGlSupported) {
     // 2D / CSS fallback for low-end devices
