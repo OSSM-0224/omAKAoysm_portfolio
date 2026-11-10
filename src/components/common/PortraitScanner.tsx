@@ -277,9 +277,10 @@ export const PortraitScanner: React.FC = () => {
           >
             <img
               ref={imageRef}
-              src="/Neon Orange Rim-Lit Portrait Cutout.png"
+              src="/om-portrait-cutout.webp"
               alt="Om (OYSM), full-stack web and mobile engineer"
               loading="eager"
+              fetchPriority="high"
               decoding="async"
               draggable={false}
               onLoad={() => setImageReady(true)}
