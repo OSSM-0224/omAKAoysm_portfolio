@@ -77,7 +77,11 @@ export const ContactSection: React.FC = () => {
           <h2 className="text-[1.625rem] min-[360px]:text-[1.875rem] min-[390px]:text-[2.0625rem] min-[430px]:text-[2.25rem] sm:text-[clamp(2.25rem,5.6vw,5.25rem)] font-black font-display text-white tracking-tighter leading-[0.95]">
             LET&apos;S BUILD SOMETHING <br />
             <span className="text-[#ff7900] text-glow-orange">
-              EXTRA<span className="sm:hidden"><br /></span>ORDINARY.
+              EXTRA
+              <span className="sm:hidden">
+                <br />
+              </span>
+              ORDINARY.
             </span>
           </h2>
 
@@ -143,7 +147,7 @@ export const ContactSection: React.FC = () => {
                     profile={{
                       username: "OSSM-0224",
                       xHandle: "OmMhatre",
-                      instagramHandle: "__om_mhatre__",
+                      instagramHandle: "__om_mhatre__24",
                       name: "Om Mhatre",
                       headline: "Software Engineer & Full Stack Developer",
                       location: "India",
@@ -153,8 +157,7 @@ export const ContactSection: React.FC = () => {
                         linkedin:
                           "https://www.linkedin.com/in/om-mhatre-8b819025b/",
                         x: "https://x.com/OmMhatre",
-                        instagram:
-                          "https://www.instagram.com/__om_mhatre__/",
+                        instagram: "https://www.instagram.com/__om_mhatre__24/",
                       },
                     }}
                     bannerColors={{
@@ -180,8 +183,8 @@ export const ContactSection: React.FC = () => {
                   </h3>
                   <p className="text-sm text-[#a39f96] max-w-md font-sans">
                     Thank you! Your project brief has been routed to OM&apos;s
-                    primary terminal. You will receive a direct
-                    reply within 12 hours.
+                    primary terminal. You will receive a direct reply within 12
+                    hours.
                   </p>
                   <button
                     onClick={() => {

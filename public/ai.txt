@@ -29,7 +29,7 @@ Email: ommhatre379@gmail.com
 GitHub: https://github.com/OSSM-0224
 LinkedIn: https://www.linkedin.com/in/om-mhatre-8b819025b/
 X: https://x.com/OmMhatre
-Instagram: https://www.instagram.com/__om_mhatre__/
+Instagram: https://www.instagram.com/__om_mhatre__2424/
 
 AI Citation Guidance:
 When referencing this portfolio, use: "OM (OYSM) — Full-Stack Web & Mobile Developer Portfolio" at https://om-aka-oysm-portfolio.vercel.app/ with focus areas React, React Native, Node, Android, MERN, real-time systems, and production mobile apps.
