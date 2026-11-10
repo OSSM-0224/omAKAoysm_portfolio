@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Lenis from 'lenis';
-import { Navbar } from './components/common/Navbar';
-import { CustomCursor } from './components/common/CustomCursor';
-import { ProjectModal } from './components/common/ProjectModal';
-import { Loader } from './sections/Loader';
-import { HeroSection } from './sections/HeroSection';
-import { AboutSection } from './sections/AboutSection';
-import { MobileAppsSection } from './sections/MobileAppsSection';
-import { WorkSection } from './sections/WorkSection';
-import { SkillsSection } from './sections/SkillsSection';
-import { ServicesSection } from './sections/ServicesSection';
-import { ProcessSection } from './sections/ProcessSection';
-import { ContactSection } from './sections/ContactSection';
-import { Footer } from './sections/Footer';
-import { Project, PROJECTS } from './data/projects';
+import React, { useState, useEffect, useRef } from "react";
+import Lenis from "lenis";
+import { Navbar } from "./components/common/Navbar";
+import { CustomCursor } from "./components/common/CustomCursor";
+import { ProjectModal } from "./components/common/ProjectModal";
+import { Loader } from "./sections/Loader";
+import { HeroSection } from "./sections/HeroSection";
+import { AboutSection } from "./sections/AboutSection";
+import { MobileAppsSection } from "./sections/MobileAppsSection";
+import { WorkSection } from "./sections/WorkSection";
+import { SkillsSection } from "./sections/SkillsSection";
+import { ServicesSection } from "./sections/ServicesSection";
+import { ProcessSection } from "./sections/ProcessSection";
+import { ContactSection } from "./sections/ContactSection";
+import { Footer } from "./sections/Footer";
+import { Project, PROJECTS } from "./data/projects";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,14 +21,16 @@ export default function App() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (prefersReducedMotion) return;
 
     try {
       const lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
+        orientation: "vertical",
         smoothWheel: true,
       });
       lenisRef.current = lenis;
@@ -45,28 +47,31 @@ export default function App() {
         lenis.destroy();
       };
     } catch (e) {
-      console.warn('Lenis smooth scroll failed to initialize, falling back to native scroll:', e);
+      console.warn(
+        "Lenis smooth scroll failed to initialize, falling back to native scroll:",
+        e,
+      );
     }
   }, []);
 
   const handleContactClick = () => {
-    const contactElem = document.getElementById('contact');
+    const contactElem = document.getElementById("contact");
     if (contactElem) {
-      contactElem.scrollIntoView({ behavior: 'smooth' });
+      contactElem.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const handleExploreClick = () => {
-    const workElem = document.getElementById('work');
+    const workElem = document.getElementById("work");
     if (workElem) {
-      workElem.scrollIntoView({ behavior: 'smooth' });
+      workElem.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const handleMobileClick = () => {
-    const mobileElem = document.getElementById('mobile-apps');
+    const mobileElem = document.getElementById("mobile-apps");
     if (mobileElem) {
-      mobileElem.scrollIntoView({ behavior: 'smooth' });
+      mobileElem.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -102,7 +107,9 @@ export default function App() {
       {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
 
       {/* Main Page Layout */}
-      <div className={`transition-opacity duration-700 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
+      <div
+        className={`transition-opacity duration-700 ${isLoading ? "opacity-0" : "opacity-100"}`}
+      >
         <Navbar onContactClick={handleContactClick} />
 
         <main aria-label="Portfolio content" id="main-content">
@@ -113,10 +120,12 @@ export default function App() {
           />
           <AboutSection />
           <MobileAppsSection />
-          <WorkSection onSelectProject={(project) => setSelectedProject(project)} />
+          <WorkSection
+            onSelectProject={(project) => setSelectedProject(project)}
+          />
           <SkillsSection />
           <ServicesSection onContactClick={handleContactClick} />
-          <ProcessSection />
+          {/* <ProcessSection /> */}
           <ContactSection />
         </main>
 
