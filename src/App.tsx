@@ -194,7 +194,7 @@ export default function App() {
           <MobileAppsSection />
           <WorkSection onSelectProject={openProject} />
           <SkillsSection />
-          <ServicesSection onContactClick={handleContactClick} />
+          {/* <ServicesSection onContactClick={handleContactClick} /> */}
           <ContactSection />
         </main>
 
