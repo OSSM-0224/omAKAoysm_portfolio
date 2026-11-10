@@ -34,6 +34,16 @@ const CSS = `
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
 }
+.work-heading {
+  font-size: clamp(1.95rem, 8.2vw, 5.8rem);
+}
+/* "Deployments" is ~12.5em wide. Below the cap this keeps the word inside the
+   gutters instead of letting it clip or collide with the intro copy. */
+@media (min-width: 640px) {
+  .work-heading {
+    font-size: min(8.2vw, calc((100vw - 7rem) / 12.6), 5.8rem);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .work-track { will-change: auto; }
 }
@@ -334,15 +344,15 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
             <Sparkles className="h-3.5 w-3.5" />
             <span>04. Selected Work</span>
           </div>
-          <div className="mt-5 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-            <h2 className="max-w-4xl font-display text-[clamp(1.95rem,8.2vw,5.8rem)] font-black uppercase leading-[0.9] tracking-[-0.05em] text-white">
-              Web <span className="text-[#ff5500]">&amp;</span> Mobile
-              <br />
-              <span className="text-[0.8em] leading-[0.95] text-[#6e675f] sm:text-[1em] sm:leading-[0.9]">
-                Deployments
-              </span>
-            </h2>
-            <p className="max-w-md text-pretty text-sm leading-relaxed text-[#a7a097] sm:text-base lg:pb-2">
+          <h2 className="work-heading mt-5 font-display font-black uppercase leading-[0.9] tracking-[-0.05em] text-white">
+            Web <span className="text-[#ff5500]">&amp;</span> Mobile
+            <br />
+            <span className="text-[0.8em] leading-[0.95] text-[#6e675f] sm:text-[1em] sm:leading-[0.9]">
+              Deployments
+            </span>
+          </h2>
+          <div className="mt-6 flex justify-end">
+            <p className="max-w-md border-l border-[#ff7900]/30 pl-4 text-pretty text-sm leading-relaxed text-[#a7a097] sm:text-base">
               A moving index of production platforms, mobile products and
               client builds. Drag through, then open any frame for the case
               study.
