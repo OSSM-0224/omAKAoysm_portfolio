@@ -508,7 +508,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
                           <img
                             src={image}
                             alt={`${project.title} preview`}
-                            loading={index < 3 ? "eager" : "lazy"}
+                            loading="lazy"
                             decoding="async"
                             draggable={false}
                             className="pointer-events-none h-full w-full object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.035] motion-reduce:transition-none"
