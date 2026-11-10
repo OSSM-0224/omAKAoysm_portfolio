@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MOBILE_APPS } from '../data/screens';
-import { Phone3DCanvas } from '../components/three/Phone3DCanvas';
+import { DeferredPhone3D } from '../components/three/DeferredPhone3D';
 import {
   ArrowUpRight,
   Download,
@@ -303,7 +303,7 @@ export const MobileAppsSection: React.FC = () => {
               </div>
 
               <div className="relative z-10 flex items-center justify-center pb-10 pt-11">
-                <Phone3DCanvas
+                <DeferredPhone3D
                   screenshotUrl={activeApp.screenshots[0]}
                   accentColor={activeApp.accentColor}
                   heightClassName="h-[clamp(390px,52vw,560px)]"

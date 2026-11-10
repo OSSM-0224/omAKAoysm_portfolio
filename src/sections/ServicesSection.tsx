@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { SERVICES } from "../data/services";
-import { CapabilityCore } from "../components/three/CapabilityCore";
+import { DeferredCapabilityCore } from "../components/three/DeferredCapabilityCore";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 const CSS = `
@@ -63,7 +63,7 @@ export const ServicesSection: React.FC<{ onContactClick: () => void }> = ({
         <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-start">
           {/* Interactive 3D core */}
           <div className="lg:sticky lg:top-24 lg:col-span-5">
-            <CapabilityCore
+            <DeferredCapabilityCore
               services={SERVICES}
               activeIndex={activeIndex}
               previewIndex={previewIndex}

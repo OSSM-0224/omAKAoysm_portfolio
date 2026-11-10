@@ -49,7 +49,7 @@ interface LevelRef {
   current: number;
 }
 
-interface CapabilityCoreProps {
+export interface CapabilityCoreProps {
   services: ServiceOffering[];
   activeIndex: number;
   previewIndex: number | null;

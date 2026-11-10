@@ -22,7 +22,7 @@ const roundedRectShape = (width: number, height: number, radius: number) => {
   return shape;
 };
 
-interface Phone3DCanvasProps {
+export interface Phone3DCanvasProps {
   screenshotUrl: string;
   accentColor?: string;
   className?: string;
