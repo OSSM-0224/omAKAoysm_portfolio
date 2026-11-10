@@ -30,43 +30,6 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    id: "bid-arena",
-    index: "01",
-    title: "BidArena",
-    subtitle: "Real-Time MERN Auction Platform",
-    category: "MERN & Real-Time",
-    filterCategories: ["MERN", "Real-Time"],
-    role: "Lead Full-Stack Developer",
-    duration: "24-Hour Hackathon Winner",
-    description:
-      "High-frequency live auction engine built with MongoDB, Express, React, and Socket.io with sub-50ms synchronized bidding.",
-    longDescription:
-      "BidArena was architected and deployed during a high-stakes 24-hour hackathon. The system synchronizes high-frequency bid updates across thousands of concurrent clients without stale state locks or race conditions. Features a custom distributed countdown timer, real-time bid validation engine, instant bidder notifications, and auto-settlement wallet escrow logic.",
-    tags: [
-      "React",
-      "Node.js",
-      "Express",
-      "Socket.io",
-      "MongoDB",
-      "TailwindCSS",
-    ],
-    features: [
-      "Sub-50ms bidirectional bid synchronization using WebSockets",
-      "Optimistic UI state updates with server-authoritative collision resolution",
-      "Anti-sniping auto-extension timer logic",
-      "Comprehensive auction room dashboard with live activity stream",
-    ],
-    metrics: [
-      "24-Hour Hackathon Build",
-      "<50ms Bid Latency",
-      "100% Zero-Loss Bid Sync",
-    ],
-    liveUrl: "https://bidarena.demo.dev",
-    githubUrl: "https://github.com/ommhatre/bidarena-auction-engine",
-    accentColor: "#ff7900",
-    image: "/web_screens/bidarena_landingpage.png",
-  },
-  {
     id: "ccms-mobile",
     index: "02",
     title: "CCMS (Canteen Coupon System)",
@@ -139,43 +102,6 @@ export const PROJECTS: Project[] = [
     image: "/web_screens/amrutampharma_page.png",
   },
   {
-    id: "cricpulse",
-    index: "04",
-    title: "CricPulse (BoundaryLine)",
-    subtitle: "Collaborative Live Cricket Scoring App",
-    category: "Real-Time & Full-Stack",
-    filterCategories: ["Real-Time", "MERN"],
-    role: "Full-Stack Architect",
-    duration: "Production Web App",
-    description:
-      "Real-time ball-by-ball collaborative cricket scoring system with instant cloud synchronization and dynamic wagon wheel analytics.",
-    longDescription:
-      "CricPulse enables scorers, umpires, and tournament coordinators to concurrently track multi-innings matches with instant offline cache and WebSocket sync. Broadcasts live commentary, ball telemetry, run-rate calculators, Duckworth-Lewis projections, and dynamic player leaderboards to thousands of fans.",
-    tags: [
-      "React",
-      "TypeScript",
-      "Node.js",
-      "Socket.io",
-      "PostgreSQL",
-      "TailwindCSS",
-    ],
-    features: [
-      "Ball-by-ball scoring interface with undo/redo transaction safety",
-      "Live spectator broadcast with zero-refresh scorecard updates",
-      "Dynamic wagon wheel and run-rate predictive graphs",
-      "Exportable PDF tournament summary and match certificates",
-    ],
-    metrics: [
-      "10,000+ Overs Scored",
-      "Zero Desync in 100+ Matches",
-      "Instant Offline Reconnect",
-    ],
-    liveUrl: "https://cricpulse.app",
-    githubUrl: "https://github.com/ommhatre/cricpulse-boundaryline",
-    accentColor: "#ff7900",
-    image: "/web_screens/cricplus_landingpage.png",
-  },
-  {
     id: "emergency-app",
     index: "05",
     title: "EmergencyApp — Safety & SOS",
@@ -241,36 +167,6 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/OSSM-0224/DSO-Navi-Mumbai-Fixtures",
     accentColor: "#ff7900",
     image: "/web_screens/dso_landingpage.png",
-  },
-  {
-    id: "lead-management-crm",
-    index: "07",
-    title: "Lead Management CRM",
-    subtitle: "Enterprise Sales Pipeline & Layered Architecture",
-    category: "MERN Full-Stack",
-    filterCategories: ["MERN"],
-    role: "Full-Stack Developer",
-    duration: "Internal Enterprise Tool",
-    description:
-      "Full-stack CRM engineered with Clean Layered Architecture, automated stage pipelines, activity logging, and conversion analytics.",
-    longDescription:
-      "Engineered with strict separation of concerns (controller-service-repository pattern) to provide lightning-fast customer onboarding, automated lead routing algorithms, interaction histories, deal Kanban boards, and sales forecasting analytics.",
-    tags: ["React", "Node.js", "Express", "MongoDB", "JWT Auth", "REST APIs"],
-    features: [
-      "Interactive Kanban drag-and-drop lead stage progression",
-      "Role-based access control (Admin, Sales Manager, SDR, Agent)",
-      "Automated follow-up scheduling and notification reminders",
-      "Comprehensive conversion funnel telemetry and exportable reports",
-    ],
-    metrics: [
-      "5x Faster Lead Processing",
-      "Clean Layered Architecture",
-      "99.9% Uptime SLA",
-    ],
-    liveUrl: "https://lead-crm-layered.dev",
-    githubUrl: "https://github.com/ommhatre/lead-management-crm-core",
-    accentColor: "#ff7900",
-    image: "/web_screens/heros_landingpage.png",
   },
   {
     id: "child-dreams-foundation",
@@ -360,32 +256,6 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/ommhatre/patil-orthodontics-clinic",
     accentColor: "#ff7900",
     image: "/web_screens/drpatiladvanceclinic_landingpage.png",
-  },
-  {
-    id: "om-sai-sports",
-    index: "11",
-    title: "OSS – Om Sai Sports",
-    subtitle: "Premium 3D Custom Jersey Brand Showcase",
-    category: "UI/UX & 3D Web",
-    filterCategories: ["UI/UX"],
-    role: "3D Web Developer",
-    duration: "In Development",
-    description:
-      "In-development athletic apparel brand website featuring an interactive 3D jersey customizer, sublimation preview, and bulk ordering.",
-    longDescription:
-      "Currently in development: a high-impact e-commerce and brand experience for sports teams. Will empower cricket and football clubs to inspect 3D jersey textures, customize squad numbers, collar trims, team emblems, and generate instant quotation specs. Being built with Vite + React + Three.js.",
-    tags: ["Three.js", "React", "Vite", "TailwindCSS", "TypeScript"],
-    features: [
-      "Interactive 3D jersey model inspection with 360-degree rotation",
-      "Real-time badge, name, and squad number decal overlay on 3D mesh",
-      "Bulk team roster upload and quote generator for team orders",
-      "High-saturation neon athletic aesthetic reflecting modern sportswear",
-    ],
-    metrics: ["In Development", "3D Configurator Planned", "Brand Concept"],
-    liveUrl: "#",
-    githubUrl: "https://github.com/OSSM-0224/Om-Sai-Sports",
-    accentColor: "#ff7900",
-    status: "In Development",
   },
   {
     id: "society-management-app",
