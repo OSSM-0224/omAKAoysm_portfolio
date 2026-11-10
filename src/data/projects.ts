@@ -76,15 +76,15 @@ export const PROJECTS: Project[] = [
       "https://play.google.com/store/apps/details?id=com.techvyassa.ccms1&hl=en_IN",
     githubUrl: "https://github.com/ommhatre",
     accentColor: "#ff7900",
-    image: "/web_screens/ccms_page.png",
+    image: "/web_screens/ccms_page.webp",
     gallery: [
       {
-        src: "/web_screens/ccms_page.png",
+        src: "/web_screens/ccms_page.webp",
         alt: "CCMS admin dashboard and mobile wallet product overview",
         label: "Product overview",
       },
       {
-        src: "/screens/screen_page_ccms.png",
+        src: "/screens/screen_page_ccms.webp",
         alt: "CCMS resident coupon wallet on Android",
         label: "Resident wallet — app screen",
         kind: "portrait",
@@ -121,15 +121,15 @@ export const PROJECTS: Project[] = [
     liveUrl: "https://github.com/OSSM-0224/amrutam_pharma",
     githubUrl: "https://github.com/OSSM-0224/amrutam_pharma",
     accentColor: "#ff5500",
-    image: "/web_screens/amrutampharma_page.png",
+    image: "/web_screens/amrutampharma_page.webp",
     gallery: [
       {
-        src: "/web_screens/amrutampharma_page.png",
+        src: "/web_screens/amrutampharma_page.webp",
         alt: "Amrutam Pharma tele-health product overview",
         label: "Product overview",
       },
       {
-        src: "/screens/amrutampharma.png",
+        src: "/screens/amrutampharma.webp",
         alt: "Amrutam Pharma consultation booking screen",
         label: "Consultation booking — app screen",
         kind: "portrait",
@@ -170,15 +170,15 @@ export const PROJECTS: Project[] = [
     liveUrl: "https://github.com/ommhatre/EmergencyApp",
     githubUrl: "https://github.com/ommhatre/EmergencyApp",
     accentColor: "#ff3b00",
-    image: "/web_screens/sos.png",
+    image: "/web_screens/sos.webp",
     gallery: [
       {
-        src: "/web_screens/sos.png",
+        src: "/web_screens/sos.webp",
         alt: "EmergencyApp safety and SOS platform overview",
         label: "Safety platform",
       },
       {
-        src: "/screens/sos_home_page.png",
+        src: "/screens/sos_home_page.webp",
         alt: "EmergencyApp live SOS screen",
         label: "Live SOS — app screen",
         kind: "portrait",
@@ -214,10 +214,10 @@ export const PROJECTS: Project[] = [
     liveUrl: "#",
     githubUrl: "https://github.com/OSSM-0224/DSO-Navi-Mumbai-Fixtures",
     accentColor: "#ff7900",
-    image: "/web_screens/dso_landingpage.png",
+    image: "/web_screens/dso_landingpage.webp",
     gallery: [
       {
-        src: "/web_screens/dso_landingpage.png",
+        src: "/web_screens/dso_landingpage.webp",
         alt: "DSO Navi Mumbai multi-sport fixtures portal",
         label: "Public tournament portal",
       },
@@ -280,10 +280,10 @@ export const PROJECTS: Project[] = [
     liveUrl: "#",
     githubUrl: "https://github.com/OSSM-0224/Unique-Dental-Care",
     accentColor: "#ff7900",
-    image: "/web_screens/uniquedentalcare_landingpage.png",
+    image: "/web_screens/uniquedentalcare_landingpage.webp",
     gallery: [
       {
-        src: "/web_screens/uniquedentalcare_landingpage.png",
+        src: "/web_screens/uniquedentalcare_landingpage.webp",
         alt: "Unique Dental Care clinic landing page",
         label: "Clinic landing experience",
       },
@@ -317,10 +317,10 @@ export const PROJECTS: Project[] = [
     liveUrl: "https://patil-orthodontics.in",
     githubUrl: "https://github.com/ommhatre/patil-orthodontics-clinic",
     accentColor: "#ff7900",
-    image: "/web_screens/drpatiladvanceclinic_landingpage.png",
+    image: "/web_screens/drpatiladvanceclinic_landingpage.webp",
     gallery: [
       {
-        src: "/web_screens/drpatiladvanceclinic_landingpage.png",
+        src: "/web_screens/drpatiladvanceclinic_landingpage.webp",
         alt: "Dr Patil Advance Clinic orthodontic practice landing page",
         label: "Practice landing experience",
       },
@@ -358,10 +358,10 @@ export const PROJECTS: Project[] = [
     liveUrl: "#",
     githubUrl: "https://github.com/OSSM-0224/Society-Management-App",
     accentColor: "#ff7900",
-    image: "/web_screens/sheetaldhara_landingpage.png",
+    image: "/web_screens/sheetaldhara_landingpage.webp",
     gallery: [
       {
-        src: "/web_screens/sheetaldhara_landingpage.png",
+        src: "/web_screens/sheetaldhara_landingpage.webp",
         alt: "Society management resident suite landing page",
         label: "Resident management suite",
       },
