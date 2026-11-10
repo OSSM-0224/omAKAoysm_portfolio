@@ -6,6 +6,14 @@ export type ProjectCategory =
   | "Client";
 export type ProjectStatus = "Live" | "In Development";
 
+export interface ProjectGalleryItem {
+  src: string;
+  alt: string;
+  label: string;
+  /** Portrait app captures are framed differently in the full-screen gallery. */
+  kind?: "portrait" | "landscape";
+}
+
 export interface Project {
   id: string;
   index: string;
@@ -24,6 +32,7 @@ export interface Project {
   githubUrl: string;
   accentColor: string;
   image?: string;
+  gallery?: ProjectGalleryItem[];
   status?: ProjectStatus;
   playStoreUrl?: string;
 }
@@ -68,6 +77,19 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/ommhatre",
     accentColor: "#ff7900",
     image: "/web_screens/ccms_page.png",
+    gallery: [
+      {
+        src: "/web_screens/ccms_page.png",
+        alt: "CCMS admin dashboard and mobile wallet product overview",
+        label: "Product overview",
+      },
+      {
+        src: "/screens/screen_page_ccms.png",
+        alt: "CCMS resident coupon wallet on Android",
+        label: "Resident wallet — app screen",
+        kind: "portrait",
+      },
+    ],
   },
   {
     id: "amrutam-pharma-app",
@@ -100,6 +122,19 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/OSSM-0224/amrutam_pharma",
     accentColor: "#ff5500",
     image: "/web_screens/amrutampharma_page.png",
+    gallery: [
+      {
+        src: "/web_screens/amrutampharma_page.png",
+        alt: "Amrutam Pharma tele-health product overview",
+        label: "Product overview",
+      },
+      {
+        src: "/screens/amrutampharma.png",
+        alt: "Amrutam Pharma consultation booking screen",
+        label: "Consultation booking — app screen",
+        kind: "portrait",
+      },
+    ],
   },
   {
     id: "emergency-app",
@@ -136,6 +171,19 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/ommhatre/EmergencyApp",
     accentColor: "#ff3b00",
     image: "/web_screens/sos.png",
+    gallery: [
+      {
+        src: "/web_screens/sos.png",
+        alt: "EmergencyApp safety and SOS platform overview",
+        label: "Safety platform",
+      },
+      {
+        src: "/screens/sos_home_page.png",
+        alt: "EmergencyApp live SOS screen",
+        label: "Live SOS — app screen",
+        kind: "portrait",
+      },
+    ],
   },
   {
     id: "multi-sport-fixtures",
@@ -167,6 +215,13 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/OSSM-0224/DSO-Navi-Mumbai-Fixtures",
     accentColor: "#ff7900",
     image: "/web_screens/dso_landingpage.png",
+    gallery: [
+      {
+        src: "/web_screens/dso_landingpage.png",
+        alt: "DSO Navi Mumbai multi-sport fixtures portal",
+        label: "Public tournament portal",
+      },
+    ],
   },
   {
     id: "child-dreams-foundation",
@@ -226,6 +281,13 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/OSSM-0224/Unique-Dental-Care",
     accentColor: "#ff7900",
     image: "/web_screens/uniquedentalcare_landingpage.png",
+    gallery: [
+      {
+        src: "/web_screens/uniquedentalcare_landingpage.png",
+        alt: "Unique Dental Care clinic landing page",
+        label: "Clinic landing experience",
+      },
+    ],
   },
   {
     id: "orthodontic-clinic",
@@ -256,6 +318,13 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/ommhatre/patil-orthodontics-clinic",
     accentColor: "#ff7900",
     image: "/web_screens/drpatiladvanceclinic_landingpage.png",
+    gallery: [
+      {
+        src: "/web_screens/drpatiladvanceclinic_landingpage.png",
+        alt: "Dr Patil Advance Clinic orthodontic practice landing page",
+        label: "Practice landing experience",
+      },
+    ],
   },
   {
     id: "society-management-app",
@@ -290,5 +359,12 @@ export const PROJECTS: Project[] = [
     githubUrl: "https://github.com/OSSM-0224/Society-Management-App",
     accentColor: "#ff7900",
     image: "/web_screens/sheetaldhara_landingpage.png",
+    gallery: [
+      {
+        src: "/web_screens/sheetaldhara_landingpage.png",
+        alt: "Society management resident suite landing page",
+        label: "Resident management suite",
+      },
+    ],
   },
 ];

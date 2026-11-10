@@ -69,7 +69,7 @@ export const CustomCursor: React.FC = () => {
   const isView = cursorType === 'view';
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
+    <div className="pointer-events-none fixed inset-0 z-[140] overflow-hidden">
       {/* Central dot */}
       <div
         className={`fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform duration-75 ease-out ${

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { Navbar } from "./components/common/Navbar";
 import { CustomCursor } from "./components/common/CustomCursor";
-import { ProjectModal } from "./components/common/ProjectModal";
+import { ProjectPage } from "./components/common/ProjectPage";
 import { Loader } from "./sections/Loader";
 import { HeroSection } from "./sections/HeroSection";
 import { AboutSection } from "./sections/AboutSection";
@@ -10,14 +10,26 @@ import { MobileAppsSection } from "./sections/MobileAppsSection";
 import { WorkSection } from "./sections/WorkSection";
 import { SkillsSection } from "./sections/SkillsSection";
 import { ServicesSection } from "./sections/ServicesSection";
-import { ProcessSection } from "./sections/ProcessSection";
 import { ContactSection } from "./sections/ContactSection";
 import { Footer } from "./sections/Footer";
 import { Project, PROJECTS } from "./data/projects";
 
+const projectFromHash = (): Project | null => {
+  const match = window.location.hash.match(/^#project\/([^/?#]+)$/);
+  if (!match) return null;
+  try {
+    const id = decodeURIComponent(match[1]);
+    return PROJECTS.find((project) => project.id === id) ?? null;
+  } catch {
+    return null;
+  }
+};
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(
+    projectFromHash,
+  );
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
@@ -54,6 +66,32 @@ export default function App() {
     }
   }, []);
 
+  const projectOpen = selectedProject !== null;
+
+  /* Freeze the page behind the case study while it is open. */
+  useEffect(() => {
+    if (!projectOpen) {
+      lenisRef.current?.start();
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    lenisRef.current?.stop();
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      lenisRef.current?.start();
+    };
+  }, [projectOpen]);
+
+  /* Browser back/forward closes or reopens the case study. */
+  useEffect(() => {
+    const onPopState = () => setSelectedProject(projectFromHash());
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
   const handleContactClick = () => {
     const contactElem = document.getElementById("contact");
     if (contactElem) {
@@ -75,25 +113,50 @@ export default function App() {
     }
   };
 
+  const openProject = (project: Project) => {
+    setSelectedProject(project);
+    const nextHash = `#project/${encodeURIComponent(project.id)}`;
+    if (window.location.hash !== nextHash) {
+      window.history.pushState({ projectId: project.id }, "", nextHash);
+    }
+  };
+
+  const closeProject = () => {
+    setSelectedProject(null);
+    if (window.location.hash.startsWith("#project/")) {
+      window.history.replaceState(null, "", "#work");
+    }
+  };
+
   const currentIndex = selectedProject
     ? PROJECTS.findIndex((p) => p.id === selectedProject.id)
     : -1;
 
+  const showProjectAt = (index: number) => {
+    const project = PROJECTS[index];
+    if (!project) return;
+    setSelectedProject(project);
+    window.history.replaceState(
+      { projectId: project.id },
+      "",
+      `#project/${encodeURIComponent(project.id)}`,
+    );
+  };
+
   const handleNextProject = () => {
-    if (!selectedProject) return;
-    const currIdx = PROJECTS.findIndex((p) => p.id === selectedProject.id);
-    if (currIdx === -1) return;
-    const nextIdx = (currIdx + 1) % PROJECTS.length;
-    setSelectedProject(PROJECTS[nextIdx]);
+    if (currentIndex === -1) return;
+    showProjectAt((currentIndex + 1) % PROJECTS.length);
   };
 
   const handlePrevProject = () => {
-    if (!selectedProject) return;
-    const currIdx = PROJECTS.findIndex((p) => p.id === selectedProject.id);
-    if (currIdx === -1) return;
-    const prevIdx = (currIdx - 1 + PROJECTS.length) % PROJECTS.length;
-    setSelectedProject(PROJECTS[prevIdx]);
+    if (currentIndex === -1) return;
+    showProjectAt((currentIndex - 1 + PROJECTS.length) % PROJECTS.length);
   };
+
+  const nextProject =
+    currentIndex >= 0
+      ? PROJECTS[(currentIndex + 1) % PROJECTS.length]
+      : PROJECTS[0];
 
   return (
     <div className="relative min-h-screen bg-[#030303] text-[#f4f1ea] font-sans selection:bg-[#ff7900] selection:text-black">
@@ -109,6 +172,8 @@ export default function App() {
       {/* Main Page Layout */}
       <div
         className={`transition-opacity duration-700 ${isLoading ? "opacity-0" : "opacity-100"}`}
+        inert={projectOpen || undefined}
+        aria-hidden={projectOpen || undefined}
       >
         <Navbar onContactClick={handleContactClick} />
 
@@ -120,27 +185,27 @@ export default function App() {
           />
           <AboutSection />
           <MobileAppsSection />
-          <WorkSection
-            onSelectProject={(project) => setSelectedProject(project)}
-          />
+          <WorkSection onSelectProject={openProject} />
           <SkillsSection />
           <ServicesSection onContactClick={handleContactClick} />
-          {/* <ProcessSection /> */}
           <ContactSection />
         </main>
 
         <Footer />
       </div>
 
-      {/* Full-Screen Project Detail Modal with Global Keyboard Navigation */}
-      <ProjectModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-        onNext={handleNextProject}
-        onPrev={handlePrevProject}
-        currentIndex={currentIndex}
-        totalCount={PROJECTS.length}
-      />
+      {/* Full-screen case study page with global keyboard + slideshow navigation */}
+      {selectedProject && (
+        <ProjectPage
+          project={selectedProject}
+          nextProject={nextProject}
+          onClose={closeProject}
+          onNext={handleNextProject}
+          onPrev={handlePrevProject}
+          currentIndex={currentIndex}
+          totalCount={PROJECTS.length}
+        />
+      )}
     </div>
   );
 }
