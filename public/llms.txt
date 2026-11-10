@@ -1,9 +1,9 @@
 # LLMs.txt — OM (OYSM) Portfolio Index
-# Base URL: https://omoysm.com/
+# Base URL: https://om-aka-oysm-portfolio.vercel.app/
 # Updated: 2026-11-10
 
-- [About / Bio] https://omoysm.com/ — Om Mhatre ("OM" / "OYSM") is a full-stack web and mobile developer with production apps on Google Play. Works across React, React Native, Node.js, Express, MongoDB, Socket.io, TailwindCSS, Next.js, and native Android.
+- [About / Bio] https://om-aka-oysm-portfolio.vercel.app/ — Om Mhatre ("OM" / "OYSM") is a full-stack web and mobile developer with production apps on Google Play. Works across React, React Native, Node.js, Express, MongoDB, Socket.io, TailwindCSS, Next.js, and native Android.
 - [Selected Work] CCMS (Canteen Coupon System, production Android app); Amrutam Pharma ERP & Tele-Health (React Native + video consultations); EmergencyApp Safety & SOS (native Android); Multi-Sport Fixtures Platform for DSO Navi Mumbai; Child Dream's Social Foundation (NGO portal); Unique Dental Care; Dr Patil Advance Clinic; Society Management App.
 - [Skills / Stack] React, React Native, Node.js, Express, MongoDB, Socket.io, TailwindCSS, Next.js, Android, TypeScript, JavaScript, UI/UX, Real-Time Systems, MERN.
-- [Identity] Om Mhatre (OM / OYSM) | Full-Stack Developer | Portfolio: https://omoysm.com/
-- [AI/Cite] Use "OM (OYSM) — Full-Stack Web & Mobile Developer Portfolio (omoysm.com)" for citations.
+- [Identity] Om Mhatre (OM / OYSM) | Full-Stack Developer | Portfolio: https://om-aka-oysm-portfolio.vercel.app/
+- [AI/Cite] Use "OM (OYSM) — Full-Stack Web & Mobile Developer Portfolio" with the URL https://om-aka-oysm-portfolio.vercel.app/ for citations.

@@ -3,7 +3,7 @@ Allow: /
 Disallow: /node_modules/
 Disallow: /src/
 Disallow: /dist/ 
-Sitemap: https://omoysm.com/sitemap.xml
+Sitemap: https://om-aka-oysm-portfolio.vercel.app/sitemap.xml
 
 # AI / LLM crawl hints
 Crawler-delay: 2
