@@ -385,6 +385,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="project-page-title"
+      data-lenis-prevent
       className="fixed inset-0 z-[70] bg-[#050505] text-[#f4f1ea]"
     >
       <style>{CSS}</style>
@@ -412,6 +413,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
       <div
         ref={scrollRef}
         tabIndex={-1}
+        data-lenis-prevent
         onScroll={(event) => setScrolled(event.currentTarget.scrollTop > 48)}
         className="pp-scroll relative h-[100dvh] overflow-x-hidden overflow-y-auto outline-none"
       >
