@@ -2,13 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://omoysm.com/</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://omoysm.com/Neon%20Orange%20Rim-Lit%20Portrait%20Cutout.png</image:loc>
-      <image:title>OM (OYSM) Developer Portfolio</image:title>
-      <image:caption>Full-Stack Web & Mobile Developer Portfolio</image:caption>
+      <image:loc>https://omoysm.com/om-portrait-cutout.webp</image:loc>
+      <image:title>Om (OYSM) — Full-Stack Web &amp; Mobile Developer</image:title>
+      <image:caption>Portrait of Om (OYSM), full-stack web and mobile app developer.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://omoysm.com/web_screens/ccms_page.webp</image:loc>
+      <image:title>CCMS — Canteen Coupon Management System</image:title>
+      <image:caption>Production canteen coupon and wallet platform live on Google Play.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://omoysm.com/web_screens/amrutampharma_page.webp</image:loc>
+      <image:title>Amrutam Pharma ERP &amp; Tele-Health</image:title>
+      <image:caption>React Native tele-health suite with video consultations and secure wallets.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://omoysm.com/web_screens/sos.webp</image:loc>
+      <image:title>EmergencyApp — Safety &amp; SOS</image:title>
+      <image:caption>Native Android safety app with live location beacons and SOS alerts.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://omoysm.com/web_screens/dso_landingpage.webp</image:loc>
+      <image:title>Multi-Sport Fixtures Platform</image:title>
+      <image:caption>Tournament management and live fixtures portal for DSO Navi Mumbai.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://omoysm.com/web_screens/uniquedentalcare_landingpage.webp</image:loc>
+      <image:title>Unique Dental Care</image:title>
+      <image:caption>Premium multi-speciality dental clinic platform.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://omoysm.com/web_screens/drpatiladvanceclinic_landingpage.webp</image:loc>
+      <image:title>Dr Patil Advance Clinic</image:title>
+      <image:caption>Orthodontic and advance dental practice landing experience.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://omoysm.com/web_screens/sheetaldhara_landingpage.webp</image:loc>
+      <image:title>Society Management App</image:title>
+      <image:caption>Residential society ERP with resident, billing, and security modules.</image:caption>
     </image:image>
   </url>
 </urlset>

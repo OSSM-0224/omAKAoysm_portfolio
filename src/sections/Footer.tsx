@@ -52,9 +52,12 @@ export const Footer: React.FC = () => {
         {
           title: "Elsewhere",
           links: [
-            { label: "GitHub", href: "https://github.com/ommhatre" },
-            { label: "LinkedIn", href: "#" },
-            { label: "Email", href: "mailto:YOUR_EMAIL@example.com" },
+            { label: "GitHub", href: "https://github.com/OSSM-0224" },
+            {
+              label: "LinkedIn",
+              href: "https://www.linkedin.com/in/om-mhatre-8b819025b/",
+            },
+            { label: "Email", href: "mailto:ommhatre379@gmail.com" },
           ],
         },
       ]}

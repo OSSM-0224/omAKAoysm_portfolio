@@ -120,12 +120,12 @@ export const Hero3DScene: React.FC<Hero3DSceneProps> = ({ className = '' }) => {
       // Code lines
       ctx.font = '18px "JetBrains Mono", monospace';
       const lines = [
-        { text: '// PRAJU CORE ENGINE v3.4', color: '#ff5500' },
+        { text: '// OM CORE ENGINE v3.4', color: '#ff5500' },
         { text: 'import { Developer, Architect, Innovator } from "@praju/mind";', color: '#f4f1ea' },
         { text: 'import { SocketCluster, WebGLRenderer, MERN } from "@praju/stack";', color: '#f4f1ea' },
         { text: '', color: '' },
         { text: 'export async function initializeExperience(): Promise<Result> {', color: '#ff7722' },
-        { text: '  const developer = new Developer({ name: "PRAJU", status: "AVAILABLE" });', color: '#f4f1ea' },
+        { text: '  const developer = new Developer({ name: "OM", status: "AVAILABLE" });', color: '#f4f1ea' },
         { text: '  await developer.loadRealTimeSockets();', color: '#aaaaaa' },
         { text: '  await developer.mountThreeJSCanvas({ dpr: 2.0, targetFps: 60 });', color: '#aaaaaa' },
         { text: '  const projects = await developer.fetchShowcaseProjects();', color: '#f4f1ea' },

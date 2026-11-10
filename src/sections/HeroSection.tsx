@@ -261,8 +261,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="relative z-10 mx-auto my-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 py-8 lg:grid-cols-12">
         <div className="space-y-7 lg:col-span-7">
           {/* Giant split-text name */}
-          <div className="flex flex-wrap items-baseline gap-3 select-none sm:gap-5">
-            <div className="flex items-center gap-1 sm:gap-2">
+          <h1 className="flex flex-wrap items-baseline gap-3 select-none sm:gap-5">
+            <span className="sr-only">
+              OM (OYSM) — full-stack web and mobile developer
+            </span>
+            <span aria-hidden="true" className="flex items-center gap-1 sm:gap-2">
               {nameLetters.map((char, idx) => (
                 <span
                   key={idx}
@@ -280,15 +283,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span className="font-display text-7xl font-black leading-none text-[#ff7900] sm:text-9xl md:text-[140px] lg:text-[160px]">
                 .
               </span>
-            </div>
+            </span>
 
-            <div className="rounded border border-[#2b2b33] bg-[#141416] px-3 py-1 font-mono text-xs font-semibold tracking-wider text-[#d1ccc2] sm:text-sm">
-              aka{" "}
+            <span
+              aria-hidden="true"
+              className="inline-flex items-baseline gap-1 rounded border border-[#2b2b33] bg-[#141416] px-3 py-1 font-mono text-xs font-semibold tracking-wider text-[#d1ccc2] sm:text-sm"
+            >
+              aka
               <span className="font-bold text-[#ff7900]">
                 &quot;OYSM&quot;
               </span>
-            </div>
-          </div>
+            </span>
+          </h1>
 
           <div className="max-w-2xl space-y-5">
             {/* Terminal role ticker */}

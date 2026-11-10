@@ -179,8 +179,8 @@ export const ContactSection: React.FC = () => {
                     Transmission Dispatched
                   </h3>
                   <p className="text-sm text-[#a39f96] max-w-md font-sans">
-                    Thank you! Your project brief has been routed to
-                    PRAJU&apos;s primary terminal. You will receive a direct
+                    Thank you! Your project brief has been routed to OM&apos;s
+                    primary terminal. You will receive a direct
                     reply within 12 hours.
                   </p>
                   <button

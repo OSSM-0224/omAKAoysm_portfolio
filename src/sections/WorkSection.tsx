@@ -338,7 +338,9 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
             <h2 className="max-w-4xl font-display text-[clamp(1.95rem,8.2vw,5.8rem)] font-black uppercase leading-[0.9] tracking-[-0.05em] text-white">
               Web <span className="text-[#ff5500]">&amp;</span> Mobile
               <br />
-              <span className="text-[#6e675f]">Deployments</span>
+              <span className="text-[0.8em] leading-[0.95] text-[#6e675f] sm:text-[1em] sm:leading-[0.9]">
+                Deployments
+              </span>
             </h2>
             <p className="max-w-md text-pretty text-sm leading-relaxed text-[#a7a097] sm:text-base lg:pb-2">
               A moving index of production platforms, mobile products and
