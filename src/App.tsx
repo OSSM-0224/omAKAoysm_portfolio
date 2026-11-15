@@ -1,4 +1,5 @@
 import React, { Suspense, useState, useEffect, useRef } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import Lenis from "lenis";
 import { Navbar } from "./components/common/Navbar";
 import { CustomCursor } from "./components/common/CustomCursor";
@@ -222,6 +223,9 @@ export default function App() {
           />
         </Suspense>
       )}
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 }
