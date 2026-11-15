@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Om Mhatre - Resume 2026. Full-stack web and mobile engineer."
+    />
+    <meta name="author" content="Om Mhatre" />
+    <title>Om Mhatre - Resume 2026</title>
+    <style>
+      :root {
+        --ink: #141414;
+        --muted: #5c5c5c;
+        --faint: #8a8a8a;
+        --line: #dedede;
+        --accent: #ff7900;
+        --paper: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #e9e9e9;
+        color: var(--ink);
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 0.5px solid #b9b9b9;
+      }
+
+      .page {
+        position: relative;
+        width: 210mm;
+        height: 296.8mm;
+        padding: 13mm 15mm 12mm;
+        margin: 0 auto;
+        background: var(--paper);
+        overflow: hidden;
+        page-break-after: always;
+      }
+
+      .page:last-of-type {
+        page-break-after: auto;
+      }
+
+      /* ---------- Header ---------- */
+
+      .masthead {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8mm;
+        padding-bottom: 3.2mm;
+        border-bottom: 2.2px solid var(--ink);
+      }
+
+      .name {
+        margin: 0;
+        font-size: 30pt;
+        line-height: 0.92;
+        font-weight: 800;
+        letter-spacing: 0.045em;
+        text-transform: uppercase;
+      }
+
+      .role {
+        margin-top: 2.6mm;
+        font-size: 9.6pt;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .doc-label {
+        flex: 0 0 auto;
+        text-align: right;
+        padding-top: 0.8mm;
+      }
+
+      .doc-label span {
+        display: block;
+        font-size: 6.6pt;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--faint);
+      }
+
+      .doc-label strong {
+        display: block;
+        margin-top: 0.8mm;
+        font-size: 20pt;
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        color: var(--ink);
+      }
+
+      .contact {
+        display: grid;
+        gap: 1.1mm;
+        margin-top: 2.6mm;
+        font-size: 8.1pt;
+        color: var(--muted);
+      }
+
+      .contact-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .contact-line span {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .contact-line span + span::before {
+        content: "";
+        width: 1px;
+        height: 2.7mm;
+        margin: 0 2.6mm;
+        background: #c2c2c2;
+      }
+
+      /* ---------- Sections ---------- */
+
+      section {
+        margin-top: 5.2mm;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 2.4mm;
+        margin: 0 0 2.6mm;
+        font-size: 8.4pt;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+
+      .section-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      .section-title .index {
+        font-size: 7pt;
+        letter-spacing: 0.06em;
+        color: var(--accent);
+      }
+
+      .summary {
+        margin: 0;
+        font-size: 9.3pt;
+        line-height: 1.5;
+        color: #2c2c2c;
+      }
+
+      /* ---------- Skills ---------- */
+
+      .skills {
+        display: grid;
+        gap: 1.5mm;
+      }
+
+      .skill-row {
+        display: grid;
+        grid-template-columns: 30mm 1fr;
+        gap: 4mm;
+        padding-bottom: 1.4mm;
+        border-bottom: 0.5px solid #e7e7e7;
+        font-size: 8.5pt;
+        line-height: 1.38;
+      }
+
+      .skill-row:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
+
+      .skill-row dt {
+        margin: 0;
+        font-size: 7.2pt;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--faint);
+        padding-top: 0.35mm;
+      }
+
+      .skill-row dd {
+        margin: 0;
+        color: #232323;
+      }
+
+      /* ---------- Experience ---------- */
+
+      .entry {
+        padding-bottom: 2.8mm;
+      }
+
+      .entry + .entry {
+        padding-top: 2.8mm;
+        border-top: 0.5px solid #ececec;
+      }
+
+      .entry:last-child {
+        padding-bottom: 0;
+      }
+
+      .entry-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 5mm;
+      }
+
+      .entry-title {
+        margin: 0;
+        font-size: 9.8pt;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+
+      .entry-title .at {
+        font-weight: 400;
+        color: var(--accent);
+      }
+
+      .entry-title .company {
+        font-weight: 700;
+      }
+
+      .entry-meta {
+        flex: 0 0 auto;
+        font-size: 7.6pt;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .bullets {
+        margin: 1.5mm 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .bullets li {
+        margin-top: 0.85mm;
+        padding-left: 3.6mm;
+        text-indent: -3.6mm;
+        font-size: 8.6pt;
+        line-height: 1.42;
+        color: #2b2b2b;
+      }
+
+      .bullets li::before {
+        content: "";
+        display: inline-block;
+        width: 1.5mm;
+        height: 0.55mm;
+        margin-right: 2.1mm;
+        background: var(--accent);
+        vertical-align: 0.45mm;
+      }
+
+      /* ---------- Projects ---------- */
+
+      .project {
+        padding-bottom: 2.9mm;
+      }
+
+      .project + .project {
+        padding-top: 2.9mm;
+        border-top: 0.5px solid #ececec;
+      }
+
+      .project:last-child {
+        padding-bottom: 0;
+      }
+
+      .project-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 5mm;
+      }
+
+      .project-title {
+        margin: 0;
+        font-size: 9.8pt;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+
+      .project-title .tag {
+        margin-left: 1.6mm;
+        font-size: 6.4pt;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+        white-space: nowrap;
+      }
+
+      .project-stack {
+        margin: 0.9mm 0 0;
+        font-size: 7.4pt;
+        line-height: 1.35;
+        color: var(--faint);
+      }
+
+      .project-stack b {
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      .project .bullets li {
+        margin-top: 0.7mm;
+        font-size: 8.5pt;
+      }
+
+      .also {
+        margin-top: 3.2mm;
+        padding: 2.4mm 3mm;
+        border-left: 1.6px solid var(--accent);
+        background: #fafafa;
+        font-size: 7.9pt;
+        line-height: 1.45;
+        color: #3a3a3a;
+      }
+
+      .also b {
+        font-size: 6.9pt;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      /* ---------- Education / Leadership ---------- */
+
+      .split {
+        display: grid;
+        grid-template-columns: 1.45fr 1fr;
+        gap: 9mm;
+      }
+
+      .edu-title {
+        margin: 0;
+        font-size: 9.8pt;
+        font-weight: 700;
+      }
+
+      .edu-sub {
+        margin: 0.8mm 0 0;
+        font-size: 8.4pt;
+        color: var(--muted);
+      }
+
+      .edu-meta {
+        margin-top: 1.2mm;
+        font-size: 7.5pt;
+        letter-spacing: 0.04em;
+        color: var(--faint);
+      }
+
+      .lead-item {
+        font-size: 8.5pt;
+        line-height: 1.45;
+        color: #2b2b2b;
+      }
+
+      .lead-item b {
+        display: block;
+        font-size: 8.9pt;
+      }
+
+      .lead-item span {
+        color: var(--muted);
+      }
+
+      /* ---------- Footer ---------- */
+
+      .page-footer {
+        position: absolute;
+        left: 15mm;
+        right: 15mm;
+        bottom: 7mm;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 2.4mm;
+        border-top: 1px solid var(--line);
+        font-size: 6.6pt;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--faint);
+      }
+
+      .page-footer .foot-brand {
+        color: var(--ink);
+        font-weight: 700;
+      }
+
+      .page-footer .foot-brand em {
+        font-style: normal;
+        color: var(--accent);
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      @media print {
+        html,
+        body {
+          background: #fff;
+        }
+
+        .page {
+          margin: 0;
+          box-shadow: none;
+        }
+      }
+
+      @media screen {
+        body {
+          padding: 12mm 0;
+        }
+
+        .page {
+          margin-bottom: 10mm;
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============================= PAGE 1 ============================= -->
+    <main class="page">
+      <header class="masthead">
+        <div>
+          <h1 class="name">Om Mhatre</h1>
+          <p class="role">Full-Stack Web &amp; Mobile Engineer</p>
+        </div>
+        <div class="doc-label">
+          <span>Resume</span>
+          <strong>2026</strong>
+        </div>
+      </header>
+
+      <div class="contact">
+        <div class="contact-line">
+          <span>Kamothe, Navi Mumbai, India</span>
+          <span><a href="tel:+917506380156">+91 75063 80156</a></span>
+          <span
+            ><a href="mailto:ommhatre379@gmail.com">ommhatre379@gmail.com</a></span
+          >
+          <span
+            ><a href="https://github.com/OSSM-0224">github.com/OSSM-0224</a></span
+          >
+        </div>
+        <div class="contact-line">
+          <span
+            ><a href="https://www.linkedin.com/in/om-mhatre-8b819025b/"
+              >linkedin.com/in/om-mhatre-8b819025b</a
+            ></span
+          >
+          <span
+            ><a href="https://om-aka-oysm-portfolio.vercel.app/"
+              >om-aka-oysm-portfolio.vercel.app</a
+            ></span
+          >
+        </div>
+      </div>
+
+      <section>
+        <h2 class="section-title">
+          <span class="index">01</span> Profile
+        </h2>
+        <p class="summary">
+          Full-stack web and mobile engineer with a production-first mindset. I
+          have launched a canteen coupon app on Google Play (100+ downloads),
+          engineered an AES-256-encrypted React Native tele-health suite, and
+          delivered client platforms across healthcare, sports, and nonprofit
+          sectors. I work end to end across React and Next.js interfaces, Node
+          and Python APIs, and native or cross-platform mobile, with a strong
+          focus on performance, accessibility, and maintainable architecture.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="section-title">
+          <span class="index">02</span> Technical Skills
+        </h2>
+        <dl class="skills">
+          <div class="skill-row">
+            <dt>Languages</dt>
+            <dd>TypeScript, JavaScript, Java, Python, C++, SQL</dd>
+          </div>
+          <div class="skill-row">
+            <dt>Frontend</dt>
+            <dd>
+              React 19, Next.js, React Native, Tailwind CSS, Redux Toolkit,
+              React Hook Form, Framer Motion, Three.js / R3F, GSAP
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt>Backend</dt>
+            <dd>
+              Node.js, Express.js, REST APIs, Flask / FastAPI, Socket.io,
+              Firebase
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt>Data</dt>
+            <dd>MongoDB, MySQL, Firebase Realtime Database, Sanity CMS</dd>
+          </div>
+          <div class="skill-row">
+            <dt>Cloud &amp; DevOps</dt>
+            <dd>AWS ECS, Docker, Vercel, Cloudflare Pages, Render, Git / GitHub</dd>
+          </div>
+          <div class="skill-row">
+            <dt>Design</dt>
+            <dd>UI/UX, Figma, CorelDRAW</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section>
+        <h2 class="section-title">
+          <span class="index">03</span> Experience
+        </h2>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3 class="entry-title">
+              Android Developer Intern <span class="at">/</span>
+              <span class="company">Tech Vyassa</span>
+            </h3>
+            <span class="entry-meta">Jun 2025 - Jul 2025</span>
+          </div>
+          <ul class="bullets">
+            <li>
+              Shipped CCMS, a production canteen coupon Android app, to Google
+              Play, now with 100+ downloads.
+            </li>
+            <li>
+              Built secure role-based authentication and one-time QR coupon
+              generation with Flask and MySQL.
+            </li>
+            <li>
+              Developed an admin dashboard for live order tracking, wallet
+              reconciliation, and usage analytics.
+            </li>
+          </ul>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3 class="entry-title">
+              SEO Analyst <span class="at">/</span>
+              <span class="company">Netweaver Technovations</span>
+            </h3>
+            <span class="entry-meta">Jul 2024 - Sep 2024</span>
+          </div>
+          <ul class="bullets">
+            <li>
+              Improved organic rankings for client websites through on-page and
+              off-page SEO strategies.
+            </li>
+            <li>
+              Automated recurring reporting workflows using Python and analytics
+              tools.
+            </li>
+          </ul>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3 class="entry-title">
+              Design Intern <span class="at">/</span>
+              <span class="company">Hopen.co.in</span>
+            </h3>
+            <span class="entry-meta">Apr 2024 - Jun 2024</span>
+          </div>
+          <ul class="bullets">
+            <li>
+              Produced high-quality UI assets and branding creatives for web and
+              social campaigns.
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section>
+        <h2 class="section-title">
+          <span class="index">04</span> Selected Projects
+        </h2>
+
+        <article class="project">
+          <div class="project-head">
+            <h3 class="project-title">
+              CCMS - Canteen Coupon Management System
+              <span class="tag">Google Play</span>
+            </h3>
+            <span class="entry-meta">2025</span>
+          </div>
+          <p class="project-stack">
+            <b>Java, Android, Flask, MySQL, Google Play Console</b>
+          </p>
+          <ul class="bullets">
+            <li>
+              Production Android app live on Google Play with 100+ downloads;
+              replaces paper lunch coupons across multi-building cafeterias.
+            </li>
+            <li>
+              Issued anti-reuse, one-time QR tokens with offline coupon caching
+              and background wallet sync; merchant scanning verifies in under
+              100 ms.
+            </li>
+            <li>
+              Shipped admin tooling for live order tracking, coupon
+              reconciliation, and cafeteria usage analytics.
+            </li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3 class="project-title">
+              Amrutam Pharma ERP &amp; Tele-Consult
+              <span class="tag">React Native</span>
+            </h3>
+            <span class="entry-meta">2026</span>
+          </div>
+          <p class="project-stack">
+            <b>React Native 0.82, TypeScript, Redux Toolkit, Zego Cloud, Formik + Yup</b>
+          </p>
+          <ul class="bullets">
+            <li>
+              Built a pharmaceutical distribution and tele-health suite with
+              encrypted doctor-patient video consultations via Zego Cloud UIKit.
+            </li>
+            <li>
+              Stored sensitive patient records with hardware-backed AES-256
+              encryption and an offline-first Redux Toolkit sync layer.
+            </li>
+            <li>
+              Implemented multi-stage prescription dispatch tracking and
+              validated medical order forms.
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <footer class="page-footer">
+        <span class="foot-brand">Om Mhatre <em>/</em> Resume 2026</span>
+        <span>Updated 15 November 2026</span>
+        <span>Page 1 of 2</span>
+      </footer>
+    </main>
+
+    <!-- ============================= PAGE 2 ============================= -->
+    <main class="page">
+      <section style="margin-top: 0">
+        <h2 class="section-title">
+          <span class="index">04</span> Selected Projects
+          <span style="color: var(--faint); font-weight: 500; letter-spacing: 0.05em"
+            >(continued)</span
+          >
+        </h2>
+
+        <article class="project">
+          <div class="project-head">
+            <h3 class="project-title">
+              EmergencyApp - Safety &amp; SOS
+              <span class="tag">Native Android</span>
+            </h3>
+            <span class="entry-meta">2025</span>
+          </div>
+          <p class="project-stack">
+            <b>Java, Android SDK, Firebase Realtime DB, Google Maps SDK, SensorManager</b>
+          </p>
+          <ul class="bullets">
+            <li>
+              Native Android safety app with one-tap SOS alerts that broadcast
+              live Google Maps coordinates to four emergency contacts.
+            </li>
+            <li>
+              Added an accelerometer shake trigger, foreground service, and
+              BootReceiver daemon so protection survives screen-off and
+              app-kill states.
+            </li>
+            <li>
+              Shipped 10 offline first-aid modules and a Firebase-backed alert
+              console for monitoring live incidents.
+            </li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3 class="project-title">
+              DSO Navi Mumbai - Multi-Sport Fixtures Platform
+              <span class="tag">Client</span>
+            </h3>
+            <span class="entry-meta">2026</span>
+          </div>
+          <p class="project-stack">
+            <b>Next.js, TypeScript, MongoDB, Tailwind CSS v4, JWT, Zod</b>
+          </p>
+          <ul class="bullets">
+            <li>
+              Sole engineer for the District Sports Office tournament platform
+              serving 120+ schools across 8 sporting disciplines.
+            </li>
+            <li>
+              Automated single and double-elimination brackets, clash-free
+              multi-venue scheduling, referee assignments, and live medal
+              tallies.
+            </li>
+            <li>
+              Built a role-based scorer panel and public fan portal with
+              cookie-based auth and government-standard results exports.
+            </li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3 class="project-title">
+              Unique Dental Care - Clinic Platform
+              <span class="tag">Client</span>
+            </h3>
+            <span class="entry-meta">2026</span>
+          </div>
+          <p class="project-stack">
+            <b>React, TypeScript, Sanity CMS, Tailwind CSS, Google Apps Script, Telegram Bot API</b>
+          </p>
+          <ul class="bullets">
+            <li>
+              Delivered a multi-branch dental platform with Sanity CMS,
+              appointment booking, treatment guides, and interactive
+              before/after galleries.
+            </li>
+            <li>
+              Automated enquiry routing through Google Apps Script and Telegram
+              Bot alerts, removing the need for a dedicated backend.
+            </li>
+            <li>
+              Reached Lighthouse 98+ with prerendered SEO pages, responsive
+              images, and a reusable component architecture.
+            </li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3 class="project-title">
+              Dr Patil Advance Clinic - Orthodontic Platform
+              <span class="tag">Live</span>
+            </h3>
+            <span class="entry-meta">2026</span>
+          </div>
+          <p class="project-stack">
+            <b>React, Vite, TypeScript, Tailwind CSS, WhatsApp API</b>
+          </p>
+          <ul class="bullets">
+            <li>
+              Built a live orthodontic site for two specialists, including an
+              aligners-versus-braces cost and timeline calculator.
+            </li>
+            <li>
+              Integrated direct WhatsApp booking with pre-filled case briefs,
+              contributing to an 80% increase in inbound leads.
+            </li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3 class="project-title">
+              Society Management App - Resident ERP
+              <span class="tag">Full-Stack</span>
+            </h3>
+            <span class="entry-meta">2026</span>
+          </div>
+          <p class="project-stack">
+            <b>React, Node.js, Express, MongoDB, PWA, i18n</b>
+          </p>
+          <ul class="bullets">
+            <li>
+              Built a multilingual housing-society system (English, Hindi,
+              Marathi) with flat directories, gate check-ins, and parking maps.
+            </li>
+            <li>
+              Automated maintenance calculation with PDF invoices, plus
+              role-based access for admins, residents, and security guards.
+            </li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3 class="project-title">
+              Child Dream's Social Foundation - NGO Portal
+              <span class="tag">In Development</span>
+            </h3>
+            <span class="entry-meta">2026</span>
+          </div>
+          <p class="project-stack">
+            <b>React, Vite, Tailwind CSS, Razorpay, Framer Motion, SEO</b>
+          </p>
+          <ul class="bullets">
+            <li>
+              Redesigning an NGO web presence around donor trust, with
+              transparent campaign finances and impact reporting.
+            </li>
+            <li>
+              Building a mobile-first donation flow with UPI and card support,
+              automated 80G receipt generation, and WCAG AA accessibility.
+            </li>
+          </ul>
+        </article>
+
+        <p class="also">
+          <b>Additional -</b> a React Three Fiber / GSAP personal portfolio
+          with a 3D phone showcase and skills matrix, and Om Sai Sports, a 3D
+          website for a jersey brand (in development).
+        </p>
+      </section>
+
+      <section>
+        <h2 class="section-title">
+          <span class="index">05</span> Education &amp; Leadership
+        </h2>
+
+        <div class="split">
+          <div>
+            <h3 class="edu-title">B.Sc. Computer Science</h3>
+            <p class="edu-sub">
+              Pillai College of Arts, Commerce and Science, Navi Mumbai
+            </p>
+            <p class="edu-meta">2022 - 2025</p>
+          </div>
+          <div class="lead-item">
+            <b>Creative Head</b>
+            <span>Tech Alegira &amp; BitFest</span>
+            <p style="margin: 1mm 0 0">
+              Led branding and visual design for two college technology
+              festivals, from identity systems to event collateral.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="section-title">
+          <span class="index">06</span> Selected Highlights
+        </h2>
+        <ul class="bullets" style="margin-top: 0">
+          <li>
+            Shipped a production consumer Android app to the Google Play Store
+            while still an intern.
+          </li>
+          <li>
+            Delivered end-to-end client platforms for healthcare, sports
+            administration, and nonprofit organizations.
+          </li>
+          <li>
+            Comfortable owning a product from architecture and database schema
+            through UI, API integration, testing, and release.
+          </li>
+        </ul>
+      </section>
+
+      <footer class="page-footer">
+        <span class="foot-brand">Om Mhatre <em>/</em> Resume 2026</span>
+        <span>Updated 15 November 2026</span>
+        <span>Page 2 of 2</span>
+      </footer>
+    </main>
+  </body>
+</html>
