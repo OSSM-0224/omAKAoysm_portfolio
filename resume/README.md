@@ -7,6 +7,9 @@ The resume is built from a single HTML file so it is easy to update.
 | `om-mhatre-resume-2026.html` | Editable source (A4, print CSS) |
 | `../public/Om_Mhatre_Resume_2026_16-11-2026.pdf` | Latest rendered PDF |
 
+The site's resume buttons read `resumeHref` from `src/data/contact.ts`. Update
+that constant whenever the PDF is renamed.
+
 ## Regenerate the PDF
 
 Edit the HTML, then render it with headless Edge:

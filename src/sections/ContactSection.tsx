@@ -48,7 +48,7 @@ export const ContactSection: React.FC = () => {
         <div className="space-y-6">
           <div className="flex items-center gap-2 text-xs font-mono text-[#ff7900] tracking-wider uppercase">
             <Terminal className="w-3.5 h-3.5" />
-            <span>06. TRANSMISSION CHANNEL // GET IN TOUCH</span>
+            <span>06. CONTACT CHANNEL // GET IN TOUCH</span>
           </div>
 
           <h2 className="text-[1.625rem] min-[360px]:text-[1.875rem] min-[390px]:text-[2.0625rem] min-[430px]:text-[2.25rem] sm:text-[clamp(2.25rem,5.6vw,5.25rem)] font-black font-display text-white tracking-tighter leading-[0.95]">
@@ -203,8 +203,8 @@ export const ContactSection: React.FC = () => {
                     Om Mhatre &mdash; Resume 2026
                   </h3>
                   <p className="mt-2 text-xs leading-relaxed text-[#8a8780] sm:text-sm">
-                    Two-page PDF covering full-stack and mobile engineering work,
-                    updated November 2026.
+                    One-page PDF covering full-stack, mobile, and AI-integrated
+                    work, updated November 2026.
                   </p>
                 </div>
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#2a2a2a] bg-[#141414]">
