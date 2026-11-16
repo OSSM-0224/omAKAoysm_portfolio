@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HalftoneWordmarkFooter from "../components/ui/halftone-wordmark-footer";
+import { CONTACT } from "../data/contact";
 
 export const Footer: React.FC = () => {
   const [istTime, setIstTime] = useState("");
@@ -50,14 +51,17 @@ export const Footer: React.FC = () => {
           ],
         },
         {
-          title: "Elsewhere",
+          title: "Connect",
           links: [
             { label: "GitHub", href: "https://github.com/OSSM-0224" },
             {
               label: "LinkedIn",
               href: "https://www.linkedin.com/in/om-mhatre-8b819025b/",
             },
-            { label: "Email", href: "mailto:ommhatre379@gmail.com" },
+            { label: "Email", href: `mailto:${CONTACT.email}` },
+            { label: "Phone", href: CONTACT.phoneHref },
+            { label: "WhatsApp", href: CONTACT.whatsappHref },
+            { label: "Resume (PDF)", href: CONTACT.resumeHref },
           ],
         },
       ]}

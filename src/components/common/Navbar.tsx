@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Smartphone } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Smartphone, Download } from 'lucide-react';
+import { CONTACT } from '../../data/contact';
 
 interface NavbarProps {
   onContactClick: () => void;
@@ -74,8 +75,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
             </a>
           </nav>
 
-          {/* Zone 3: 1 primary action */}
-          <div className="flex items-center gap-4 shrink-0">
+          {/* Zone 3: action links */}
+          <div className="flex items-center gap-3 shrink-0">
+            <a
+              href={CONTACT.resumeHref}
+              download
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-mono font-medium tracking-wide text-white border border-[#2b2b30] hover:border-[#ff7900]/60 hover:text-[#ff7900] rounded-md transition-all whitespace-nowrap shrink-0"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>RESUME</span>
+            </a>
+
             <button
               onClick={onContactClick}
               className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium tracking-wide text-black bg-[#ff7900] hover:bg-[#ff9029] rounded-md transition-all shadow-[0_0_20px_rgba(255,121,0,0.35)] hover:shadow-[0_0_25px_rgba(255,121,0,0.6)] whitespace-nowrap shrink-0 active:scale-95"
@@ -146,6 +156,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
           </nav>
 
           <div className="pt-8 border-t border-[#1c1c24] flex flex-col gap-4">
+            <a
+              href={CONTACT.resumeHref}
+              download
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-3 text-center text-sm font-mono font-medium tracking-wider text-white border border-[#2b2b30] hover:border-[#ff7900]/60 hover:text-[#ff7900] rounded-md transition-colors flex items-center justify-center gap-2"
+            >
+              <Download className="w-4 h-4 text-[#ff7900]" />
+              DOWNLOAD RESUME 2026
+            </a>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
