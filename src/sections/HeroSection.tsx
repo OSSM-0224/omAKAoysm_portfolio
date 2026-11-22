@@ -6,7 +6,7 @@ import {
   Terminal,
 } from "lucide-react";
 import DataRain from "../components/ui/data-rain";
-import { PortraitScanner } from "../components/common/PortraitScanner";
+import ProfileCard from "../components/common/ProfileCard";
 
 interface HeroSectionProps {
   onExploreClick: () => void;
@@ -343,9 +343,37 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Right Column: Interactive portrait scanner */}
+        {/* Right Column: Interactive identity card */}
         <div className="relative flex items-center justify-center lg:col-span-5">
-          <PortraitScanner />
+          <div className="relative w-full max-w-[340px]">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-10 rounded-[36px] blur-3xl"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 45%, rgba(255,121,0,0.18), transparent 68%)",
+              }}
+            />
+            <ProfileCard
+              name="Om Mhatre"
+              title="Full-Stack Engineer"
+              handle="OSSM-0224"
+              status="Open to work"
+              statusColor="#ff7900"
+              contactText="Contact"
+              avatarUrl="/om-portrait-cutout.webp"
+              onContactClick={onContactClick}
+              theme="dark"
+              backdropColor="#07070a"
+              radius={18}
+              holo={0.45}
+              glare={0.5}
+              tiltStrength={9}
+              parallax={6}
+              intro={false}
+              enableMobileTilt={false}
+            />
+          </div>
         </div>
       </div>
 
