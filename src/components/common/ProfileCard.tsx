@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, type CSSProperties } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Mail01Icon } from "@hugeicons/core-free-icons";
+import { AsciiAnimals } from "../ascii-animals/react";
 
 import "./ProfileCard.css";
 
@@ -417,8 +418,11 @@ const ProfileCard = ({
     >
       <div className="profile-card__body">
         <div className="profile-card__tile">
-          <span className="profile-card__backdrop" aria-hidden="true" />
-          <span className="profile-card__reticle" aria-hidden="true" />
+          <AsciiAnimals
+            animal="koi"
+            theme="dark"
+            className="profile-card__koi"
+          />
           <span className="profile-card__sheen" />
           <span className="profile-card__holo">
             <span className="profile-card__holo-glow" />
@@ -435,7 +439,6 @@ const ProfileCard = ({
               draggable={false}
             />
           )}
-          <span className="profile-card__brackets" aria-hidden="true" />
           {(name || title) && (
             <>
               <span className="profile-card__scrim" />
