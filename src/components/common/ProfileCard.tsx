@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, type CSSProperties } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Mail01Icon } from "@hugeicons/core-free-icons";
-import { AsciiAnimals } from "../ascii-animals/react";
+import { KoiPond } from "./KoiPond";
 
 import "./ProfileCard.css";
 
@@ -418,11 +418,7 @@ const ProfileCard = ({
     >
       <div className="profile-card__body">
         <div className="profile-card__tile">
-          <AsciiAnimals
-            animal="koi"
-            theme="dark"
-            className="profile-card__koi"
-          />
+          <KoiPond className="profile-card__koi" />
           <span className="profile-card__sheen" />
           <span className="profile-card__holo">
             <span className="profile-card__holo-glow" />

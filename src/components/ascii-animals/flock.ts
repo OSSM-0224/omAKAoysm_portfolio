@@ -38,7 +38,7 @@ export interface Creature {
 export const SHARED_TUNING = {
   // Movement
   /** Individuals per screen, relative to the area-based default. */
-  density: 1,
+  density: 4,
   /** Cross corner to corner (bottom-left → top-right) whatever the screen shape. */
   corner: false,
   /** Course in degrees when not corner to corner: 0 → right, 90 → up. */
@@ -87,34 +87,174 @@ export type Tuning = SharedTuning & Record<string, number | boolean>;
 
 /** A slider (or, with toggle, a switch) in the tweak panel; hint explains it in a tooltip. */
 export type KnobSpec =
-  | { key: string; label: string; min: number; max: number; step: number; hint: string; disabledWhen?: string }
+  | {
+      key: string;
+      label: string;
+      min: number;
+      max: number;
+      step: number;
+      hint: string;
+      disabledWhen?: string;
+    }
   | { key: string; label: string; toggle: true; hint: string };
 
 export type ControlGroup = [title: string, knobs: KnobSpec[]];
 
 export const SHARED_CONTROLS: { movement: KnobSpec[]; look: KnobSpec[] } = {
   movement: [
-    { key: "density", label: "Density", min: 0.1, max: 4, step: 0.05, hint: "How many are on screen." },
-    { key: "corner", label: "Corner to corner", toggle: true, hint: "Cross from the bottom-left corner to the top-right, whatever the window's shape. Turn off to set Direction yourself." },
-    { key: "direction", label: "Direction (°)", min: 0, max: 360, step: 1, disabledWhen: "corner", hint: "Which way they travel, in degrees: 0 is right, 90 is up. Only used when Corner to corner is off." },
-    { key: "speed", label: "Speed", min: 0.1, max: 3, step: 0.05, hint: "How fast they travel." },
-    { key: "sway", label: "Sway", min: 0, max: 0.6, step: 0.01, hint: "How much the whole group slowly drifts left and right off course. 0 is a dead-straight line." },
-    { key: "spread", label: "Spread", min: 0, max: 0.8, step: 0.01, hint: "How far each one's own path can stray from the group's. 0 means everyone keeps exactly the same line." },
-    { key: "size", label: "Size", min: 0.3, max: 2.5, step: 0.05, hint: "How big they are." },
-    { key: "farthest", label: "Farthest depth", min: 0.1, max: 1, step: 0.01, hint: "How small and faint the farthest ones get. 1 makes them all equally close." },
-    { key: "farBias", label: "Far bias", min: 0.3, max: 3, step: 0.05, hint: "How many sit far away versus close. Higher puts more of them in the distance." },
-    { key: "grip", label: "Hold course", min: 0.2, max: 5, step: 0.05, hint: "How hard they steer back onto course after drifting. Higher is stricter." },
-    { key: "separation", label: "Separation", min: 0, max: 1000, step: 10, hint: "How strongly neighbours keep their distance from each other." },
+    {
+      key: "density",
+      label: "Density",
+      min: 0.1,
+      max: 4,
+      step: 0.05,
+      hint: "How many are on screen.",
+    },
+    {
+      key: "corner",
+      label: "Corner to corner",
+      toggle: true,
+      hint: "Cross from the bottom-left corner to the top-right, whatever the window's shape. Turn off to set Direction yourself.",
+    },
+    {
+      key: "direction",
+      label: "Direction (°)",
+      min: 0,
+      max: 360,
+      step: 1,
+      disabledWhen: "corner",
+      hint: "Which way they travel, in degrees: 0 is right, 90 is up. Only used when Corner to corner is off.",
+    },
+    {
+      key: "speed",
+      label: "Speed",
+      min: 0.1,
+      max: 3,
+      step: 0.05,
+      hint: "How fast they travel.",
+    },
+    {
+      key: "sway",
+      label: "Sway",
+      min: 0,
+      max: 0.6,
+      step: 0.01,
+      hint: "How much the whole group slowly drifts left and right off course. 0 is a dead-straight line.",
+    },
+    {
+      key: "spread",
+      label: "Spread",
+      min: 0,
+      max: 0.8,
+      step: 0.01,
+      hint: "How far each one's own path can stray from the group's. 0 means everyone keeps exactly the same line.",
+    },
+    {
+      key: "size",
+      label: "Size",
+      min: 0.3,
+      max: 2.5,
+      step: 0.05,
+      hint: "How big they are.",
+    },
+    {
+      key: "farthest",
+      label: "Farthest depth",
+      min: 0.1,
+      max: 1,
+      step: 0.01,
+      hint: "How small and faint the farthest ones get. 1 makes them all equally close.",
+    },
+    {
+      key: "farBias",
+      label: "Far bias",
+      min: 0.3,
+      max: 3,
+      step: 0.05,
+      hint: "How many sit far away versus close. Higher puts more of them in the distance.",
+    },
+    {
+      key: "grip",
+      label: "Hold course",
+      min: 0.2,
+      max: 5,
+      step: 0.05,
+      hint: "How hard they steer back onto course after drifting. Higher is stricter.",
+    },
+    {
+      key: "separation",
+      label: "Separation",
+      min: 0,
+      max: 1000,
+      step: 10,
+      hint: "How strongly neighbours keep their distance from each other.",
+    },
   ],
   look: [
-    { key: "hueShift", label: "Hue shift (°)", min: -180, max: 180, step: 1, hint: "Turns the animal's colour around the colour wheel, in degrees. Find one you like and tell me the number to make it permanent." },
-    { key: "shimmer", label: "Shimmer", min: 0, max: 1, step: 0.01, hint: "How much iridescent surfaces roll brighter and darker as the animal turns." },
-    { key: "sparkle", label: "Sparkle", min: 0, max: 0.5, step: 0.01, hint: "How often cells flash white, like light catching scales or wings." },
-    { key: "fog", label: "Distance fade", min: 0, max: 1, step: 0.01, hint: "How much far-away ones fade into the background." },
-    { key: "trail", label: "Trail", min: 0, max: 4, step: 0.05, hint: "How much they leave behind: scales, ripples, footprints or glow." },
-    { key: "trailFade", label: "Trail fade", min: 0.05, max: 6, step: 0.05, hint: "How quickly that trail fades. Lower lingers longer." },
-    { key: "grid", label: "Grid", min: 0, max: 4, step: 0.05, hint: "How visible the background grid lines are." },
-    { key: "detail", label: "ASCII detail", min: 0.5, max: 2, step: 0.05, hint: "ASCII resolution. Higher means smaller characters and finer animals." },
+    {
+      key: "hueShift",
+      label: "Hue shift (°)",
+      min: -180,
+      max: 180,
+      step: 1,
+      hint: "Turns the animal's colour around the colour wheel, in degrees. Find one you like and tell me the number to make it permanent.",
+    },
+    {
+      key: "shimmer",
+      label: "Shimmer",
+      min: 0,
+      max: 1,
+      step: 0.01,
+      hint: "How much iridescent surfaces roll brighter and darker as the animal turns.",
+    },
+    {
+      key: "sparkle",
+      label: "Sparkle",
+      min: 0,
+      max: 0.5,
+      step: 0.01,
+      hint: "How often cells flash white, like light catching scales or wings.",
+    },
+    {
+      key: "fog",
+      label: "Distance fade",
+      min: 0,
+      max: 1,
+      step: 0.01,
+      hint: "How much far-away ones fade into the background.",
+    },
+    {
+      key: "trail",
+      label: "Trail",
+      min: 0,
+      max: 4,
+      step: 0.05,
+      hint: "How much they leave behind: scales, ripples, footprints or glow.",
+    },
+    {
+      key: "trailFade",
+      label: "Trail fade",
+      min: 0.05,
+      max: 6,
+      step: 0.05,
+      hint: "How quickly that trail fades. Lower lingers longer.",
+    },
+    {
+      key: "grid",
+      label: "Grid",
+      min: 0,
+      max: 4,
+      step: 0.05,
+      hint: "How visible the background grid lines are.",
+    },
+    {
+      key: "detail",
+      label: "ASCII detail",
+      min: 0.5,
+      max: 2,
+      step: 0.05,
+      hint: "ASCII resolution. Higher means smaller characters and finer animals.",
+    },
   ],
 };
 
@@ -150,7 +290,13 @@ export interface Animal<C extends Creature = Creature> {
   /** Take the click itself (e.g. dropping food), instead of startling the creatures near it. */
   tap?(x: number, y: number, flock: Flock<C>): void;
   /** React to a click; (dx, dy) points away from it and strength fades 1 → 0 with distance. */
-  startle?(c: C, dx: number, dy: number, strength: number, flock: Flock<C>): void;
+  startle?(
+    c: C,
+    dx: number,
+    dy: number,
+    strength: number,
+    flock: Flock<C>,
+  ): void;
   /** Draw one creature. */
   draw?(c: C, pen: Pen, flock: Flock<C>): void;
   /** Draw the whole flock at once instead, for animals drawn as a crowd. */
@@ -187,26 +333,36 @@ export class Flock<C extends Creature = Creature> {
   private nextId = 1;
 
   /** count pins the population, overriding tuning.density. */
-  constructor(readonly animal: Animal<C>, readonly tuning: Tuning, private count?: number) {}
+  constructor(
+    readonly animal: Animal<C>,
+    readonly tuning: Tuning,
+    private count?: number,
+  ) {}
 
   resize(width: number, height: number) {
     const first = this.width === 0;
     this.width = width;
     this.height = height;
-    this.base = clamp(Math.min(width, height) * 0.2, 80, 190) * this.animal.scale;
+    this.base =
+      clamp(Math.min(width, height) * 0.2, 80, 190) * this.animal.scale;
     if (first) this.populate(true);
   }
 
   /** Course in radians (screen space, y down). */
   get course() {
     const k = this.tuning;
-    return k.corner ? Math.atan2(-this.height, this.width) : (-k.direction * Math.PI) / 180;
+    return k.corner
+      ? Math.atan2(-this.height, this.width)
+      : (-k.direction * Math.PI) / 180;
   }
 
   /** The course with the whole stream's slow sway applied. */
   get heading() {
     const t = this.time;
-    return this.course + this.tuning.sway * (Math.sin(t * 0.13) + 0.5 * Math.sin(t * 0.31 + 1.7));
+    return (
+      this.course +
+      this.tuning.sway * (Math.sin(t * 0.13) + 0.5 * Math.sin(t * 0.31 + 1.7))
+    );
   }
 
   /**
@@ -217,7 +373,14 @@ export class Flock<C extends Creature = Creature> {
   get target() {
     const { width: W, height: H, animal } = this;
     const shrink = (this.base / animal.scale / REFERENCE_SIZE) ** 2;
-    return this.count ?? clamp(Math.round(((W * H) / (animal.area * shrink)) * this.tuning.density), 1, animal.max ?? 200);
+    return (
+      this.count ??
+      clamp(
+        Math.round(((W * H) / (animal.area * shrink)) * this.tuning.density),
+        1,
+        animal.max ?? 200,
+      )
+    );
   }
 
   depthOf(roll: number) {
@@ -269,7 +432,10 @@ export class Flock<C extends Creature = Creature> {
   private populate(scatter: boolean) {
     const target = this.target;
     while (this.creatures.length > target) {
-      const [c] = this.creatures.splice(Math.floor(Math.random() * this.creatures.length), 1);
+      const [c] = this.creatures.splice(
+        Math.floor(Math.random() * this.creatures.length),
+        1,
+      );
       c.gone = true;
     }
     while (this.creatures.length < target) {
@@ -342,9 +508,15 @@ export class Flock<C extends Creature = Creature> {
     const cos = Math.cos(course);
     const sin = Math.sin(course);
     const out =
-      (cos > 0.05 && c.x > W + margin) || (cos < -0.05 && c.x < -margin) ||
-      (sin < -0.05 && c.y < -margin) || (sin > 0.05 && c.y > H + margin);
-    const lost = c.x < -3 * margin || c.x > W + 3 * margin || c.y < -3 * margin || c.y > H + 3 * margin;
+      (cos > 0.05 && c.x > W + margin) ||
+      (cos < -0.05 && c.x < -margin) ||
+      (sin < -0.05 && c.y < -margin) ||
+      (sin > 0.05 && c.y > H + margin);
+    const lost =
+      c.x < -3 * margin ||
+      c.x > W + 3 * margin ||
+      c.y < -3 * margin ||
+      c.y > H + 3 * margin;
     return out || lost;
   }
 
